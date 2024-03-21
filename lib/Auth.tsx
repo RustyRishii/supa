@@ -17,6 +17,7 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Auth = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState<string>("");
@@ -30,12 +31,18 @@ const Auth = ({ navigation }: { navigation: any }) => {
 
   const signUp = async () => {
     try {
-      supabase.auth.signUp({
+      const { user, error } = await supabase.auth.signUp({
         email,
         password,
       });
-      navigation.navigate("BottomTabs", { screen: "Home" });
-      ToastAndroid.show("Account created", ToastAndroid.SHORT);
+      if (error) {
+        Alert.alert("Error", error.message);
+      } else {
+        // Save user info to AsyncStorage
+        await AsyncStorage.setItem("userToken", user?.access_token);
+        navigation.navigate("BottomTabs", { screen: "Home" });
+        ToastAndroid.show("Account created", ToastAndroid.SHORT);
+      }
     } catch (error) {
       if (error === "Email already exists") {
         ToastAndroid.show("Email Already exists", ToastAndroid.SHORT);

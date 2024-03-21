@@ -16,13 +16,12 @@ const Settings = ({ navigation }: { navigation: any }) => {
     }
   };
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ padding: 10 }}>
       <Pressable
         onPress={() => signOut()}
         style={{
           backgroundColor: "black",
           borderRadius: 5,
-          marginVertical: 20,
           borderWidth: 1,
           height: 50,
           justifyContent: "center",

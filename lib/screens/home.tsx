@@ -1,4 +1,11 @@
-import { Pressable, StyleSheet, Text, View, ToastAndroid } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ToastAndroid,
+  TextInput,
+} from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
@@ -131,6 +138,20 @@ const Home = () => {
               {bookmark}
             </Pressable>
           </View>
+          <TextInput
+            placeholder="Email"
+            cursorColor={"black"}
+            keyboardType="email-address"
+            //value={email}
+            onChangeText={(txt) => {}}
+            style={{
+              borderWidth: 1,
+              height: 50,
+              padding: 10,
+              borderRadius: 5,
+              borderColor: "black",
+            }}
+          />
         </ScrollView>
       </GestureHandlerRootView>
     </SafeAreaView>
