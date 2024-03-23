@@ -5,6 +5,7 @@ import {
   View,
   ToastAndroid,
   TextInput,
+  Button,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,6 +17,10 @@ import {
 } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/Ionicons";
 import Clipboard from "@react-native-clipboard/clipboard";
+import { SupabaseClient } from "@supabase/supabase-js";
+import { supabase } from "../supabase";
+import { createClient } from "@supabase/supabase-js";
+import universalStyles from "../../components/universalStyles";
 
 const copyIconFilled = <Icon name="copy" size={20} color={"black"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"black"} />;
@@ -26,12 +31,24 @@ const bookmarkIconOutline = (
 );
 
 const Home = () => {
+  const [textData, setTextData] = useState("");
   const [copy, setCopy] = useState(copyIconOutline);
   const [bookmark, setBookmark] = useState(bookmarkIconOutline);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [apiData, setAPIData] = useState<
     { text: string; author: string } | undefined
   >(undefined);
+
+  const handleSubmit = async () => {
+    const { data, error } = await supabase
+      .from("Bookmarks")
+      .insert({ Quote: apiData?.text, Author: apiData?.author });
+    if (error) {
+      console.error(error);
+    } else {
+      console.log("Text Data added successfully");
+    }
+  };
 
   function copyIconFunction() {
     setCopy(copyIconFilled);
@@ -45,6 +62,7 @@ const Home = () => {
   function bookmarkCondition() {
     if (bookmark === bookmarkIconOutline) {
       setBookmark(bookmarkIconFilled);
+      handleSubmit();
       ToastAndroid.show("Bookmarked", ToastAndroid.SHORT);
     } else if (bookmark === bookmarkIconFilled) {
       setBookmark(bookmarkIconOutline);
@@ -89,38 +107,15 @@ const Home = () => {
             <RefreshControl refreshing={refreshing} onRefresh={getQuotes} />
           }
         >
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              alignContent: "center",
-              borderRadius: 10,
-              borderWidth: 1,
-              marginVertical: 10,
-              height: 215,
-              paddingHorizontal: 10,
-            }}
-          >
+          <View style={universalStyles.quoteBlock}>
             {apiData ? (
               <View>
                 <Text style={{ fontSize: 20 }}>{apiData.text}</Text>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    paddingTop: 10,
-                    alignContent: "flex-end",
-                    textAlign: "right",
-                    alignItems: "flex-end",
-                  }}
-                >
-                  {apiData.author}
-                </Text>
+                <Text style={universalStyles.author}>{apiData.author}</Text>
               </View>
             ) : null}
           </View>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-around" }}
-          >
+          <View style={universalStyles.bookmarkAndCopy}>
             <Pressable
               style={{ height: 50, width: 50 }}
               onPress={() => {
@@ -139,11 +134,13 @@ const Home = () => {
             </Pressable>
           </View>
           <TextInput
-            placeholder="Email"
+            placeholder="Add data"
             cursorColor={"black"}
-            keyboardType="email-address"
+            //keyboardType="email-address"
             //value={email}
-            onChangeText={(txt) => {}}
+            onChangeText={(text) => {
+              setTextData(text);
+            }}
             style={{
               borderWidth: 1,
               height: 50,
@@ -152,6 +149,7 @@ const Home = () => {
               borderColor: "black",
             }}
           />
+          <Button title="Submit" onPress={handleSubmit} />
         </ScrollView>
       </GestureHandlerRootView>
     </SafeAreaView>
