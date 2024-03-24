@@ -38,10 +38,10 @@ const Auth = ({ navigation }: { navigation: any }) => {
       if (error) {
         Alert.alert("Error", error.message);
       } else {
-        // Save user info to AsyncStorage
-        await AsyncStorage.setItem("userToken", user?.access_token);
         navigation.navigate("BottomTabs", { screen: "Home" });
         ToastAndroid.show("Account created", ToastAndroid.SHORT);
+        // Save user info to AsyncStorage
+        await AsyncStorage.setItem("userToken", user?.access_token);
       }
     } catch (error) {
       if (error === "Email already exists") {
@@ -53,16 +53,19 @@ const Auth = ({ navigation }: { navigation: any }) => {
 
   const signIn = async () => {
     try {
-      supabase.auth.signInWithPassword;
-      ({
+      const { user, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
-      navigation.navigate("BottomTabs", { screen: "Home" });
-    } catch (error) {
       if (error) {
-        Alert.alert((error as Error).message);
+        Alert.alert("Error", error.message);
       } else {
+        navigation.navigate("BottomTabs", { screen: "Home" });
+        ToastAndroid.show("User SingedIn", ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      if (error === "Email already exists") {
+        ToastAndroid.show("Email Already exists", ToastAndroid.SHORT);
         console.error(error);
       }
     }

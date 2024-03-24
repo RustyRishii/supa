@@ -40,9 +40,11 @@ const Home = () => {
   >(undefined);
 
   const handleSubmit = async () => {
-    const { data, error } = await supabase
-      .from("Bookmarks")
-      .insert({ Quote: apiData?.text, Author: apiData?.author });
+    const { data, error } = await supabase.from("Bookmarks").insert({
+      Quote: apiData?.text,
+      Author: apiData?.author,
+      UserID: supabase.auth.getSession,
+    });
     if (error) {
       console.error(error);
     } else {
@@ -133,23 +135,6 @@ const Home = () => {
               {bookmark}
             </Pressable>
           </View>
-          <TextInput
-            placeholder="Add data"
-            cursorColor={"black"}
-            //keyboardType="email-address"
-            //value={email}
-            onChangeText={(text) => {
-              setTextData(text);
-            }}
-            style={{
-              borderWidth: 1,
-              height: 50,
-              padding: 10,
-              borderRadius: 5,
-              borderColor: "black",
-            }}
-          />
-          <Button title="Submit" onPress={handleSubmit} />
         </ScrollView>
       </GestureHandlerRootView>
     </SafeAreaView>
