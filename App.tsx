@@ -10,6 +10,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Bookmark from "./lib/screens/bookmark";
 import Settings from "./lib/screens/settings";
 import Icon from "react-native-vector-icons/Ionicons";
+import { useEffect, useState } from "react";
+import { supabase } from "./lib/supabase";
+import { Session } from "@supabase/supabase-js";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -89,22 +92,47 @@ function AuthStack() {
         component={Auth}
       />
       <Stack.Screen
-        options={{ animation: "slide_from_right" }}
+        options={{ animation: "slide_from_left" }}
         name="Home"
         component={Home}
+      />
+      <Stack.Screen
+        options={{ animation: "slide_from_right" }}
+        name="Settings"
+        component={Settings} // Pass the signOut function as initialParams
       />
     </Stack.Navigator>
   );
 }
 
 const App = () => {
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data: session } = await supabase.auth.session();
+      setSession(session);
+    };
+
+    fetchSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      async (_event, session) => {
+        setSession(session);
+      }
+    );
+
+    return () => {
+      authListener?.unsubscribe();
+    };
+  }, []);
+
   return (
     <NavigationContainer>
-      <AuthStack />
+      {session ? <BottomTabs /> : <AuthStack />}
     </NavigationContainer>
   );
 };
-
 export default App;
 
 const styles = StyleSheet.create({});
