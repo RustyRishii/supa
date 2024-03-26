@@ -6,54 +6,11 @@ import { supabase } from "../supabase";
 import { useState, useEffect } from "react";
 import { Session } from "@supabase/supabase-js";
 
-const Settings = ({
-  navigation,
-  session,
-}: {
-  navigation: any;
-  session: Session;
-}) => {
-  const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState("");
-  const [website, setWebsite] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-
-  useEffect(() => {
-    if (session) getProfile();
-  }, [session]);
-
-  async function getProfile() {
-    try {
-      setLoading(true);
-      if (!session?.user) throw new Error("No user on the session!");
-
-      const { data, error, status } = await supabase
-        .from("profiles")
-        .select(`username, website, avatar_url`)
-        .eq("id", session?.user.id)
-        .single();
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      if (data) {
-        setUsername(data.username);
-        setWebsite(data.website);
-        setAvatarUrl(data.avatar_url);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
+const Settings = ({ navigation }: { navigation: any }) => {
   const signOut = async () => {
     try {
       supabase.auth.signOut();
-      navigation.navigate("Auth");
+      navigation.navigate("AuthStack", { screen: "Auth" });
     } catch (error) {
       if (error) {
         console.error(error);

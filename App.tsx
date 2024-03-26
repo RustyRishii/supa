@@ -13,6 +13,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import { Session } from "@supabase/supabase-js";
+import { Tab } from "react-native-elements";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -97,15 +98,15 @@ function AuthStack() {
         component={Home}
       />
       <Stack.Screen
-        options={{ animation: "slide_from_right" }}
-        name="Settings"
-        component={Settings} // Pass the signOut function as initialParams
+        options={{ animation: "slide_from_left" }}
+        name="Setting"
+        component={Settings}
       />
     </Stack.Navigator>
   );
 }
 
-const App = () => {
+const App = (navigation: any) => {
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
