@@ -1,7 +1,5 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
 import Auth from "./lib/Auth";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -13,7 +11,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import { Session } from "@supabase/supabase-js";
-import { Tab } from "react-native-elements";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -25,6 +22,7 @@ function BottomTabs() {
         tabBarLabelStyle: {
           position: "relative",
           fontSize: 13,
+          flex: 0,
         },
         tabBarShowLabel: false,
         tabBarActiveTintColor: "black",
@@ -84,13 +82,13 @@ function AuthStack() {
     >
       <Stack.Screen
         options={{ animation: "slide_from_right" }}
-        name="BottomTabs"
-        component={BottomTabs}
+        name="Auth"
+        component={Auth}
       />
       <Stack.Screen
         options={{ animation: "slide_from_right" }}
-        name="Auth"
-        component={Auth}
+        name="BottomTabs"
+        component={BottomTabs}
       />
       <Stack.Screen
         options={{ animation: "slide_from_left" }}

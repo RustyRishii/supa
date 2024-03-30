@@ -112,7 +112,9 @@ const Home = () => {
           <View style={universalStyles.quoteBlock}>
             {apiData ? (
               <View>
-                <Text style={{ fontSize: 20 }}>{apiData.text}</Text>
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                  {apiData.text}
+                </Text>
                 <Text style={universalStyles.author}>{apiData.author}</Text>
               </View>
             ) : null}

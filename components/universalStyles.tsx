@@ -1,7 +1,11 @@
 import { StyleSheet } from "react-native";
 
 const universalStyles = StyleSheet.create({
+  pageTitle: {
+    fontSize: 25,
+  },
   quoteBlock: {
+  
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",

@@ -10,7 +10,7 @@ const Settings = ({ navigation }: { navigation: any }) => {
   const signOut = async () => {
     try {
       supabase.auth.signOut();
-      navigation.navigate("AuthStack", { screen: "Auth" });
+      navigation.navigate("Auth");
     } catch (error) {
       if (error) {
         console.error(error);

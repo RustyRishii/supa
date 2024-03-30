@@ -35,7 +35,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
   const [loading, setLoading] = useState(false);
 
   GoogleSignin.configure({
-    scopes: ["https://www.googleapis.com/auth/drive.readonly"],
+    scopes: ["email", "profile"],
     webClientId:
       "633436539850-j820badpnksfhm4oo5pr2l7u3i4blhau.apps.googleusercontent.com",
   });

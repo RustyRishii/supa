@@ -2,71 +2,61 @@ import { Alert, StyleSheet, Text, View, FlatList } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../supabase";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  ScrollView,
+} from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
+import universalStyles from "../../components/universalStyles";
 
 const Bookmark = () => {
-  const tableName = "Bookmarks";
+  const [bookmarks, setBookmarks] = useState([]);
 
-  const [data, setData] = useState<any>([]);
+  async function fetchBookmarks() {
+    const { data, error } = await supabase
+      .from("Bookmarks")
+      .select("Quote, Author");
+
+    if (error) {
+      console.error("Error fetching bookmarks:", error);
+      return;
+    }
+
+    console.log(data);
+    return data;
+  }
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase.from(tableName).select("*");
-
-      if (error) {
-        console.error("Error fetching todos:", error.message);
-        return;
-      }
-
-      setData(data);
+      const data = await fetchBookmarks();
+      setBookmarks(data);
     };
 
     fetchData();
   }, []);
 
-  const renderItem = ({ item }: { item: any }) => {
-    return <Text style={styles.item}>{item.text}</Text>;
-  };
-
-  const DATA = [
-    {
-      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-      title: "First Item",
-    },
-    {
-      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-      title: "Second Item",
-    },
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      title: "Third Item",
-    },
-  ];
-
-  
-  type ItemProps = { title: string };
-
-  const Item = ({ title }: ItemProps) => (
+  const renderItem = ({ item }: { item: any }) => (
     <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
+      <Text selectable={true} style={styles.quote}>
+        {item.Quote}
+      </Text>
+      <Text selectable={true} style={styles.author}>
+        - {item.Author}
+      </Text>
     </View>
   );
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <GestureHandlerRootView>
-        <View>
-          <Text>Bookmarks</Text>
+        <View style={{ padding: 10 }}>
+          <Text style={universalStyles.pageTitle}>Bookmarks</Text>
           <FlatList
-            data={data}
+            scrollEnabled={true}
+            style={{ marginBottom: "15%" }}
+            data={bookmarks}
             renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-          />
-          <FlatList
-            data={DATA}
-            renderItem={({ item }) => <Item title={item.title} />}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item, index) => index.toString()}
           />
         </View>
       </GestureHandlerRootView>
@@ -78,11 +68,20 @@ export default Bookmark;
 
 const styles = StyleSheet.create({
   item: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
   },
-  title: {
-    fontSize: 32,
+  quote: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  author: {
+    fontSize: 16,
+    fontStyle: "italic",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    alignContent: "flex-end",
+    textAlign: "right",
   },
 });
