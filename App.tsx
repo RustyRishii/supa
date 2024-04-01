@@ -90,7 +90,7 @@ function AuthStack() {
         name="BottomTabs"
         component={BottomTabs}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         options={{ animation: "slide_from_left" }}
         name="Home"
         component={Home}
@@ -99,7 +99,7 @@ function AuthStack() {
         options={{ animation: "slide_from_left" }}
         name="Setting"
         component={Settings}
-      />
+      /> */}
     </Stack.Navigator>
   );
 }
@@ -109,7 +109,7 @@ const App = (navigation: any) => {
 
   useEffect(() => {
     const fetchSession = async () => {
-      const { data: session } = await supabase.auth.session();
+      const { data: session } = await supabase.auth.getSession();
       setSession(session);
     };
 
@@ -122,7 +122,7 @@ const App = (navigation: any) => {
     );
 
     return () => {
-      authListener?.unsubscribe();
+      //authListener?.unsubscribe();
     };
   }, []);
 
