@@ -9,6 +9,7 @@ import {
   RefreshControl,
 } from "react-native";
 import React from "react";
+import Clipboard from "@react-native-clipboard/clipboard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../supabase";
 import {
@@ -24,7 +25,13 @@ import { Button } from "react-native-elements";
 const copyIconFilled = <Icon name="copy" size={20} color={"black"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"black"} />;
 
+const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"black"} />;
+const bookmarkIconOutline = (
+  <Icon name="bookmark-outline" size={20} color={"black"} />
+);
+
 const Bookmark = () => {
+  const [copy, setCopy] = useState(copyIconOutline);
   const [bookmarks, setBookmarks] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -51,11 +58,15 @@ const Bookmark = () => {
     }, 200);
   }
 
+  useEffect(() => {
+    RefreshFunction();
+    console.log("UseEffect Run done");
+  }, []);
   // useEffect(() => {
   //   fetchBookmarks();
   // }, [200]);
 
-  const renderItem = ({ item }: { item: any }) => (
+  const renderItem = ({ item, index }: { item: any; index: number }) => (
     <View style={styles.item}>
       <Text selectable={true} style={styles.quote}>
         {item.Quote}
@@ -63,8 +74,37 @@ const Bookmark = () => {
       <Text selectable={true} style={styles.author}>
         - {item.Author}
       </Text>
+      <View style={{ flexDirection: "row" }}>
+        <Pressable
+          style={{ height: 50, width: 50 }}
+          onPress={function copyIconFunction() {
+            setCopy(copyIconFilled);
+            Clipboard.setString(`${item.Quote} - ${item.Author} `);
+            ToastAndroid.show("Copied", ToastAndroid.SHORT);
+            setTimeout(() => {
+              setCopy(copyIconOutline);
+            }, 200);
+          }}
+        >
+          {copy}
+        </Pressable>
+      </View>
     </View>
   );
+
+  // const handleCopy = (index: number) => {
+  //   const updatedBookmarks = [...bookmarks];
+  //   updatedBookmarks[index].isCopied = true;
+  //   setBookmarks(updatedBookmarks);
+  //   Clipboard.setString(
+  //     `${updatedBookmarks[index].Quote} - ${updatedBookmarks[index].Author} `
+  //   );
+  //   ToastAndroid.show("Copied", ToastAndroid.SHORT);
+  //   setTimeout(() => {
+  //     updatedBookmarks[index].isCopied = false;
+  //     setBookmarks(updatedBookmarks);
+  //   }, 200);
+  // };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -116,3 +156,14 @@ const styles = StyleSheet.create({
 {
   /*  */
 }
+
+/*
+function copyIconFunction() {
+            setCopy(copyIconFilled);
+            Clipboard.setString(`${item.Quote} - ${item.Author} `);
+            ToastAndroid.show("Copied", ToastAndroid.SHORT);
+            setTimeout(() => {
+              setCopy(copyIconOutline);
+            }, 200);
+          }
+          */

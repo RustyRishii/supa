@@ -11,6 +11,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import { Session } from "@supabase/supabase-js";
+import { Swipeable } from "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -132,6 +133,7 @@ const App = (navigation: any) => {
     </NavigationContainer>
   );
 };
+
 export default App;
 
 const styles = StyleSheet.create({});
