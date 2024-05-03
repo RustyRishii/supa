@@ -63,3 +63,4 @@ const Settings = ({ navigation }: { navigation: any }) => {
 export default Settings;
 
 const styles = StyleSheet.create({});
+ 

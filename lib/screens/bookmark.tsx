@@ -62,9 +62,6 @@ const Bookmark = () => {
     RefreshFunction();
     console.log("UseEffect Run done");
   }, []);
-  // useEffect(() => {
-  //   fetchBookmarks();
-  // }, [200]);
 
   const renderItem = ({ item, index }: { item: any; index: number }) => (
     <View style={styles.item}>
@@ -91,20 +88,6 @@ const Bookmark = () => {
       </View>
     </View>
   );
-
-  // const handleCopy = (index: number) => {
-  //   const updatedBookmarks = [...bookmarks];
-  //   updatedBookmarks[index].isCopied = true;
-  //   setBookmarks(updatedBookmarks);
-  //   Clipboard.setString(
-  //     `${updatedBookmarks[index].Quote} - ${updatedBookmarks[index].Author} `
-  //   );
-  //   ToastAndroid.show("Copied", ToastAndroid.SHORT);
-  //   setTimeout(() => {
-  //     updatedBookmarks[index].isCopied = false;
-  //     setBookmarks(updatedBookmarks);
-  //   }, 200);
-  // };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
