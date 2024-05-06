@@ -74,7 +74,7 @@ const Bookmark = () => {
       <View style={{ flexDirection: "row" }}>
         <Pressable
           style={{ height: 50, width: 50 }}
-          onPress={function copyIconFunction() {
+          onPress={() => {
             setCopy(copyIconFilled);
             Clipboard.setString(`${item.Quote} - ${item.Author} `);
             ToastAndroid.show("Copied", ToastAndroid.SHORT);
@@ -94,20 +94,18 @@ const Bookmark = () => {
       <GestureHandlerRootView>
         <View style={{ padding: 10 }}>
           <Text style={universalStyles.pageTitle}>Bookmarks</Text>
-          <FlatList
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={RefreshFunction}
+          <View>
+            <RefreshControl refreshing={refreshing} onRefresh={RefreshFunction}>
+              <FlatList
+                scrollEnabled={true}
+                data={bookmarks}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => index.toString()}
+                contentContainerStyle={{ paddingBottom: 60 }}
+                style={{ height: "100%" }}
               />
-            }
-            scrollEnabled={true}
-            contentContainerStyle={{ paddingBottom: 60 }}
-            style={{ height: "100%" }}
-            data={bookmarks}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-          />
+            </RefreshControl>
+          </View>
         </View>
       </GestureHandlerRootView>
     </SafeAreaView>
@@ -150,3 +148,29 @@ function copyIconFunction() {
             }, 200);
           }
           */
+
+/*
+<SafeAreaView style={{ flex: 1 }}>
+      <GestureHandlerRootView>
+        <View style={{ padding: 10 }}>
+          <Text style={universalStyles.pageTitle}>Bookmarks</Text>
+          <View>
+            <FlatList
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={RefreshFunction}
+                />
+              }
+              scrollEnabled={true}
+              contentContainerStyle={{ paddingBottom: 60 }}
+              style={{ height: "100%" }}
+              data={bookmarks}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </View>
+        </View>
+      </GestureHandlerRootView>
+    </SafeAreaView>
+*/

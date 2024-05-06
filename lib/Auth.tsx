@@ -20,6 +20,7 @@ import {
 } from "@react-native-google-signin/google-signin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Session } from "@supabase/supabase-js";
+import Bookmark from "./screens/bookmark";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -33,6 +34,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState<string>("");
 
   GoogleSignin.configure({
     scopes: ["email", "profile"],
@@ -42,9 +44,14 @@ const Auth = ({ navigation }: { navigation: any }) => {
 
   const signUp = async () => {
     try {
-      const { user, error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            userName,
+          },
+        },
       });
       if (error) {
         Alert.alert("Error", error.message);
@@ -64,7 +71,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
 
   const signIn = async () => {
     try {
-      const { user, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -188,24 +195,3 @@ const Auth = ({ navigation }: { navigation: any }) => {
 };
 
 export default Auth;
-
-{
-  /* <Text style={{ marginBottom: 5 }}>Name</Text>
-        <TextInput
-          placeholder="user name"
-          cursorColor={"black"}
-          keyboardType="name-phone-pad"
-          value={userName}
-          onChangeText={(txt) => {
-            setUserName(txt);
-            setUserName;
-          }}
-          style={{
-            borderWidth: 1,
-            height: 50,
-            padding: 10,
-            borderRadius: 5,
-            borderColor: "black",
-          }}
-        /> */
-}

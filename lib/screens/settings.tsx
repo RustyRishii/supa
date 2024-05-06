@@ -13,6 +13,7 @@ import { supabase } from "../supabase";
 import { useState, useEffect } from "react";
 import { Session } from "@supabase/supabase-js";
 import {
+  FlatList,
   GestureHandlerRootView,
   RectButton,
   Swipeable,
@@ -41,18 +42,7 @@ const Settings = ({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaView style={{ padding: 10 }}>
       <GestureHandlerRootView>
-        <Pressable
-          onPress={() => signOut()}
-          style={{
-            backgroundColor: "black",
-            borderRadius: 5,
-            borderWidth: 1,
-            height: 50,
-            justifyContent: "center",
-            alignContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <Pressable onPress={() => signOut()} style={styles.singOutButton}>
           <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
         </Pressable>
       </GestureHandlerRootView>
@@ -62,5 +52,14 @@ const Settings = ({ navigation }: { navigation: any }) => {
 
 export default Settings;
 
-const styles = StyleSheet.create({});
- 
+const styles = StyleSheet.create({
+  singOutButton: {
+    backgroundColor: "black",
+    borderRadius: 5,
+    borderWidth: 1,
+    height: 50,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+  },
+});
