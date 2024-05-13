@@ -21,6 +21,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "../supabase";
 import { createClient } from "@supabase/supabase-js";
 import universalStyles from "../../components/universalStyles";
+import Auth from "../Auth";
 
 const copyIconFilled = <Icon name="copy" size={20} color={"black"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"black"} />;
@@ -43,7 +44,6 @@ const Home = () => {
     const { data, error } = await supabase.from("Bookmarks").insert({
       Quote: apiData?.text,
       Author: apiData?.author,
-      UserID: supabase.auth.getSession,
     });
     if (error) {
       console.error(error);

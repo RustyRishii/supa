@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { Component } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "../supabase";
 import { useState, useEffect } from "react";
 import { Session } from "@supabase/supabase-js";
@@ -44,7 +44,12 @@ const Settings = ({ navigation }: { navigation: any }) => {
       <GestureHandlerRootView>
         <Pressable onPress={() => signOut()} style={styles.singOutButton}>
           <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
-        </Pressable>
+        </Pressable>e
+        <Swipeable>
+          <View style={styles.swipableTest}>
+            <Text>Text Test</Text>
+          </View>
+        </Swipeable>
       </GestureHandlerRootView>
     </SafeAreaView>
   );
@@ -60,6 +65,15 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: "center",
     alignContent: "center",
+    alignItems: "center",
+  },
+  swipableTest: {
+    width: "100%",
+    height: 100,
+    borderColor: "black",
+    borderWidth: 1,
+    marginVertical: 10,
+    justifyContent: "center",
     alignItems: "center",
   },
 });

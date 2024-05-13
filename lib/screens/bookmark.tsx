@@ -21,6 +21,7 @@ import universalStyles from "../../components/universalStyles";
 import Icon from "react-native-vector-icons/Ionicons";
 import { createClient } from "@supabase/supabase-js";
 import { Button } from "react-native-elements";
+import { useFocusEffect } from "@react-navigation/native";
 
 const copyIconFilled = <Icon name="copy" size={20} color={"black"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"black"} />;
@@ -29,6 +30,7 @@ const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"black"} />;
 const bookmarkIconOutline = (
   <Icon name="bookmark-outline" size={20} color={"black"} />
 );
+
 
 const Bookmark = () => {
   const [copy, setCopy] = useState(copyIconOutline);
