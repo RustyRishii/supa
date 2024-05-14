@@ -44,7 +44,7 @@ const Settings = ({ navigation }: { navigation: any }) => {
       <GestureHandlerRootView>
         <Pressable onPress={() => signOut()} style={styles.singOutButton}>
           <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
-        </Pressable>e
+        </Pressable>
         <Swipeable>
           <View style={styles.swipableTest}>
             <Text>Text Test</Text>

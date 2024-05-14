@@ -31,11 +31,15 @@ const bookmarkIconOutline = (
   <Icon name="bookmark-outline" size={20} color={"black"} />
 );
 
-
 const Bookmark = () => {
   const [copy, setCopy] = useState(copyIconOutline);
+  const [bookmarkIcon, setBookmarkIcon] = useState(bookmarkIconFilled);
   const [bookmarks, setBookmarks] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  async function deleteBookmarks() {
+    //const { error } = await supabase.from("Bookmarks").delete().eq("id", 47);
+  }
 
   async function fetchBookmarks() {
     const { data, error } = await supabase
@@ -60,10 +64,16 @@ const Bookmark = () => {
     }, 200);
   }
 
-  useEffect(() => {
-    RefreshFunction();
-    console.log("UseEffect Run done");
-  }, []);
+  // useEffect(() => {
+  //   RefreshFunction();
+  //   console.log("UseEffect Run done");
+  // }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      RefreshFunction();
+    }, [])
+  );
 
   const renderItem = ({ item, index }: { item: any; index: number }) => (
     <View style={styles.item}>
@@ -75,7 +85,7 @@ const Bookmark = () => {
       </Text>
       <View style={{ flexDirection: "row" }}>
         <Pressable
-          style={{ height: 50, width: 50 }}
+          style={styles.icon}
           onPress={() => {
             setCopy(copyIconFilled);
             Clipboard.setString(`${item.Quote} - ${item.Author} `);
@@ -87,6 +97,9 @@ const Bookmark = () => {
         >
           {copy}
         </Pressable>
+        {/* <Pressable style={styles.icon} onPress={() => deleteBookmarks()}>
+          {bookmarkIcon}
+        </Pressable> */}
       </View>
     </View>
   );
@@ -94,20 +107,18 @@ const Bookmark = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GestureHandlerRootView>
-        <View style={{ padding: 10 }}>
+        <View style={{ padding: 5 }}>
           <Text style={universalStyles.pageTitle}>Bookmarks</Text>
-          <View>
-            <RefreshControl refreshing={refreshing} onRefresh={RefreshFunction}>
-              <FlatList
-                scrollEnabled={true}
-                data={bookmarks}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => index.toString()}
-                contentContainerStyle={{ paddingBottom: 60 }}
-                style={{ height: "100%" }}
-              />
-            </RefreshControl>
-          </View>
+          <RefreshControl refreshing={refreshing} onRefresh={RefreshFunction}>
+            <FlatList
+              scrollEnabled={true}
+              data={bookmarks}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              contentContainerStyle={{ paddingBottom: 120 }}
+              style={{ height: "100%" }}
+            />
+          </RefreshControl>
         </View>
       </GestureHandlerRootView>
     </SafeAreaView>
@@ -120,11 +131,12 @@ const styles = StyleSheet.create({
   item: {
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+    // marginBottom: 30,
   },
   quote: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   author: {
     fontSize: 16,
@@ -133,6 +145,10 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     alignContent: "flex-end",
     textAlign: "right",
+  },
+  icon: {
+    height: 25,
+    width: 50,
   },
 });
 
