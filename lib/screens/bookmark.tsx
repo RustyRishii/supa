@@ -123,7 +123,8 @@ const Bookmark = () => {
       </GestureHandlerRootView>
     </SafeAreaView>
   );
-};
+
+};  
 
 export default Bookmark;
 

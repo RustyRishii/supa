@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { Swipeable } from "react-native-gesture-handler";
+import Community from "./lib/screens/community";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
@@ -57,6 +58,19 @@ function BottomTabs() {
         }}
         name="Bookmark"
         component={Bookmark}
+      />
+      <Tabs.Screen
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Icon
+              name={focused ? "people" : "people-outline"}
+              color={"black"}
+              size={20}
+            />
+          ),
+        }}
+        name="Community"
+        component={Community}
       />
       <Tabs.Screen
         options={{
