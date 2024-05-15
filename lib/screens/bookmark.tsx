@@ -69,11 +69,11 @@ const Bookmark = () => {
   //   console.log("UseEffect Run done");
   // }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      RefreshFunction();
-    }, [])
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     RefreshFunction();
+  //   }, [])
+  // );
 
   const renderItem = ({ item, index }: { item: any; index: number }) => (
     <View style={styles.item}>
@@ -123,8 +123,7 @@ const Bookmark = () => {
       </GestureHandlerRootView>
     </SafeAreaView>
   );
-
-};  
+};
 
 export default Bookmark;
 
