@@ -1,14 +1,45 @@
-import { StyleSheet, Text, View, TextInput, Image } from "react-native";
-import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Image,
+  Button,
+  Touchable,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import universalStyles from "../../components/universalStyles";
 //import { Image } from "expo-image";
-
-const blurhash =
-  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+import { supabase } from "../supabase";
+import { FloatingAction } from "react-native-floating-action";
+import { Icon } from "react-native-elements";
 
 const Community = () => {
+  const [task, setTask] = useState("");
+  
+  async function addTask() {
+    if (task === "") {
+      return;
+    }
+
+    const { error } = await supabase.from("Todo").insert({
+      Task: task,
+    });
+
+    if (error) {
+      console.error("Error adding task:", error.message);
+      // Handle the error, show an error message, etc.
+    } else {
+      // Task added successfully, you can do something here if needed
+      console.log("Task added successfully!");
+      // Optionally, clear the input field after successful addition
+      setTask("");
+    }
+  }
+
   return (
     <SafeAreaView style={{ padding: 5 }}>
       <GestureHandlerRootView>
@@ -23,13 +54,19 @@ const Community = () => {
           }}
           keyboardType="email-address"
           placeholder="Email"
+          value={task}
+          onChangeText={(txt) => {
+            setTask(txt);
+            setTask;
+          }}
         />
-        <Image
+        <Button title="Submit" onPress={addTask} />
+        {/* <Image
           source={{ uri: "https://picsum.photos/seed/696/3000/2000" }}
           alt="Painting of mountains"
           height={500}
           width={400}
-        />
+        /> */}
       </GestureHandlerRootView>
     </SafeAreaView>
   );

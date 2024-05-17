@@ -21,6 +21,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Session } from "@supabase/supabase-js";
 import Bookmark from "./screens/bookmark";
+import universalStyles from "../components/universalStyles";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -93,7 +94,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
     <SafeAreaView style={{ padding: 10 }}>
       <StatusBar backgroundColor="black" style="light" />
       <View>
-        <Text style={{ marginBottom: 5, marginTop: 20 }}>Email</Text>
+        <Text style={universalStyles.ReferenceText}>Email</Text>
         <TextInput
           placeholder="Email"
           cursorColor={"black"}
@@ -103,23 +104,11 @@ const Auth = ({ navigation }: { navigation: any }) => {
             setEmail(txt);
             setEmail;
           }}
-          style={{
-            borderWidth: 1,
-            height: 50,
-            padding: 10,
-            borderRadius: 5,
-            borderColor: "black",
-          }}
+          style={universalStyles.TextInput}
         />
-        <Text style={{ marginTop: 20, marginBottom: 5 }}>Password</Text>
+        <Text style={universalStyles.ReferenceText}>Password</Text>
         <TextInput
-          style={{
-            borderWidth: 1,
-            height: 50,
-            padding: 10,
-            borderRadius: 5,
-            borderColor: "black",
-          }}
+          style={universalStyles.TextInput}
           value={password}
           onChangeText={(txt) => {
             setPassword(txt);
