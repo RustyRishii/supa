@@ -31,7 +31,7 @@ const Settings = ({ navigation }: { navigation: any }) => {
   const signOut = async () => {
     try {
       supabase.auth.signOut();
-      navigation.navigate("Auth");
+      navigation.navigate("AuthStack");
     } catch (error) {
       if (error) {
         console.error(error);

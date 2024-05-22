@@ -3,78 +3,84 @@ import {
   Text,
   View,
   TextInput,
-  Image,
   Button,
-  Touchable,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {
+  FlatList,
+  GestureHandlerRootView,
+  RefreshControl,
+  ScrollView,
+} from "react-native-gesture-handler";
 import universalStyles from "../../components/universalStyles";
-//import { Image } from "expo-image";
+// import { Image } from "expo-image";
 import { supabase } from "../supabase";
-import { FloatingAction } from "react-native-floating-action";
 import { Icon } from "react-native-elements";
 
-const Community = () => {
-  const [task, setTask] = useState("");
-  
-  async function addTask() {
-    if (task === "") {
+const CommunityPage = ({ navigation }: { navigation: any }) => {
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [post, setPost] = useState([]);
+
+  async function fetchPosts() {
+    const { error, data } = await supabase
+      .from("Posts")
+      .select("post, time_created");
+
+    if (error) {
+      console.error("Error fetching bookmarks:", error);
       return;
     }
 
-    const { error } = await supabase.from("Todo").insert({
-      Task: task,
-    });
-
-    if (error) {
-      console.error("Error adding task:", error.message);
-      // Handle the error, show an error message, etc.
-    } else {
-      // Task added successfully, you can do something here if needed
-      console.log("Task added successfully!");
-      // Optionally, clear the input field after successful addition
-      setTask("");
-    }
+    return data;
   }
 
+  async function communityRefresh() {}
+
   return (
-    <SafeAreaView style={{ padding: 5 }}>
-      <GestureHandlerRootView>
+    <SafeAreaView style={styles.safeArea}>
+      <GestureHandlerRootView style={styles.container}>
         <Text style={universalStyles.pageTitle}>Community</Text>
-        <TextInput
-          style={{
-            borderRadius: 5,
-            borderWidth: 1,
-            borderColor: "black",
-            padding: 10,
-            color: "black",
-          }}
-          keyboardType="email-address"
-          placeholder="Email"
-          value={task}
-          onChangeText={(txt) => {
-            setTask(txt);
-            setTask;
-          }}
-        />
-        <Button title="Submit" onPress={addTask} />
-        {/* <Image
-          source={{ uri: "https://picsum.photos/seed/696/3000/2000" }}
-          alt="Painting of mountains"
-          height={500}
-          width={400}
-        /> */}
+        <RefreshControl onRefresh={} refreshing={true}>
+          <FlatList />
+        </RefreshControl>
+        <Pressable
+          onPress={() => navigation.navigate("Modal")}
+          style={styles.fab}
+        >
+          <Icon
+            name="add-circle"
+            color={universalStyles.buttonBgColor.color}
+            size={65}
+          />
+        </Pressable>
       </GestureHandlerRootView>
     </SafeAreaView>
   );
 };
 
-export default Community;
+export default CommunityPage;
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    padding: 5,
+  },
+  container: {
+    flex: 1,
+  },
+  fab: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+    borderRadius: 37.5, // half of the size of the icon (75/2)
+    width: 75,
+    height: 75,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   image: {
     flex: 1,
     width: "100%",

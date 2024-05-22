@@ -36,6 +36,17 @@ const universalStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
   },
+  buttonBgColor: {
+    color: "#5c4628",
+  },
+  postButton: {
+    color: "white",
+    backgroundColor: "#5c4628",
+    fontSize: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    borderRadius: 50,
+  },
 });
 
 export default universalStyles;

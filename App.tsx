@@ -12,10 +12,12 @@ import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { Swipeable } from "react-native-gesture-handler";
-import Community from "./lib/screens/community";
+import CommunityPage from "./lib/screens/community";
+import Modal from "./lib/screens/modal";
 
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
+const ModalStack = createNativeStackNavigator();
 
 function BottomTabs() {
   return (
@@ -97,24 +99,36 @@ function AuthStack() {
     >
       <Stack.Screen
         options={{ animation: "slide_from_right" }}
-        name="Auth"
-        component={Auth}
-      />
-      <Stack.Screen
-        options={{ animation: "slide_from_right" }}
         name="BottomTabs"
         component={BottomTabs}
       />
-      {/* <Stack.Screen
-        options={{ animation: "slide_from_left" }}
-        name="Home"
-        component={Home}
+      <Stack.Screen
+        options={{
+          animation: "slide_from_right",
+        }}
+        name="Auth"
+        component={Auth}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function Community() {
+  return (
+    <Stack.Navigator
+      screenOptions={{ presentation: "modal", headerShown: false }}
+      initialRouteName="CommunityPage"
+    >
+      <Stack.Screen
+        name="CommunityPage"
+        component={CommunityPage}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
-        options={{ animation: "slide_from_left" }}
-        name="Setting"
-        component={Settings}
-      /> */}
+        name="Modal"
+        component={Modal}
+        options={{ animation: "fade_from_bottom", animationDuration: 1000 }}
+      />
     </Stack.Navigator>
   );
 }

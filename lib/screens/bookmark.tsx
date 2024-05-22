@@ -37,10 +37,6 @@ const Bookmark = () => {
   const [bookmarks, setBookmarks] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  async function deleteBookmarks() {
-    //const { error } = await supabase.from("Bookmarks").delete().eq("id", 47);
-  }
-
   async function fetchBookmarks() {
     const { data, error } = await supabase
       .from("Bookmarks")
