@@ -105,16 +105,20 @@ const Bookmark = () => {
       <GestureHandlerRootView>
         <View style={{ padding: 5 }}>
           <Text style={universalStyles.pageTitle}>Bookmarks</Text>
-          <RefreshControl refreshing={refreshing} onRefresh={RefreshFunction}>
-            <FlatList
-              scrollEnabled={true}
-              data={bookmarks}
-              renderItem={renderItem}
-              keyExtractor={(item, index) => index.toString()}
-              contentContainerStyle={{ paddingBottom: 120 }}
-              style={{ height: "100%" }}
-            />
-          </RefreshControl>
+          <FlatList
+            scrollEnabled={true}
+            data={bookmarks}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{ paddingBottom: 80 }}
+            style={{ height: "100%" }}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={RefreshFunction}
+              />
+            }
+          />
         </View>
       </GestureHandlerRootView>
     </SafeAreaView>
