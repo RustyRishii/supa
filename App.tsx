@@ -69,7 +69,7 @@ function BottomTabs() {
               color={"black"}
               size={20}
             />
-          ),
+          )
         }}
         name="Community"
         component={Community}
@@ -127,7 +127,7 @@ function Community() {
       <Stack.Screen
         name="Modal"
         component={Modal}
-        options={{ animation: "fade_from_bottom", animationDuration: 1000 }}
+        options={{ animation: "fade_from_bottom", animationDuration: 5000 }}
       />
     </Stack.Navigator>
   );

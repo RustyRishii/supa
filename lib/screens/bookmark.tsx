@@ -4,9 +4,11 @@ import {
   Text,
   View,
   FlatList,
+  Image,
   ToastAndroid,
   Pressable,
   RefreshControl,
+  TouchableOpacity,
 } from "react-native";
 import React from "react";
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -22,19 +24,19 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { createClient } from "@supabase/supabase-js";
 import { Button } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
+import { MenuProvider } from "react-native-popup-menu";
 
 const copyIconFilled = <Icon name="copy" size={20} color={"black"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"black"} />;
 
-const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"black"} />;
-const bookmarkIconOutline = (
-  <Icon name="bookmark-outline" size={20} color={"black"} />
-);
+// const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"black"} />;
+// const bookmarkIconOutline = (
+//   <Icon name="bookmark-outline" size={20} color={"black"} />
+// );
 
 const Bookmark = () => {
   const [copy, setCopy] = useState(copyIconOutline);
-  const [bookmarkIcon, setBookmarkIcon] = useState(bookmarkIconFilled);
-  const [bookmarks, setBookmarks] = useState([]);
+  const [bookmarks, setBookmarks] = useState<any>([]);
   const [refreshing, setRefreshing] = useState(false);
 
   async function fetchBookmarks() {
@@ -76,9 +78,11 @@ const Bookmark = () => {
       <Text selectable={true} style={styles.quote}>
         {item.Quote}
       </Text>
+
       <Text selectable={true} style={styles.author}>
         - {item.Author}
       </Text>
+
       <View style={{ flexDirection: "row" }}>
         <Pressable
           style={styles.icon}
@@ -103,9 +107,10 @@ const Bookmark = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GestureHandlerRootView>
-        <View style={{ padding: 5 }}>
+        <View style={{ padding: 5, backgroundColor: "white" }}>
           <Text style={universalStyles.pageTitle}>Bookmarks</Text>
           <FlatList
+            removeClippedSubviews={false}
             scrollEnabled={true}
             data={bookmarks}
             renderItem={renderItem}
@@ -120,6 +125,7 @@ const Bookmark = () => {
             }
           />
         </View>
+        
       </GestureHandlerRootView>
     </SafeAreaView>
   );
@@ -136,10 +142,12 @@ const styles = StyleSheet.create({
   quote: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "black",
     // marginBottom: 5,
   },
   author: {
     fontSize: 16,
+    color: "black",
     fontStyle: "italic",
     justifyContent: "flex-end",
     alignItems: "flex-end",

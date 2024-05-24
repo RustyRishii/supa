@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -11,6 +11,7 @@ import {
 
 const Modal = ({ navigation }: { navigation: any }) => {
   const [post, setPost] = useState<string>("");
+  var [wordCount, setWordCount] = useState(0);
 
   async function PostFunction() {
     if (post == "") {
@@ -30,37 +31,50 @@ const Modal = ({ navigation }: { navigation: any }) => {
     }
   }
 
+  //backgroundColor: "#878474"
+
   return (
     <SafeAreaView
-      style={{ padding: 5, backgroundColor: "#878474", height: "100%" }}
+      style={{ padding: 5, backgroundColor: "gray", height: "100%" }}
     >
       <GestureHandlerRootView>
-        <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
-          <Pressable
-            style={{
-              //justifyContent: "flex-start",
-              width: 35,
-              height: 30,
-              //backgroundColor: "green",
-            }}
-            onPress={() => navigation.goBack()}
+        <ScrollView>
+          <View
+            style={{ justifyContent: "space-between", flexDirection: "row" }}
           >
-            <Icon name="close-outline" size={40} color={"white"} />
-          </Pressable>
-          <Pressable onPress={() => PostFunction()}>
-            <Text style={universalStyles.postButton}>Post</Text>
-          </Pressable>
-        </View>
-        <TextInput
-          style={universalStyles.TextInput}
-          value={post}
-          onChangeText={(txt) => {
-            setPost(txt);
-            setPost;
-          }}
-          placeholder="Post something"
-          cursorColor={"black"}
-        />
+            <Pressable
+              style={{
+                //justifyContent: "flex-start",
+                width: 35,
+                height: 30,
+                //backgroundColor: "green",
+              }}
+              onPress={() => navigation.goBack()}
+            >
+              <Icon name="close-outline" size={40} color={"white"} />
+            </Pressable>
+            <Text>{wordCount}/300</Text>
+            <Pressable onPress={() => PostFunction()}>
+              <Text style={universalStyles.postButton}>Post</Text>
+            </Pressable>
+          </View>
+          <TextInput
+            style={{
+              fontSize: 25,
+              color: "white",
+            }}
+            selectionColor={"#5c4628"}
+            value={post}
+            onChangeText={(txt) => {
+              setPost(txt);
+              setWordCount(txt.length);
+            }}
+            placeholder="Post something...."
+            cursorColor={"black"}
+            multiline={true}
+            maxLength={350}
+          />
+        </ScrollView>
       </GestureHandlerRootView>
     </SafeAreaView>
   );

@@ -137,6 +137,9 @@ const Home = () => {
               {bookmark}
             </Pressable>
           </View>
+          <Text style={{ fontSize: 50 }} selectable={true}>
+            This is a text
+          </Text>
         </ScrollView>
       </GestureHandlerRootView>
     </SafeAreaView>

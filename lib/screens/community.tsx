@@ -6,6 +6,7 @@ import {
   Button,
   TouchableOpacity,
   Pressable,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,14 +19,17 @@ import {
 import universalStyles from "../../components/universalStyles";
 // import { Image } from "expo-image";
 import { supabase } from "../supabase";
-import { Icon } from "react-native-elements";
+import Icon from "react-native-vector-icons/Ionicons";
+import { useFocusEffect } from "@react-navigation/native";
 
 const CommunityPage = ({ navigation }: { navigation: any }) => {
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [post, setPost] = useState([]);
+  const [post, setPost] = useState<any>([]);
 
   async function fetchPosts() {
-    const { error, data } = await supabase.from("Posts").select("post");
+    const { error, data } = await supabase
+      .from("Posts")
+      .select("post , time_created ");
     setPost(data);
     console.log(data);
 
@@ -36,69 +40,6 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
     return data;
   }
 
-  const DATA = [
-    {
-      id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-      title: "1 Item",
-    },
-    {
-      id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-      title: "2 Item",
-    },
-    {
-      id: "58694a0f-3da1-471f-bd96-145571e29d72",
-      title: "3 Item",
-    },
-    {
-      id: "abc",
-      title: "4 Item",
-    },
-    {
-      id: "-a4f8-fbd91aa97f63",
-      title: "5 Item",
-    },
-    {
-      id: "-471f-bd96-145571e29d72",
-      title: "6 Item",
-    },
-    {
-      id: "abcbhfhdvff",
-      title: "7 Item",
-    },
-    {
-      id: "-4f8-fbd91aa97f63",
-      title: "8 Item",
-    },
-    {
-      id: "471f-bd96-145571e29d72",
-      title: "9 Item",
-    },
-    {
-      id: "abcfhdvff",
-      title: "10 Item",
-    },
-    {
-      id: "-4fbd91aa97f63",
-      title: "11 Item",
-    },
-    {
-      id: "471f-145571e29d72",
-      title: "12 Item",
-    },
-    {
-      id: "abcdvff",
-      title: "13 Item",
-    },
-    {
-      id: "-4fbda97f63",
-      title: "14 Item",
-    },
-    {
-      id: "471f-1471e29d72",
-      title: "15 Item",
-    },
-  ];
-
   async function communityRefresh() {
     setRefreshing(true);
     fetchPosts();
@@ -107,28 +48,60 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
     }, 200);
   }
 
-  type ItemProps = { title: string };
+  async function deleteData({ item, index }: { item: any; index: number }) {
+    const { error } = await supabase.from("Posts").delete().eq("post", index);
+  }
 
-  const Item = ({ title }: ItemProps) => (
-    <View>
-      <Text style={{ fontSize: 50 }}>{title}</Text>
-    </View>
+  useFocusEffect(
+    React.useCallback(() => {
+      communityRefresh();
+    }, [])
   );
 
-  function modalPress () {
-    
-  }
+  const renderTweet = ({ item, index }: { item: any; index: number }) => {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          borderTopWidth: 1,
+          borderBottomWidth: 1,
+          marginVertical: 10,
+          paddingVertical: 5,
+          paddingHorizontal: 5,
+          flexWrap: "wrap",
+        }}
+      >
+        <Pressable onPress={() => console.log("Image pressed")}>
+          <Image
+            width={50}
+            height={50}
+            borderRadius={50}
+            source={{
+              uri: "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
+            }}
+          />
+        </Pressable>
+        <Text selectable={true} style={{ fontSize: 20, paddingHorizontal: 10 }}>
+          {item.post}
+        </Text>
+        <Button title="Delete" onPress={() => deleteData} />
+        {/* <Text>{item.time_created}</Text> */}
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GestureHandlerRootView>
-        <View style={{ paddingHorizontal: 5 }}>
+        <View>
           <Text style={universalStyles.pageTitle}>Community</Text>
           <FlatList
             scrollEnabled={true}
-            data={DATA}
-            renderItem={({ item }) => <Item title={item.title} />}
-            keyExtractor={(item) => item.id}
+            removeClippedSubviews={false}
+            data={post}
+            renderItem={renderTweet}
+            keyExtractor={(item, index) => index.toString()}
             contentContainerStyle={{ paddingBottom: 75 }}
             style={{ height: "100%" }}
             refreshControl={
