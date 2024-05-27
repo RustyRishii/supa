@@ -64,8 +64,8 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          borderTopWidth: 1,
-          borderBottomWidth: 1,
+          borderTopWidth: 0.5,
+          borderBottomWidth: 0.5,
           marginVertical: 10,
           paddingVertical: 5,
           paddingHorizontal: 5,

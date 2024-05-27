@@ -52,6 +52,19 @@ function BottomTabs() {
         options={{
           tabBarIcon: ({ focused }) => (
             <Icon
+              name={focused ? "people" : "people-outline"}
+              color={"black"}
+              size={20}
+            />
+          ),
+        }}
+        name="Community"
+        component={Community}
+      />
+      <Tabs.Screen
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Icon
               name={focused ? "bookmark" : "bookmark-outline"}
               color={"black"}
               size={20}
@@ -61,19 +74,7 @@ function BottomTabs() {
         name="Bookmark"
         component={Bookmark}
       />
-      <Tabs.Screen
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              name={focused ? "people" : "people-outline"}
-              color={"black"}
-              size={20}
-            />
-          )
-        }}
-        name="Community"
-        component={Community}
-      />
+
       <Tabs.Screen
         options={{
           tabBarIcon: ({ focused }) => (

@@ -60,7 +60,7 @@ const Modal = ({ navigation }: { navigation: any }) => {
           </View>
           <TextInput
             style={{
-              fontSize: 25,
+              fontSize: 20,
               color: "white",
             }}
             selectionColor={"#5c4628"}

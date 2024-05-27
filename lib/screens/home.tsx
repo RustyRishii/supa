@@ -112,16 +112,28 @@ const Home = () => {
           <View style={universalStyles.quoteBlock}>
             {apiData ? (
               <View>
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                <Text
+                  selectable={true}
+                  style={{ fontSize: 20, fontWeight: "bold" }}
+                >
                   {apiData.text}
                 </Text>
-                <Text style={universalStyles.author}>{apiData.author}</Text>
+                <Text selectable={true} style={universalStyles.author}>
+                  {apiData.author}
+                </Text>
               </View>
             ) : null}
           </View>
           <View style={universalStyles.bookmarkAndCopy}>
             <Pressable
-              style={{ height: 50, width: 50 }}
+              style={{
+                //backgroundColor: "green",
+                justifyContent: "center",
+                height: 25,
+                alignContent: "center",
+                alignItems: "center",
+                width: 25,
+              }}
               onPress={() => {
                 copyIconFunction();
               }}
@@ -129,7 +141,14 @@ const Home = () => {
               {copy}
             </Pressable>
             <Pressable
-              style={{ height: 50, width: 50 }}
+              style={{
+                //backgroundColor: "green",
+                justifyContent: "center",
+                height: 25,
+                alignContent: "center",
+                alignItems: "center",
+                width: 25,
+              }}
               onPress={() => {
                 bookmarkCondition();
               }}
