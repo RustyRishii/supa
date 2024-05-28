@@ -29,7 +29,7 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
   async function fetchPosts() {
     const { error, data } = await supabase
       .from("Posts")
-      .select("post , time_created ");
+      .select("id, post , time_created ");
     setPost(data);
     console.log(data);
 
@@ -48,8 +48,16 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
     }, 200);
   }
 
-  async function deleteData({ item, index }: { item: any; index: number }) {
-    const { error } = await supabase.from("Posts").delete().eq("post", index);
+  async function deleteData(id: number) {
+    const { error } = await supabase.from("Posts").delete().eq("id", id);
+
+    if (error) {
+      console.error("Error deleting post:", error);
+    } else {
+      console.log("Post deleted successfully");
+      // Refresh the posts after deletion
+      communityRefresh();
+    }
   }
 
   useFocusEffect(
@@ -74,8 +82,9 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
       >
         <Pressable onPress={() => console.log("Image pressed")}>
           <Image
-            width={50}
-            height={50}
+            width={35}
+            height={35}
+            style={{ backgroundColor: "gray" }}
             borderRadius={50}
             source={{
               uri: "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
@@ -86,7 +95,7 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
           {item.post}
         </Text>
         <Button title="Delete" onPress={() => deleteData} />
-        {/* <Text>{item.time_created}</Text> */}
+        <Text>{item.time_created}</Text>
       </View>
     );
   };
@@ -152,16 +161,3 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 });
-
-/*
-<Pressable
-          onPress={() => navigation.navigate("Modal")}
-          style={styles.fab}
-        >
-          <Icon
-            name="add-circle"
-            color={universalStyles.buttonBgColor.color}
-            size={65}
-          />
-        </Pressable>
-*/

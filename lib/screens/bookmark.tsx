@@ -125,7 +125,6 @@ const Bookmark = () => {
             }
           />
         </View>
-        
       </GestureHandlerRootView>
     </SafeAreaView>
   );
