@@ -61,6 +61,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
         ToastAndroid.show("Account created", ToastAndroid.SHORT);
         // Save user info to AsyncStorage
         await AsyncStorage.setItem("userToken", user?.access_token);
+        await AsyncStorage.setItem("userEmail", email);
       }
     } catch (error) {
       if (error === "Email already exists") {
@@ -79,6 +80,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
       if (error) {
         Alert.alert("Error", error.message);
       } else {
+        await AsyncStorage.setItem("userEmail", email);
         navigation.navigate("BottomTabs", { screen: "Home" });
         ToastAndroid.show("User SingedIn", ToastAndroid.SHORT);
       }

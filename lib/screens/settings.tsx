@@ -19,6 +19,7 @@ import {
   Swipeable,
 } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"black"} />;
 const bookmarkIconOutline = (
@@ -27,6 +28,16 @@ const bookmarkIconOutline = (
 
 const Settings = ({ navigation }: { navigation: any }) => {
   const [bookmark, setBookmark] = useState(bookmarkIconOutline);
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const fetchEmail = async () => {
+      const userEmail = await AsyncStorage.getItem("userEmail");
+      setEmail(userEmail || "No email found");
+    };
+
+    fetchEmail();
+  }, []);
 
   const signOut = async () => {
     try {
@@ -42,14 +53,10 @@ const Settings = ({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaView style={{ padding: 10 }}>
       <GestureHandlerRootView>
+        <Text>Email : {email}</Text>
         <Pressable onPress={() => signOut()} style={styles.singOutButton}>
           <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
         </Pressable>
-        <Swipeable>
-          <View style={styles.swipableTest}>
-            <Text>Text Test</Text>
-          </View>
-        </Swipeable>
       </GestureHandlerRootView>
     </SafeAreaView>
   );

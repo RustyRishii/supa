@@ -11,6 +11,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { supabase } from "../supabase";
 import universalStyles from "../../components/universalStyles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const copyIconFilled = <Icon name="copy" size={20} color={"black"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"black"} />;
@@ -28,12 +29,25 @@ const Home = () => {
     { text: string; author: string } | undefined
   >(undefined);
 
+  // useEffect(() => {
+  //   const {
+  //     data: { user },
+  //   } = await supabase.auth.getUser();
+  //   console.log(user);
+  // });
+
   const handleSubmit = async () => {
-    //const user = supabase.auth.user();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    const userEmail = user?.email;
+
     const { data, error } = await supabase.from("Bookmarks").insert({
       Quote: apiData?.text,
       Author: apiData?.author,
-      //user_id: user.id,
+      email_id: userEmail,
     });
     if (error) {
       console.error(error);
