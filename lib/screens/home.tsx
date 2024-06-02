@@ -29,20 +29,15 @@ const Home = () => {
     { text: string; author: string } | undefined
   >(undefined);
 
-  // useEffect(() => {
-  //   const {
-  //     data: { user },
-  //   } = await supabase.auth.getUser();
-  //   console.log(user);
-  // });
-
-  const handleSubmit = async () => {
+  const bookmarkQuote = async () => {
     const {
       data: { user },
       error: userError,
     } = await supabase.auth.getUser();
+    // from docs
 
     const userEmail = user?.email;
+    //for Adding users Email to the bookmarks table.
 
     const { data, error } = await supabase.from("Bookmarks").insert({
       Quote: apiData?.text,
@@ -68,7 +63,7 @@ const Home = () => {
   function bookmarkCondition() {
     if (bookmark === bookmarkIconOutline) {
       setBookmark(bookmarkIconFilled);
-      handleSubmit();
+      bookmarkQuote();
       ToastAndroid.show("Bookmarked", ToastAndroid.SHORT);
     } else if (bookmark === bookmarkIconFilled) {
       setBookmark(bookmarkIconOutline);
@@ -161,9 +156,6 @@ const Home = () => {
               {bookmark}
             </Pressable>
           </View>
-          <Text style={{ fontSize: 50 }} selectable={true}>
-            This is a text
-          </Text>
         </ScrollView>
       </GestureHandlerRootView>
     </SafeAreaView>

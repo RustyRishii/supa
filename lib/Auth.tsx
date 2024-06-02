@@ -32,6 +32,7 @@ AppState.addEventListener("change", (state) => {
 });
 
 const Auth = ({ navigation }: { navigation: any }) => {
+  //const [userName, setUserName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState(false);
@@ -48,11 +49,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: {
-            userName,
-          },
-        },
+        userName,
       });
       if (error) {
         Alert.alert("Error", error.message);
@@ -96,6 +93,18 @@ const Auth = ({ navigation }: { navigation: any }) => {
     <SafeAreaView style={{ padding: 10 }}>
       <StatusBar backgroundColor="black" style="light" />
       <View>
+        <Text style={universalStyles.ReferenceText}>Name</Text>
+        <TextInput
+          placeholder="Username"
+          cursorColor={"black"}
+          keyboardType="name-phone-pad"
+          value={userName}
+          onChangeText={(txt) => {
+            setUserName(txt);
+            setUserName;
+          }}
+          style={universalStyles.TextInput}
+        />
         <Text style={universalStyles.ReferenceText}>Email</Text>
         <TextInput
           placeholder="Email"

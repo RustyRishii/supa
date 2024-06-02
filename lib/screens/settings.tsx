@@ -5,6 +5,7 @@ import {
   Pressable,
   View,
   Animated,
+  Image,
 } from "react-native";
 import React, { Component } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -53,7 +54,31 @@ const Settings = ({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaView style={{ padding: 10 }}>
       <GestureHandlerRootView>
-        <Text>Email : {email}</Text>
+        <View
+          style={{
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            width={150}
+            height={150}
+            style={{ backgroundColor: "gray" }}
+            borderRadius={150}
+            source={{
+              uri: "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
+            }}
+          />
+
+          {/* <Text style={{ fontSize: 20, paddingVertical: 10 }}>
+            Name : {userName}
+          </Text> */}
+          <Text style={{ fontSize: 20, paddingVertical: 10 }}>
+            Email : {email}
+          </Text>
+        </View>
+
         <Pressable onPress={() => signOut()} style={styles.singOutButton}>
           <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
         </Pressable>

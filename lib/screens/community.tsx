@@ -21,6 +21,7 @@ import universalStyles from "../../components/universalStyles";
 import { supabase } from "../supabase";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
+import Fab from "../../components/fab";
 
 const CommunityPage = ({ navigation }: { navigation: any }) => {
   const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -105,7 +106,18 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
       <GestureHandlerRootView>
         <View>
           <Text style={universalStyles.pageTitle}>Community</Text>
-          <FlatList
+          <Text
+            style={{
+              fontSize: 50,
+              justifyContent: "center",
+              alignContent: "center",
+              alignItems: "center",
+              alignSelf: "center",
+            }}
+          >
+            Coming Soon
+          </Text>
+          {/* <FlatList
             scrollEnabled={true}
             removeClippedSubviews={false}
             data={post}
@@ -119,7 +131,7 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
                 onRefresh={communityRefresh}
               />
             }
-          />
+          /> */}
         </View>
         <Pressable
           onPress={() => navigation.navigate("Modal")}
