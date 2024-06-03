@@ -49,7 +49,11 @@ const Auth = ({ navigation }: { navigation: any }) => {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        userName,
+        options: {
+          data: {
+            userName: userName,
+          },
+        },
       });
       if (error) {
         Alert.alert("Error", error.message);
@@ -57,8 +61,9 @@ const Auth = ({ navigation }: { navigation: any }) => {
         navigation.navigate("BottomTabs", { screen: "Home" });
         ToastAndroid.show("Account created", ToastAndroid.SHORT);
         // Save user info to AsyncStorage
-        await AsyncStorage.setItem("userToken", user?.access_token);
+        //await AsyncStorage.setItem("userToken", user?.access_token);
         await AsyncStorage.setItem("userEmail", email);
+        await AsyncStorage.setItem("userName", userName);
       }
     } catch (error) {
       if (error === "Email already exists") {

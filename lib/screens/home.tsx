@@ -43,6 +43,7 @@ const Home = () => {
       Quote: apiData?.text,
       Author: apiData?.author,
       email_id: userEmail,
+      
     });
     if (error) {
       console.error(error);

@@ -1,14 +1,11 @@
 import {
-  Alert,
   StyleSheet,
   Text,
   View,
   FlatList,
-  Image,
   ToastAndroid,
   Pressable,
   RefreshControl,
-  TouchableOpacity,
 } from "react-native";
 import React from "react";
 import Clipboard from "@react-native-clipboard/clipboard";
@@ -75,11 +72,21 @@ const Bookmark = () => {
 
   const renderItem = ({ item, index }: { item: any; index: number }) => (
     <View style={styles.item}>
-      <Text selectable={true} style={styles.quote}>
+      <Text
+        accessible={true}
+        accessibilityLabel="Quote and Author name"
+        selectable={true}
+        style={styles.quote}
+      >
         {item.Quote}
       </Text>
 
-      <Text selectable={true} style={styles.author}>
+      <Text
+        accessible={true}
+        accessibilityLabel="Author name"
+        selectable={true}
+        style={styles.author}
+      >
         - {item.Author}
       </Text>
 
@@ -124,6 +131,11 @@ const Bookmark = () => {
               />
             }
           />
+          {/* <VirtualizedList
+            initialNumToRender={6}
+            renderItem={renderItem}
+            removeClippedSubviews={false}
+          /> */}
         </View>
       </GestureHandlerRootView>
     </SafeAreaView>

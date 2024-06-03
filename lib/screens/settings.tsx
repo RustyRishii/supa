@@ -1,39 +1,20 @@
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  Pressable,
-  View,
-  Animated,
-  Image,
-} from "react-native";
-import React, { Component } from "react";
+import { Alert, StyleSheet, Text, Pressable, View, Image } from "react-native";
+import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "../supabase";
-import { useState, useEffect } from "react";
-import { Session } from "@supabase/supabase-js";
-import {
-  FlatList,
-  GestureHandlerRootView,
-  RectButton,
-  Swipeable,
-} from "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"black"} />;
-const bookmarkIconOutline = (
-  <Icon name="bookmark-outline" size={20} color={"black"} />
-);
+import universalStyles from "../../components/universalStyles";
+import App from "../../App";
 
 const Settings = ({ navigation }: { navigation: any }) => {
-  const [bookmark, setBookmark] = useState(bookmarkIconOutline);
   const [email, setEmail] = useState("");
 
   useEffect(() => {
     const fetchEmail = async () => {
       const userEmail = await AsyncStorage.getItem("userEmail");
+      const userName = await AsyncStorage.getItem("userName");
       setEmail(userEmail || "No email found");
     };
 
@@ -42,18 +23,17 @@ const Settings = ({ navigation }: { navigation: any }) => {
 
   const signOut = async () => {
     try {
-      supabase.auth.signOut();
+      await supabase.auth.signOut();
       navigation.navigate("AuthStack");
     } catch (error) {
-      if (error) {
-        console.error(error);
-      }
+      console.error(error);
     }
   };
 
   return (
     <SafeAreaView style={{ padding: 10 }}>
       <GestureHandlerRootView>
+        <Text style={universalStyles.pageTitle}>Settings</Text>
         <View
           style={{
             justifyContent: "center",
@@ -70,16 +50,14 @@ const Settings = ({ navigation }: { navigation: any }) => {
               uri: "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
             }}
           />
-
-          {/* <Text style={{ fontSize: 20, paddingVertical: 10 }}>
-            Name : {userName}
-          </Text> */}
           <Text style={{ fontSize: 20, paddingVertical: 10 }}>
             Email : {email}
           </Text>
+          {/* <Text style={{ fontSize: 20, paddingVertical: 10 }}>
+            userName : {userName}
+          </Text> */}
         </View>
-
-        <Pressable onPress={() => signOut()} style={styles.singOutButton}>
+        <Pressable onPress={signOut} style={styles.signOutButton}>
           <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
         </Pressable>
       </GestureHandlerRootView>
@@ -90,22 +68,13 @@ const Settings = ({ navigation }: { navigation: any }) => {
 export default Settings;
 
 const styles = StyleSheet.create({
-  singOutButton: {
+  signOutButton: {
     backgroundColor: "black",
     borderRadius: 5,
     borderWidth: 1,
     height: 50,
     justifyContent: "center",
     alignContent: "center",
-    alignItems: "center",
-  },
-  swipableTest: {
-    width: "100%",
-    height: 100,
-    borderColor: "black",
-    borderWidth: 1,
-    marginVertical: 10,
-    justifyContent: "center",
     alignItems: "center",
   },
 });
