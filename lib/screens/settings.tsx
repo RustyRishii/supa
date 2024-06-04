@@ -7,6 +7,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import universalStyles from "../../components/universalStyles";
 import App from "../../App";
+import Swipeable from "react-native-gesture-handler";
 
 const Settings = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState("");

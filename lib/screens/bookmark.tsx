@@ -26,20 +26,21 @@ import { MenuProvider } from "react-native-popup-menu";
 const copyIconFilled = <Icon name="copy" size={20} color={"black"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"black"} />;
 
-// const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"black"} />;
-// const bookmarkIconOutline = (
-//   <Icon name="bookmark-outline" size={20} color={"black"} />
-// );
+const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"black"} />;
+const bookmarkIconOutline = (
+  <Icon name="bookmark-outline" size={20} color={"black"} />
+);
 
 const Bookmark = () => {
   const [copy, setCopy] = useState(copyIconOutline);
   const [bookmarks, setBookmarks] = useState<any>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [bookmarkIcon, setBookmarkIcon] = useState(bookmarkIconFilled);
 
   async function fetchBookmarks() {
     const { data, error } = await supabase
       .from("Bookmarks")
-      .select("Quote, Author");
+      .select("id, Quote, Author");
     setBookmarks(data);
     console.log(data);
 
@@ -57,6 +58,21 @@ const Bookmark = () => {
     setTimeout(() => {
       setRefreshing(false);
     }, 200);
+  }
+
+  async function deleteBookmark(id: number) {
+    ToastAndroid.show("Deleted", ToastAndroid.SHORT);
+    const { data, error } = await supabase
+      .from("Bookmarks")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error deleting bookmark:", error);
+    } else {
+      console.log("Bookmark deleted successfully:", data);
+      fetchBookmarks(); // Refresh the list after deletion
+    }
   }
 
   // useEffect(() => {
@@ -104,9 +120,10 @@ const Bookmark = () => {
         >
           {copy}
         </Pressable>
-        {/* <Pressable style={styles.icon} onPress={() => deleteBookmarks()}>
+        <Pressable onPress={() => deleteBookmark(item.id)}>
           {bookmarkIcon}
-        </Pressable> */}
+        </Pressable>
+        {/* <Button onPress={() => deleteBookmark(item.id)} title={"Delete"} /> */}
       </View>
     </View>
   );
