@@ -3,16 +3,22 @@ import { StyleSheet } from "react-native";
 const universalStyles = StyleSheet.create({
   pageTitle: {
     fontSize: 30,
+    color: "white",
   },
   quoteBlock: {
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
+    borderColor: "white",
     borderRadius: 10,
-    borderWidth: 1,
+    borderWidth: 0.2,
     marginVertical: 10,
     height: 215,
     paddingHorizontal: 10,
+  },
+  quote: {
+    fontSize: 20,
+    color: "aliceblue",
   },
   author: {
     fontSize: 20,
@@ -20,6 +26,7 @@ const universalStyles = StyleSheet.create({
     alignContent: "flex-end",
     textAlign: "right",
     alignItems: "flex-end",
+    color: "aliceblue",
   },
   TextInput: {
     borderWidth: 1,
@@ -37,7 +44,7 @@ const universalStyles = StyleSheet.create({
     justifyContent: "space-around",
   },
   buttonBgColor: {
-    color: "#5c4628",
+    color: "#1D9BF0",
   },
   postButton: {
     color: "white",
@@ -46,6 +53,14 @@ const universalStyles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 5,
     borderRadius: 50,
+  },
+  icon: {
+    height: 25,
+    width: 25,
+    color: "white",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
   },
 });
 

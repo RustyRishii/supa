@@ -32,35 +32,39 @@ const Settings = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <SafeAreaView style={{ padding: 10 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <GestureHandlerRootView>
-        <Text style={universalStyles.pageTitle}>Settings</Text>
         <View
-          style={{
-            justifyContent: "center",
-            alignContent: "center",
-            alignItems: "center",
-          }}
+          style={{ backgroundColor: "#243447", padding: 5, height: "100%" }}
         >
-          <Image
-            width={150}
-            height={150}
-            style={{ backgroundColor: "gray" }}
-            borderRadius={150}
-            source={{
-              uri: "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
+          <Text style={universalStyles.pageTitle}>Settings</Text>
+          <View
+            style={{
+              justifyContent: "center",
+              alignContent: "center",
+              alignItems: "center",
             }}
-          />
-          <Text style={{ fontSize: 20, paddingVertical: 10 }}>
-            Email : {email}
-          </Text>
-          {/* <Text style={{ fontSize: 20, paddingVertical: 10 }}>
+          >
+            <Image
+              width={150}
+              height={150}
+              style={{ backgroundColor: "gray" }}
+              borderRadius={150}
+              source={{
+                uri: "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
+              }}
+            />
+            <Text style={{ fontSize: 20, paddingVertical: 10, color: "white" }}>
+              Email : {email}
+            </Text>
+            {/* <Text style={{ fontSize: 20, paddingVertical: 10 }}>
             userName : {userName}
           </Text> */}
+          </View>
+          <Pressable onPress={signOut} style={styles.signOutButton}>
+            <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
+          </Pressable>
         </View>
-        <Pressable onPress={signOut} style={styles.signOutButton}>
-          <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
-        </Pressable>
       </GestureHandlerRootView>
     </SafeAreaView>
   );

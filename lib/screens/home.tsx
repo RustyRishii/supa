@@ -13,12 +13,12 @@ import { supabase } from "../supabase";
 import universalStyles from "../../components/universalStyles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const copyIconFilled = <Icon name="copy" size={20} color={"black"} />;
-const copyIconOutline = <Icon name="copy-outline" size={20} color={"black"} />;
+const copyIconFilled = <Icon name="copy" size={20} color={"#1D9BF0"} />;
+const copyIconOutline = <Icon name="copy-outline" size={20} color={"white"} />;
 
-const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"black"} />;
+const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"#1D9BF0"} />;
 const bookmarkIconOutline = (
-  <Icon name="bookmark-outline" size={20} color={"black"} />
+  <Icon name="bookmark-outline" size={20} color={"aliceblue"} />
 );
 
 const Home = () => {
@@ -43,7 +43,6 @@ const Home = () => {
       Quote: apiData?.text,
       Author: apiData?.author,
       email_id: userEmail,
-      
     });
     if (error) {
       console.error(error);
@@ -100,11 +99,15 @@ const Home = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{ padding: 10 }}>
+    <SafeAreaView style={{}}>
       <StatusBar backgroundColor="black" style="light" />
       <GestureHandlerRootView>
         <ScrollView
-          style={{ height: "100%" }}
+          style={{ height: "100%", padding: 10, backgroundColor: "#243447" }}
+          contentContainerStyle={{
+            justifyContent: "center",
+            flex: 1,
+          }}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={getQuotes} />
           }
@@ -112,30 +115,18 @@ const Home = () => {
           <View style={universalStyles.quoteBlock}>
             {apiData ? (
               <View>
-                <Text
-                  selectable={true}
-                  style={{ fontSize: 20, fontWeight: "bold" }}
-                >
+                <Text selectable={true} style={universalStyles.quote}>
                   {apiData.text}
                 </Text>
                 <Text selectable={true} style={universalStyles.author}>
-                  {apiData.author}
+                  - {apiData.author}
                 </Text>
               </View>
             ) : null}
           </View>
           <View style={universalStyles.bookmarkAndCopy}>
             <Pressable
-              style={[
-                {
-                  height: 20,
-                  width: 20,
-                  //backgroundColor: "green",
-                  justifyContent: "center",
-                  alignContent: "center",
-                  alignItems: "center",
-                },
-              ]}
+              style={universalStyles.icon}
               onPress={() => {
                 copyIconFunction();
               }}
@@ -143,13 +134,7 @@ const Home = () => {
               {copy}
             </Pressable>
             <Pressable
-              style={{
-                justifyContent: "center",
-                height: 25,
-                alignContent: "center",
-                alignItems: "center",
-                width: 25,
-              }}
+              style={universalStyles.icon}
               onPress={() => {
                 bookmarkCondition();
               }}

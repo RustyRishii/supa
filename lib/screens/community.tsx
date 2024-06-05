@@ -102,11 +102,11 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, padding: 5, backgroundColor: "#243447" }}>
       <GestureHandlerRootView>
         <View>
           <Text style={universalStyles.pageTitle}>Community</Text>
-          <Text
+          {/* <Text
             style={{
               fontSize: 50,
               justifyContent: "center",
@@ -116,8 +116,8 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
             }}
           >
             Coming Soon
-          </Text>
-          {/* <FlatList
+          </Text> */}
+          <FlatList
             scrollEnabled={true}
             removeClippedSubviews={false}
             data={post}
@@ -131,7 +131,7 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
                 onRefresh={communityRefresh}
               />
             }
-          /> */}
+          />
         </View>
         <Pressable
           onPress={() => navigation.navigate("Modal")}

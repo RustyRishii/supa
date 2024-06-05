@@ -23,10 +23,10 @@ import { Button } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
 import { MenuProvider } from "react-native-popup-menu";
 
-const copyIconFilled = <Icon name="copy" size={20} color={"black"} />;
-const copyIconOutline = <Icon name="copy-outline" size={20} color={"black"} />;
+const copyIconFilled = <Icon name="copy" size={20} color={"#1D9BF0"} />;
+const copyIconOutline = <Icon name="copy-outline" size={20} color={"white"} />;
 
-const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"black"} />;
+const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"#1D9BF0"} />;
 const bookmarkIconOutline = (
   <Icon name="bookmark-outline" size={20} color={"black"} />
 );
@@ -92,7 +92,7 @@ const Bookmark = () => {
         accessible={true}
         accessibilityLabel="Quote and Author name"
         selectable={true}
-        style={styles.quote}
+        style={universalStyles.quote}
       >
         {item.Quote}
       </Text>
@@ -101,12 +101,12 @@ const Bookmark = () => {
         accessible={true}
         accessibilityLabel="Author name"
         selectable={true}
-        style={styles.author}
+        style={universalStyles.author}
       >
         - {item.Author}
       </Text>
 
-      <View style={{ flexDirection: "row" }}>
+      <View style={{ flexDirection: "row", margin: 5 }}>
         <Pressable
           style={styles.icon}
           onPress={() => {
@@ -131,7 +131,7 @@ const Bookmark = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GestureHandlerRootView>
-        <View style={{ padding: 5, backgroundColor: "white" }}>
+        <View style={{ padding: 5, backgroundColor: "#243447" }}>
           <Text style={universalStyles.pageTitle}>Bookmarks</Text>
           <FlatList
             removeClippedSubviews={false}
@@ -148,11 +148,6 @@ const Bookmark = () => {
               />
             }
           />
-          {/* <VirtualizedList
-            initialNumToRender={6}
-            renderItem={renderItem}
-            removeClippedSubviews={false}
-          /> */}
         </View>
       </GestureHandlerRootView>
     </SafeAreaView>
@@ -163,7 +158,7 @@ export default Bookmark;
 
 const styles = StyleSheet.create({
   item: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.2,
     borderBottomColor: "#ccc",
     // marginBottom: 30,
   },

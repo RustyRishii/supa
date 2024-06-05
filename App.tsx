@@ -32,12 +32,10 @@ const App = (navigation: any) => {
           tabBarLabelStyle: {
             position: "relative",
             fontSize: 13,
-            flex: 0,
           },
           tabBarShowLabel: false,
-          tabBarActiveTintColor: "black",
+          tabBarActiveTintColor: "#243447",
           headerShown: false,
-          tabBarActiveBackgroundColor: "white",
         }}
         initialRouteName="Home"
       >
