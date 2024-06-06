@@ -24,10 +24,21 @@ const Modal = ({ navigation }: { navigation: any }) => {
   const postLengthLimit = 350;
 
   async function PostFunction() {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+    // from docs
+
+    const userEmail = user?.email;
+    var post_id = Math.random();
+
     if (post == "") {
       return;
     }
-    const { error } = await supabase.from("Posts").insert({ post });
+    const { data, error } = await supabase
+      .from("Posts")
+      .insert({ post, post_id: post_id, email_id: userEmail });
     navigation.goBack();
 
     if (error) {
@@ -41,7 +52,7 @@ const Modal = ({ navigation }: { navigation: any }) => {
     }
   }
 
-  //backgroundColor: "#878474"
+  //backgroundColor: "#878474"f
 
   return (
     <SafeAreaView

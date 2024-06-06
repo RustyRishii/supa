@@ -23,7 +23,7 @@ const universalStyles = StyleSheet.create({
     color: "aliceblue",
   },
   author: {
-    fontSize: 20,
+    fontSize: 18,
     paddingTop: 10,
     alignContent: "flex-end",
     textAlign: "right",
@@ -47,6 +47,9 @@ const universalStyles = StyleSheet.create({
   },
   buttonBgColor: {
     color: "#1D9BF0",
+  },
+  universalColors: {
+    backgroundColor: "#243447",
   },
   postButton: {
     color: "white",

@@ -37,6 +37,14 @@ const Bookmark = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [bookmarkIcon, setBookmarkIcon] = useState(bookmarkIconFilled);
 
+  async function RefreshFunction() {
+    setRefreshing(true);
+    fetchBookmarks();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 200);
+  }
+
   async function fetchBookmarks() {
     const { data, error } = await supabase
       .from("Bookmarks")
@@ -52,16 +60,7 @@ const Bookmark = () => {
     return data;
   }
 
-  async function RefreshFunction() {
-    setRefreshing(true);
-    fetchBookmarks();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 200);
-  }
-
   async function deleteBookmark(id: number) {
-    ToastAndroid.show("Deleted", ToastAndroid.SHORT);
     const { data, error } = await supabase
       .from("Bookmarks")
       .delete()
@@ -71,6 +70,7 @@ const Bookmark = () => {
       console.error("Error deleting bookmark:", error);
     } else {
       console.log("Bookmark deleted successfully:", data);
+      ToastAndroid.show("Deleted", ToastAndroid.SHORT);
       fetchBookmarks(); // Refresh the list after deletion
     }
   }

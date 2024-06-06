@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
+  ToastAndroid,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -27,6 +28,14 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [post, setPost] = useState<any>([]);
 
+  async function communityRefresh() {
+    setRefreshing(true);
+    fetchPosts();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 200);
+  }
+
   async function fetchPosts() {
     const { error, data } = await supabase
       .from("Posts")
@@ -41,22 +50,13 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
     return data;
   }
 
-  async function communityRefresh() {
-    setRefreshing(true);
-    fetchPosts();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 200);
-  }
-
-  async function deleteData(id: number) {
-    const { error } = await supabase.from("Posts").delete().eq("id", id);
-
+  async function deletePosts(id: number) {
+    const { data, error } = await supabase.from("Posts").delete().eq("id", id);
     if (error) {
-      console.error("Error deleting post:", error);
+      console.error();
     } else {
-      console.log("Post deleted successfully");
-      // Refresh the posts after deletion
+      console.log("Post delete successfully", data);
+      ToastAndroid.show("Deleted", ToastAndroid.SHORT);
       communityRefresh();
     }
   }
@@ -73,11 +73,12 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
         style={{
           flexDirection: "row",
           alignItems: "center",
-          borderTopWidth: 0.5,
-          borderBottomWidth: 0.5,
+          //borderWidth: 1,
+          borderBottomWidth: 1,
+          borderRadius: 10,
+          borderColor: "white",
           marginVertical: 10,
-          paddingVertical: 5,
-          paddingHorizontal: 5,
+          padding: 5,
           flexWrap: "wrap",
         }}
       >
@@ -92,11 +93,14 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
             }}
           />
         </Pressable>
-        <Text selectable={true} style={{ fontSize: 20, paddingHorizontal: 10 }}>
+        <Text
+          selectable={true}
+          style={{ fontSize: 20, paddingHorizontal: 10, color: "aliceblue" }}
+        >
           {item.post}
         </Text>
-        <Button title="Delete" onPress={() => deleteData} />
-        <Text>{item.time_created}</Text>
+        <Button title="Delete" onPress={() => deletePosts(item.id)} />
+        <Text style={{ color: "aliceblue" }}>{item.time_created}</Text>
       </View>
     );
   };

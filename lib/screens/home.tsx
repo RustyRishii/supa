@@ -21,9 +21,17 @@ const bookmarkIconOutline = (
   <Icon name="bookmark-outline" size={20} color={"aliceblue"} />
 );
 
+const postIconFilled = (
+  <Icon name="arrow-forward-circle" size={20} color={"#1D9BF0"} />
+);
+const postIconOutline = (
+  <Icon name="arrow-forward-circle-outline" size={20} color={"white"} />
+);
+
 const Home = () => {
   const [copy, setCopy] = useState(copyIconOutline);
   const [bookmark, setBookmark] = useState(bookmarkIconOutline);
+  const [postIcon, setPostIcon] = useState(postIconOutline);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [apiData, setAPIData] = useState<
     { text: string; author: string } | undefined
@@ -48,6 +56,7 @@ const Home = () => {
       console.error(error);
     } else {
       console.log("Text Data added successfully");
+      setBookmark(bookmarkIconFilled);
     }
   };
 
@@ -60,9 +69,14 @@ const Home = () => {
     }, 200);
   }
 
+  function postIconFunction() {
+    setPostIcon(postIconFilled);
+    setTimeout(() => {
+      setPostIcon(postIconOutline);
+    }, 200);
+  }
   function bookmarkCondition() {
     if (bookmark === bookmarkIconOutline) {
-      setBookmark(bookmarkIconFilled);
       bookmarkQuote();
       ToastAndroid.show("Bookmarked", ToastAndroid.SHORT);
     } else if (bookmark === bookmarkIconFilled) {
@@ -97,6 +111,29 @@ const Home = () => {
   useEffect(() => {
     getQuotes();
   }, []);
+
+  async function quoteToPost() {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    var post_id = Math.random();
+
+    const userEmail = user?.email;
+    const { data, error } = await supabase.from("Posts").insert({
+      post: [apiData?.text, apiData?.author],
+      post_id: post_id,
+      email_id: userEmail,
+    });
+    if (error) {
+      console.error(error);
+    } else {
+      postIconFunction();
+      console.log("Quote To Post successful");
+      ToastAndroid.show("Posted", ToastAndroid.SHORT);
+    }
+  }
 
   return (
     <SafeAreaView style={{}}>
@@ -141,6 +178,7 @@ const Home = () => {
             >
               {bookmark}
             </Pressable>
+            <Pressable onPress={() => quoteToPost()}>{postIcon}</Pressable>
           </View>
         </ScrollView>
       </GestureHandlerRootView>

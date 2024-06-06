@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
 import Auth from "./lib/Auth";
 import { NavigationContainer } from "@react-navigation/native";
@@ -6,7 +6,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./lib/screens/home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Bookmark from "./lib/screens/bookmark";
-import Settings from "./lib/screens/settings";
+import SettingsPage from "./lib/screens/settings";
+import ViewImage from "./lib/screens/viewImage";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
@@ -20,7 +21,7 @@ import Modal from "./lib/screens/modal";
 const AuthStackNavigator = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
-const tryAuth = createNativeStackNavigator();
+const Image = createNativeStackNavigator();
 
 const App = (navigation: any) => {
   const [session, setSession] = useState<Session | null>(null);
@@ -90,8 +91,8 @@ const App = (navigation: any) => {
               />
             ),
           }}
-          name="Settings"
-          component={Settings}
+          name="SettingsPage"
+          component={SettingsPage}
         />
       </Tabs.Navigator>
     );
@@ -114,8 +115,8 @@ const App = (navigation: any) => {
           options={{
             animation: "slide_from_left",
           }}
-          name="Settings"
-          component={Settings}
+          name="SettingsPage"
+          component={SettingsPage}
         />
         <AuthStackNavigator.Screen
           options={{

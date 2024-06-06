@@ -1,21 +1,18 @@
-import { Alert, StyleSheet, Text, Pressable, View, Image } from "react-native";
+import { StyleSheet, Text, Pressable, View, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../supabase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Icon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import universalStyles from "../../components/universalStyles";
-import App from "../../App";
-import Swipeable from "react-native-gesture-handler";
 
-const Settings = ({ navigation }: { navigation: any }) => {
+const SettingsPage = ({ navigation }: { navigation: any }) => {
   const [email, setEmail] = useState("");
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     const fetchEmail = async () => {
       const userEmail = await AsyncStorage.getItem("userEmail");
-      const userName = await AsyncStorage.getItem("userName");
       setEmail(userEmail || "No email found");
     };
 
@@ -25,7 +22,7 @@ const Settings = ({ navigation }: { navigation: any }) => {
   const signOut = async () => {
     try {
       await supabase.auth.signOut();
-      navigation.navigate("AuthStack");
+      navigation.navigate("Auth");
     } catch (error) {
       console.error(error);
     }
@@ -45,21 +42,20 @@ const Settings = ({ navigation }: { navigation: any }) => {
               alignItems: "center",
             }}
           >
-            <Image
-              width={150}
-              height={150}
-              style={{ backgroundColor: "gray" }}
-              borderRadius={150}
-              source={{
-                uri: "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
-              }}
-            />
+            <Pressable onPress={() => console.log("Image opened")}>
+              <Image
+                width={150}
+                height={150}
+                style={{ backgroundColor: "gray", marginVertical: 10 }}
+                borderRadius={150}
+                source={{
+                  uri: "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
+                }}
+              />
+            </Pressable>
             <Text style={{ fontSize: 20, paddingVertical: 10, color: "white" }}>
               Email : {email}
             </Text>
-            {/* <Text style={{ fontSize: 20, paddingVertical: 10 }}>
-            userName : {userName}
-          </Text> */}
           </View>
           <Pressable onPress={signOut} style={styles.signOutButton}>
             <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
@@ -70,7 +66,7 @@ const Settings = ({ navigation }: { navigation: any }) => {
   );
 };
 
-export default Settings;
+export default SettingsPage;
 
 const styles = StyleSheet.create({
   signOutButton: {
