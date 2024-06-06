@@ -159,7 +159,7 @@ export default Bookmark;
 const styles = StyleSheet.create({
   item: {
     borderBottomWidth: 0.2,
-    borderBottomColor: "#ccc",
+    borderBottomColor: "aliceblue",
     // marginBottom: 30,
   },
   quote: {

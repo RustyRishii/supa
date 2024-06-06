@@ -34,7 +34,9 @@ const App = (navigation: any) => {
             fontSize: 13,
           },
           tabBarShowLabel: false,
-          tabBarActiveTintColor: "#243447",
+          //tabBarActiveTintColor: "#243447",
+          tabBarActiveBackgroundColor: "#243447",
+          tabBarInactiveBackgroundColor: "#243447",
           headerShown: false,
         }}
         initialRouteName="Home"
@@ -44,7 +46,7 @@ const App = (navigation: any) => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 name={focused ? "home" : "home-outline"}
-                color={"black"}
+                color={"white"}
                 size={20}
               />
             ),
@@ -57,7 +59,7 @@ const App = (navigation: any) => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 name={focused ? "people" : "people-outline"}
-                color={"black"}
+                color={"white"}
                 size={20}
               />
             ),
@@ -70,7 +72,7 @@ const App = (navigation: any) => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 name={focused ? "bookmark" : "bookmark-outline"}
-                color={"black"}
+                color={"white"}
                 size={20}
               />
             ),
@@ -83,7 +85,7 @@ const App = (navigation: any) => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 name={focused ? "settings" : "settings-outline"}
-                color={"black"}
+                color={"white"}
                 size={20}
               />
             ),

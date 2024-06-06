@@ -4,6 +4,8 @@ const universalStyles = StyleSheet.create({
   pageTitle: {
     fontSize: 30,
     color: "white",
+    borderBottomWidth: 0.2,
+    borderColor: "aliceblue",
   },
   quoteBlock: {
     justifyContent: "center",
