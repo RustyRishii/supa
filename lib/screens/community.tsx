@@ -42,7 +42,6 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
       .select("id, post , time_created ");
     setPost(data);
     console.log(data);
-
     if (error) {
       console.error("Error fetching bookmarks:", error);
       return;

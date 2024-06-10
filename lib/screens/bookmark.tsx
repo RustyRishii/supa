@@ -71,14 +71,9 @@ const Bookmark = () => {
     } else {
       console.log("Bookmark deleted successfully:", data);
       ToastAndroid.show("Deleted", ToastAndroid.SHORT);
-      fetchBookmarks(); // Refresh the list after deletion
+      fetchBookmarks();
     }
   }
-
-  // useEffect(() => {
-  //   RefreshFunction();
-  //   console.log("UseEffect Run done");
-  // }, []);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -123,7 +118,6 @@ const Bookmark = () => {
         <Pressable onPress={() => deleteBookmark(item.id)}>
           {bookmarkIcon}
         </Pressable>
-        {/* <Button onPress={() => deleteBookmark(item.id)} title={"Delete"} /> */}
       </View>
     </View>
   );
@@ -160,13 +154,11 @@ const styles = StyleSheet.create({
   item: {
     borderBottomWidth: 0.2,
     borderBottomColor: "aliceblue",
-    // marginBottom: 30,
   },
   quote: {
     fontSize: 18,
     fontWeight: "bold",
     color: "black",
-    // marginBottom: 5,
   },
   author: {
     fontSize: 16,
@@ -182,44 +174,3 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
-
-{
-  /*  */
-}
-
-/*
-function copyIconFunction() {
-            setCopy(copyIconFilled);
-            Clipboard.setString(`${item.Quote} - ${item.Author} `);
-            ToastAndroid.show("Copied", ToastAndroid.SHORT);
-            setTimeout(() => {
-              setCopy(copyIconOutline);
-            }, 200);
-          }
-          */
-
-/*
-<SafeAreaView style={{ flex: 1 }}>
-      <GestureHandlerRootView>
-        <View style={{ padding: 10 }}>
-          <Text style={universalStyles.pageTitle}>Bookmarks</Text>
-          <View>
-            <FlatList
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={RefreshFunction}
-                />
-              }
-              scrollEnabled={true}
-              contentContainerStyle={{ paddingBottom: 60 }}
-              style={{ height: "100%" }}
-              data={bookmarks}
-              renderItem={renderItem}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
-        </View>
-      </GestureHandlerRootView>
-    </SafeAreaView>
-*/
