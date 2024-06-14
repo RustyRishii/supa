@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Pressable,
   Image,
+  Dimensions,
   ToastAndroid,
 } from "react-native";
 import React, { useState } from "react";
@@ -23,8 +24,14 @@ import { supabase } from "../supabase";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
 import Fab from "../../components/fab";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const CommunityPage = ({ navigation }: { navigation: any }) => {
+  const insets = useSafeAreaInsets();
+  const tabBarHeight = useBottomTabBarHeight();
+  const { height: viewportHeight } = Dimensions.get("window");
+
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [post, setPost] = useState<any>([]);
 
@@ -76,7 +83,6 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
           borderBottomWidth: 1,
           borderRadius: 10,
           borderColor: "white",
-          marginVertical: 10,
           padding: 5,
           flexWrap: "wrap",
         }}
@@ -105,29 +111,23 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, padding: 5, backgroundColor: "#243447" }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        //padding: 5,
+        backgroundColor: "#243447",
+        height: viewportHeight - tabBarHeight,
+      }}
+    >
       <GestureHandlerRootView>
-        <View>
+        <View style={{ height: viewportHeight - tabBarHeight }}>
           <Text style={universalStyles.pageTitle}>Community</Text>
-          {/* <Text
-            style={{
-              fontSize: 50,
-              justifyContent: "center",
-              alignContent: "center",
-              alignItems: "center",
-              alignSelf: "center",
-            }}
-          >
-            Coming Soon
-          </Text> */}
           <FlatList
             scrollEnabled={true}
             removeClippedSubviews={false}
             data={post}
             renderItem={renderTweet}
             keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{ paddingBottom: 75 }}
-            style={{ height: "100%" }}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}

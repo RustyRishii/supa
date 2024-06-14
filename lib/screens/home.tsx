@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View, ToastAndroid } from "react-native";
+import { Pressable, Text, View, ToastAndroid, Dimensions } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
@@ -11,7 +11,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { supabase } from "../supabase";
 import universalStyles from "../../components/universalStyles";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const copyIconFilled = <Icon name="copy" size={20} color={"#1D9BF0"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"white"} />;
@@ -75,6 +75,7 @@ const Home = () => {
       setPostIcon(postIconOutline);
     }, 200);
   }
+
   function bookmarkCondition() {
     if (bookmark === bookmarkIconOutline) {
       bookmarkQuote();
@@ -135,12 +136,18 @@ const Home = () => {
     }
   }
 
+  const tabBarHeight = useBottomTabBarHeight();
+  const { height: viewportHeight } = Dimensions.get("window");
   return (
     <SafeAreaView style={{}}>
       <StatusBar backgroundColor="black" style="light" />
       <GestureHandlerRootView>
         <ScrollView
-          style={{ height: "100%", padding: 10, backgroundColor: "#243447" }}
+          style={{
+            height: viewportHeight - tabBarHeight,
+            padding: 10,
+            backgroundColor: "#243447",
+          }}
           contentContainerStyle={{
             justifyContent: "center",
             flex: 1,

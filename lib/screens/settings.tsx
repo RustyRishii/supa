@@ -1,12 +1,23 @@
-import { StyleSheet, Text, Pressable, View, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+  Image,
+  Dimensions,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../supabase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import universalStyles from "../../components/universalStyles";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const SettingsPage = ({ navigation }: { navigation: any }) => {
+  const tabBarHeight = useBottomTabBarHeight();
+  const { height: viewportHeight } = Dimensions.get("window");
+
   const [email, setEmail] = useState("");
   const [image, setImage] = useState(null);
 
@@ -32,7 +43,11 @@ const SettingsPage = ({ navigation }: { navigation: any }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <GestureHandlerRootView>
         <View
-          style={{ backgroundColor: "#243447", padding: 5, height: "100%" }}
+          style={{
+            backgroundColor: "#243447",
+            padding: 5,
+            height: viewportHeight - tabBarHeight,
+          }}
         >
           <Text style={universalStyles.pageTitle}>Settings</Text>
           <View

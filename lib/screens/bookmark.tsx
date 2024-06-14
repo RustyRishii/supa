@@ -4,6 +4,7 @@ import {
   View,
   FlatList,
   ToastAndroid,
+  Dimensions,
   Pressable,
   RefreshControl,
 } from "react-native";
@@ -22,6 +23,8 @@ import { createClient } from "@supabase/supabase-js";
 import { Button } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
 import { MenuProvider } from "react-native-popup-menu";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const copyIconFilled = <Icon name="copy" size={20} color={"#1D9BF0"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"white"} />;
@@ -32,6 +35,11 @@ const bookmarkIconOutline = (
 );
 
 const Bookmark = () => {
+  const insets = useSafeAreaInsets();
+  const { height: viewportHeight } = Dimensions.get("window");
+
+  const tabBarHeight = useBottomTabBarHeight();
+
   const [copy, setCopy] = useState(copyIconOutline);
   const [bookmarks, setBookmarks] = useState<any>([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -101,7 +109,7 @@ const Bookmark = () => {
         - {item.Author}
       </Text>
 
-      <View style={{ flexDirection: "row", margin: 5 }}>
+      <View style={{ flexDirection: "row" }}>
         <Pressable
           style={styles.icon}
           onPress={() => {
@@ -125,7 +133,13 @@ const Bookmark = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GestureHandlerRootView>
-        <View style={{ padding: 5, backgroundColor: "#243447" }}>
+        <View
+          style={{
+            paddingHorizontal: 5,
+            backgroundColor: "#243447",
+            height: viewportHeight - tabBarHeight,
+          }}
+        >
           <Text style={universalStyles.pageTitle}>Bookmarks</Text>
           <FlatList
             removeClippedSubviews={false}
@@ -133,8 +147,11 @@ const Bookmark = () => {
             data={bookmarks}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{ paddingBottom: 80 }}
+            //contentContainerStyle={{ paddingBottom: 80 }}
             style={{ height: "100%" }}
+            indicatorStyle="white"
+            snapToEnd={true}
+            showsVerticalScrollIndicator={true}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
