@@ -28,7 +28,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const CommunityPage = ({ navigation }: { navigation: any }) => {
-  const insets = useSafeAreaInsets();
+  //const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabBarHeight();
   const { height: viewportHeight } = Dimensions.get("window");
 

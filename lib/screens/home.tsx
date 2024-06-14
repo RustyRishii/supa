@@ -123,7 +123,7 @@ const Home = () => {
 
     const userEmail = user?.email;
     const { data, error } = await supabase.from("Posts").insert({
-      post: [apiData?.text, apiData?.author],
+      post: `${apiData?.text} - ${apiData?.author}`,
       post_id: post_id,
       email_id: userEmail,
     });
