@@ -185,7 +185,12 @@ const Home = () => {
             >
               {bookmark}
             </Pressable>
-            <Pressable onPress={() => quoteToPost()}>{postIcon}</Pressable>
+            <Pressable
+              style={universalStyles.icon}
+              onPress={() => quoteToPost()}
+            >
+              {postIcon}
+            </Pressable>
           </View>
         </ScrollView>
       </GestureHandlerRootView>

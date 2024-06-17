@@ -7,7 +7,7 @@ import Home from "./lib/screens/home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Bookmark from "./lib/screens/bookmark";
 import SettingsPage from "./lib/screens/settings";
-import ViewImage from "./lib/screens/viewImage";
+//import ViewImage from "./lib/screens/viewImage";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
