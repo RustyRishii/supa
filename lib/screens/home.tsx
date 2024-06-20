@@ -144,9 +144,9 @@ const Home = () => {
       <GestureHandlerRootView>
         <ScrollView
           style={{
+            backgroundColor: "#243447",
             height: viewportHeight - tabBarHeight,
             padding: 10,
-            backgroundColor: "#243447",
           }}
           contentContainerStyle={{
             justifyContent: "center",

@@ -7,7 +7,6 @@ import Home from "./lib/screens/home";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Bookmark from "./lib/screens/bookmark";
 import SettingsPage from "./lib/screens/settings";
-//import ViewImage from "./lib/screens/viewImage";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
@@ -15,6 +14,7 @@ import { Session } from "@supabase/supabase-js";
 import { Swipeable } from "react-native-gesture-handler";
 import CommunityPage from "./lib/screens/community";
 import Modal from "./lib/screens/modal";
+import CanvasPage from "./lib/screens/canvas";
 
 //const ModalStack = createNativeStackNavigator();
 
@@ -93,6 +93,19 @@ const App = (navigation: any) => {
           }}
           name="SettingsPage"
           component={SettingsPage}
+        />
+        <Tabs.Screen
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Icon
+                name={focused ? "brush" : "brush-outline"}
+                color={"white"}
+                size={20}
+              />
+            ),
+          }}
+          name="CanvasPage"
+          component={CanvasPage}
         />
       </Tabs.Navigator>
     );

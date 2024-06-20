@@ -26,6 +26,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import Fab from "../../components/fab";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { color } from "react-native-elements/dist/helpers";
 
 const CommunityPage = ({ navigation }: { navigation: any }) => {
   //const insets = useSafeAreaInsets();
@@ -73,7 +74,7 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
     }, [])
   );
 
-  const renderTweet = ({ item, index }: { item: any; index: number }) => {
+  const renderPost = ({ item, index }: { item: any; index: number }) => {
     return (
       <View
         style={{
@@ -113,20 +114,21 @@ const CommunityPage = ({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaView
       style={{
-        flex: 1,
-        //padding: 5,
         backgroundColor: "#243447",
-        height: viewportHeight - tabBarHeight,
       }}
     >
       <GestureHandlerRootView>
         <View style={{ height: viewportHeight - tabBarHeight }}>
           <Text style={universalStyles.pageTitle}>Community</Text>
           <FlatList
+            style={{
+              backgroundColor: "#243447",
+              height: viewportHeight - tabBarHeight,
+            }}
             scrollEnabled={true}
             removeClippedSubviews={false}
             data={post}
-            renderItem={renderTweet}
+            renderItem={renderPost}
             keyExtractor={(item, index) => index.toString()}
             refreshControl={
               <RefreshControl

@@ -12,17 +12,11 @@ import React from "react";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../supabase";
-import {
-  GestureHandlerRootView,
-  ScrollView,
-} from "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useEffect, useState } from "react";
 import universalStyles from "../../components/universalStyles";
 import Icon from "react-native-vector-icons/Ionicons";
-import { createClient } from "@supabase/supabase-js";
-import { Button } from "react-native-elements";
 import { useFocusEffect } from "@react-navigation/native";
-import { MenuProvider } from "react-native-popup-menu";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
@@ -147,7 +141,6 @@ const Bookmark = () => {
             data={bookmarks}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
-            //contentContainerStyle={{ paddingBottom: 80 }}
             style={{ height: "100%" }}
             indicatorStyle="white"
             snapToEnd={true}

@@ -1,4 +1,5 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const universalStyles = StyleSheet.create({
   pageTitle: {
@@ -7,6 +8,7 @@ const universalStyles = StyleSheet.create({
     borderBottomWidth: 0.2,
     borderColor: "aliceblue",
   },
+
   quoteBlock: {
     justifyContent: "center",
     alignItems: "center",
