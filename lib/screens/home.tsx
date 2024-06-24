@@ -21,17 +21,15 @@ const bookmarkIconOutline = (
   <Icon name="bookmark-outline" size={20} color={"aliceblue"} />
 );
 
-const postIconFilled = (
-  <Icon name="arrow-forward-circle" size={20} color={"#1D9BF0"} />
-);
-const postIconOutline = (
-  <Icon name="arrow-forward-circle-outline" size={20} color={"white"} />
+const downloadIconFilled = <Icon name="download" size={20} color={"#1D9BF0"} />;
+const downloadIconOutline = (
+  <Icon name="download-outline" size={20} color={"white"} />
 );
 
 const Home = () => {
   const [copy, setCopy] = useState(copyIconOutline);
   const [bookmark, setBookmark] = useState(bookmarkIconOutline);
-  const [postIcon, setPostIcon] = useState(postIconOutline);
+  const [postIcon, setPostIcon] = useState(downloadIconOutline);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [apiData, setAPIData] = useState<
     { text: string; author: string } | undefined
@@ -70,9 +68,9 @@ const Home = () => {
   }
 
   function postIconFunction() {
-    setPostIcon(postIconFilled);
+    setPostIcon(downloadIconFilled);
     setTimeout(() => {
-      setPostIcon(postIconOutline);
+      setPostIcon(downloadIconOutline);
     }, 200);
   }
 
