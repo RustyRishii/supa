@@ -16,7 +16,7 @@ const universalStyles = StyleSheet.create({
     borderColor: "white",
     borderRadius: 10,
     borderWidth: 0.2,
-    marginVertical: 10,
+    //marginVertical: 10,
     height: 215,
     paddingHorizontal: 10,
   },
@@ -44,6 +44,7 @@ const universalStyles = StyleSheet.create({
     marginBottom: 5,
   },
   bookmarkAndCopy: {
+    marginVertical: 10,
     flexDirection: "row",
     justifyContent: "space-around",
   },

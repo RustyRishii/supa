@@ -55,7 +55,7 @@ const App = (navigation: any) => {
           name="Home"
           component={Home}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           options={{
             tabBarIcon: ({ focused }) => (
               <Icon
@@ -67,7 +67,7 @@ const App = (navigation: any) => {
           }}
           name="Community"
           component={Community}
-        />
+        /> */}
         <Tabs.Screen
           options={{
             tabBarIcon: ({ focused }) => (
@@ -94,7 +94,7 @@ const App = (navigation: any) => {
           name="SettingsPage"
           component={SettingsPage}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           options={{
             tabBarIcon: ({ focused }) => (
               <Icon
@@ -106,7 +106,7 @@ const App = (navigation: any) => {
           }}
           name="CanvasPage"
           component={CanvasPage}
-        />
+        /> */}
       </Tabs.Navigator>
     );
   }

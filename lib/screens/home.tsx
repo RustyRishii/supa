@@ -1,5 +1,15 @@
-import { Pressable, Text, View, ToastAndroid, Dimensions } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import {
+  Pressable,
+  Text,
+  View,
+  ToastAndroid,
+  Dimensions,
+  Alert,
+  Image,
+  TouchableNativeFeedback,
+  Platform,
+} from "react-native";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -12,6 +22,9 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { supabase } from "../supabase";
 import universalStyles from "../../components/universalStyles";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import ViewShot from "react-native-view-shot";
+import RNFS from "react-native-fs";
+import { request, PERMISSIONS } from "react-native-permissions";
 
 const copyIconFilled = <Icon name="copy" size={20} color={"#1D9BF0"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"white"} />;
@@ -134,6 +147,41 @@ const Home = () => {
     }
   }
 
+  const viewShotRef = useRef();
+
+  const handleLongPress = async () => {
+    try {
+      // Request permissions if needed
+      const permission = await request(
+        Platform.OS === "ios"
+          ? PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY
+          : PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE
+      );
+
+      if (permission !== "granted") {
+        Alert.alert(
+          "Permission Denied",
+          "Cannot save screenshot without permission"
+        );
+        return;
+      }
+
+      // Capture screenshot
+      const uri = await viewShotRef.current.capture();
+
+      // Save to gallery
+      const destPath = `${
+        RNFS.PicturesDirectoryPath
+      }/screenshot_${Date.now()}.png`;
+      await RNFS.moveFile(uri, destPath);
+
+      ToastAndroid.show("Saved to gallery", ToastAndroid.SHORT);
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while taking the screenshot");
+      console.error(error);
+    }
+  };
+
   const tabBarHeight = useBottomTabBarHeight();
   const { height: viewportHeight } = Dimensions.get("window");
   return (
@@ -154,18 +202,26 @@ const Home = () => {
             <RefreshControl refreshing={refreshing} onRefresh={getQuotes} />
           }
         >
-          <View style={universalStyles.quoteBlock}>
-            {apiData ? (
-              <View>
-                <Text selectable={true} style={universalStyles.quote}>
-                  {apiData.text}
-                </Text>
-                <Text selectable={true} style={universalStyles.author}>
-                  - {apiData.author}
-                </Text>
+          <ViewShot
+            ref={viewShotRef}
+            options={{ format: "jpg", quality: 1.0, height: 215 }}
+            style={{ backgroundColor: "#243447" }}
+          >
+            <TouchableNativeFeedback onLongPress={handleLongPress}>
+              <View style={universalStyles.quoteBlock}>
+                {apiData ? (
+                  <View>
+                    <Text selectable={true} style={universalStyles.quote}>
+                      {apiData.text}
+                    </Text>
+                    <Text selectable={true} style={universalStyles.author}>
+                      - {apiData.author}
+                    </Text>
+                  </View>
+                ) : null}
               </View>
-            ) : null}
-          </View>
+            </TouchableNativeFeedback>
+          </ViewShot>
           <View style={universalStyles.bookmarkAndCopy}>
             <Pressable
               style={universalStyles.icon}
@@ -183,12 +239,12 @@ const Home = () => {
             >
               {bookmark}
             </Pressable>
-            <Pressable
+            {/* <Pressable
               style={universalStyles.icon}
               onPress={() => quoteToPost()}
             >
               {postIcon}
-            </Pressable>
+            </Pressable> */}
           </View>
         </ScrollView>
       </GestureHandlerRootView>

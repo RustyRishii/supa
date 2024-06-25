@@ -5,20 +5,27 @@ import {
   FlatList,
   ToastAndroid,
   Dimensions,
+  Alert,
+  Platform,
   Pressable,
   RefreshControl,
+  TouchableNativeFeedback,
 } from "react-native";
-import React from "react";
+//import React, { useRef } from "react";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../supabase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import React from "react";
 import universalStyles from "../../components/universalStyles";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import ViewShot from "react-native-view-shot";
+import RNFS from "react-native-fs";
+import { request, PERMISSIONS } from "react-native-permissions";
 
 const copyIconFilled = <Icon name="copy" size={20} color={"#1D9BF0"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"white"} />;
@@ -124,6 +131,41 @@ const Bookmark = () => {
     </View>
   );
 
+  const viewShotRef = useRef();
+
+  const handleLongPress = async () => {
+    try {
+      // Request permissions if needed
+      const permission = await request(
+        Platform.OS === "ios"
+          ? PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY
+          : PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE
+      );
+
+      if (permission !== "granted") {
+        Alert.alert(
+          "Permission Denied",
+          "Cannot save screenshot without permission"
+        );
+        return;
+      }
+
+      // Capture screenshot
+      const uri = await viewShotRef.current.capture();
+
+      // Save to gallery
+      const destPath = `${
+        RNFS.PicturesDirectoryPath
+      }/screenshot_${Date.now()}.png`;
+      await RNFS.moveFile(uri, destPath);
+
+      ToastAndroid.show("Saved to gallery", ToastAndroid.SHORT);
+    } catch (error) {
+      Alert.alert("Error", "An error occurred while taking the screenshot");
+      console.error(error);
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GestureHandlerRootView>
@@ -135,6 +177,7 @@ const Bookmark = () => {
           }}
         >
           <Text style={universalStyles.pageTitle}>Bookmarks</Text>
+
           <FlatList
             removeClippedSubviews={false}
             scrollEnabled={true}
@@ -164,6 +207,7 @@ const styles = StyleSheet.create({
   item: {
     borderBottomWidth: 0.2,
     borderBottomColor: "aliceblue",
+    padding: 5,
   },
   quote: {
     fontSize: 18,
