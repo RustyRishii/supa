@@ -100,10 +100,10 @@ const Home = () => {
   const fetchAPIData = async () => {
     const url = "https://stoic-quotes.com/api/quote";
     try {
-      let urlResult = fetch(url);
-      let myData = (await urlResult).json();
-      setAPIData(await myData);
-      console.log(myData);
+      let urlResult = await fetch(url); // Added 'await'
+      let myData = await urlResult.json(); // Added 'await'
+      setAPIData(myData);
+      console.log(myData); // This should only log once
     } catch (error) {
       if (error) {
         console.error(error);
@@ -122,7 +122,7 @@ const Home = () => {
 
   useEffect(() => {
     getQuotes();
-  }, []);
+  }, [getQuotes]); // Added 'getQuotes' to the dependency array
 
   async function quoteToPost() {
     const {

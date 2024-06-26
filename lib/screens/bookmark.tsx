@@ -23,9 +23,9 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import ViewShot from "react-native-view-shot";
-import RNFS from "react-native-fs";
-import { request, PERMISSIONS } from "react-native-permissions";
+// import ViewShot from "react-native-view-shot";
+// import RNFS from "react-native-fs";
+// import { request, PERMISSIONS } from "react-native-permissions";
 
 const copyIconFilled = <Icon name="copy" size={20} color={"#1D9BF0"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"white"} />;
@@ -59,7 +59,7 @@ const Bookmark = () => {
       .from("Bookmarks")
       .select("id, Quote, Author");
     setBookmarks(data);
-    console.log(data);
+    //console.log(data);
 
     if (error) {
       console.error("Error fetching bookmarks:", error);
@@ -131,41 +131,6 @@ const Bookmark = () => {
     </View>
   );
 
-  const viewShotRef = useRef();
-
-  const handleLongPress = async () => {
-    try {
-      // Request permissions if needed
-      const permission = await request(
-        Platform.OS === "ios"
-          ? PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY
-          : PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE
-      );
-
-      if (permission !== "granted") {
-        Alert.alert(
-          "Permission Denied",
-          "Cannot save screenshot without permission"
-        );
-        return;
-      }
-
-      // Capture screenshot
-      const uri = await viewShotRef.current.capture();
-
-      // Save to gallery
-      const destPath = `${
-        RNFS.PicturesDirectoryPath
-      }/screenshot_${Date.now()}.png`;
-      await RNFS.moveFile(uri, destPath);
-
-      ToastAndroid.show("Saved to gallery", ToastAndroid.SHORT);
-    } catch (error) {
-      Alert.alert("Error", "An error occurred while taking the screenshot");
-      console.error(error);
-    }
-  };
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GestureHandlerRootView>
@@ -228,3 +193,38 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
+
+// const viewShotRef = useRef();
+
+//   const handleLongPress = async () => {
+//     try {
+//       // Request permissions if needed
+//       const permission = await request(
+//         Platform.OS === "ios"
+//           ? PERMISSIONS.IOS.PHOTO_LIBRARY_ADD_ONLY
+//           : PERMISSIONS.ANDROID.WRITE_EXTERNAL_STORAGE
+//       );
+
+//       if (permission !== "granted") {
+//         Alert.alert(
+//           "Permission Denied",
+//           "Cannot save screenshot without permission"
+//         );
+//         return;
+//       }
+
+//       // Capture screenshot
+//       const uri = await viewShotRef.current.capture();
+
+//       // Save to gallery
+//       const destPath = `${
+//         RNFS.PicturesDirectoryPath
+//       }/screenshot_${Date.now()}.png`;
+//       await RNFS.moveFile(uri, destPath);
+
+//       ToastAndroid.show("Saved to gallery", ToastAndroid.SHORT);
+//     } catch (error) {
+//       Alert.alert("Error", "An error occurred while taking the screenshot");
+//       console.error(error);
+//     }
+//   };

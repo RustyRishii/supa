@@ -1,5 +1,5 @@
-import { StyleSheet, View } from "react-native";
-import React from "react";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+import React, { useEffect, useState } from "react";
 import Auth from "./lib/Auth";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -8,23 +8,16 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Bookmark from "./lib/screens/bookmark";
 import SettingsPage from "./lib/screens/settings";
 import Icon from "react-native-vector-icons/Ionicons";
-import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 import { Session } from "@supabase/supabase-js";
-import { Swipeable } from "react-native-gesture-handler";
-import CommunityPage from "./lib/screens/community";
-import Modal from "./lib/screens/modal";
-import CanvasPage from "./lib/screens/canvas";
-
-//const ModalStack = createNativeStackNavigator();
 
 const AuthStackNavigator = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
-const Image = createNativeStackNavigator();
 
-const App = (navigation: any) => {
+const App = () => {
   const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   function BottomTabs() {
     return (
@@ -35,7 +28,6 @@ const App = (navigation: any) => {
             fontSize: 13,
           },
           tabBarShowLabel: false,
-          //tabBarActiveTintColor: "#243447",
           tabBarActiveBackgroundColor: "#243447",
           tabBarInactiveBackgroundColor: "#243447",
           headerShown: false,
@@ -55,19 +47,6 @@ const App = (navigation: any) => {
           name="Home"
           component={Home}
         />
-        {/* <Tabs.Screen
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <Icon
-                name={focused ? "people" : "people-outline"}
-                color={"white"}
-                size={20}
-              />
-            ),
-          }}
-          name="Community"
-          component={Community}
-        /> */}
         <Tabs.Screen
           options={{
             tabBarIcon: ({ focused }) => (
@@ -94,19 +73,6 @@ const App = (navigation: any) => {
           name="SettingsPage"
           component={SettingsPage}
         />
-        {/* <Tabs.Screen
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <Icon
-                name={focused ? "brush" : "brush-outline"}
-                color={"white"}
-                size={20}
-              />
-            ),
-          }}
-          name="CanvasPage"
-          component={CanvasPage}
-        /> */}
       </Tabs.Navigator>
     );
   }
@@ -142,30 +108,13 @@ const App = (navigation: any) => {
     );
   }
 
-  function Community() {
-    return (
-      <Stack.Navigator
-        screenOptions={{ presentation: "modal", headerShown: false }}
-        initialRouteName="CommunityPage"
-      >
-        <Stack.Screen
-          name="CommunityPage"
-          component={CommunityPage}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Modal"
-          component={Modal}
-          options={{ animation: "fade_from_bottom", animationDuration: 5000 }}
-        />
-      </Stack.Navigator>
-    );
-  }
-
   useEffect(() => {
     const fetchSession = async () => {
-      const { data: session } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       setSession(session);
+      setLoading(false);
     };
 
     fetchSession();
@@ -181,6 +130,14 @@ const App = (navigation: any) => {
     };
   }, []);
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
     <NavigationContainer>
       {session ? <BottomTabs /> : <AuthStack />}
@@ -190,4 +147,10 @@ const App = (navigation: any) => {
 
 export default App;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
