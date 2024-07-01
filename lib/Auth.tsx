@@ -12,7 +12,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { createClient } from "@supabase/supabase-js";
-import { supabase } from "./supabase";
+import { supabase } from "./utlities/supabase";
 import { StatusBar } from "expo-status-bar";
 import {
   GoogleSignin,
@@ -23,6 +23,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Session } from "@supabase/supabase-js";
 import Bookmark from "./screens/bookmark";
 import universalStyles from "../components/universalStyles";
+import { Colors } from "./utlities/colors";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -96,13 +97,16 @@ const Auth = ({ navigation }: { navigation: any }) => {
   };
 
   return (
-    <SafeAreaView style={{ padding: 10 }}>
-      <StatusBar backgroundColor="black" style="light" />
-      <View>
+    <SafeAreaView
+      style={{ padding: 10, backgroundColor: "#121212", height: "100%" }}
+    >
+      <StatusBar backgroundColor="#1E1E1E" style="light" />
+      <View style={{}}>
         <Text style={universalStyles.ReferenceText}>Name</Text>
         <TextInput
           placeholder="Username"
-          cursorColor={"black"}
+          placeholderTextColor={Colors.placeHolder}
+          cursorColor={Colors.cursorColor}
           keyboardType="name-phone-pad"
           value={userName}
           onChangeText={(txt) => {
@@ -114,7 +118,8 @@ const Auth = ({ navigation }: { navigation: any }) => {
         <Text style={universalStyles.ReferenceText}>Email</Text>
         <TextInput
           placeholder="Email"
-          cursorColor={"black"}
+          placeholderTextColor={Colors.placeHolder}
+          cursorColor={Colors.cursorColor}
           keyboardType="email-address"
           value={email}
           onChangeText={(txt) => {
@@ -125,15 +130,16 @@ const Auth = ({ navigation }: { navigation: any }) => {
         />
         <Text style={universalStyles.ReferenceText}>Password</Text>
         <TextInput
+          placeholder="Password"
+          placeholderTextColor={Colors.placeHolder}
+          keyboardType="visible-password"
+          cursorColor={"black"}
           style={universalStyles.TextInput}
           value={password}
           onChangeText={(txt) => {
             setPassword(txt);
             setPassword;
           }}
-          placeholder="Password"
-          keyboardType="visible-password"
-          cursorColor={"black"}
         />
         <Pressable
           onPress={() => signUp()}

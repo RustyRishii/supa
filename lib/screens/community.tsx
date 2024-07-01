@@ -20,7 +20,7 @@ import {
 } from "react-native-gesture-handler";
 import universalStyles from "../../components/universalStyles";
 // import { Image } from "expo-image";
-import { supabase } from "../supabase";
+import { supabase } from "../utlities/supabase";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
 import Fab from "../../components/fab";

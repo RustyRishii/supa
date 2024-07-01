@@ -9,7 +9,7 @@ import {
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
-import { supabase } from "../supabase";
+import { supabase } from "../utlities/supabase";
 import universalStyles from "../../components/universalStyles";
 import {
   GestureHandlerRootView,

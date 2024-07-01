@@ -19,20 +19,25 @@ import {
 } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/Ionicons";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { supabase } from "../supabase";
+import { supabase } from "../utlities/supabase";
 import universalStyles from "../../components/universalStyles";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import ViewShot from "react-native-view-shot";
 import RNFS from "react-native-fs";
 import { request, PERMISSIONS } from "react-native-permissions";
 import NetInfo from "@react-native-community/netinfo";
+import { Colors } from "../utlities/colors";
 //FFA500
-const copyIconFilled = <Icon name="copy" size={20} color={"tomato"} />;
-const copyIconOutline = <Icon name="copy-outline" size={20} color={"tomato"} />;
+const copyIconFilled = <Icon name="copy" size={20} color={Colors.iconColor} />;
+const copyIconOutline = (
+  <Icon name="copy-outline" size={20} color={Colors.iconColor} />
+);
 
-const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"tomato"} />;
+const bookmarkIconFilled = (
+  <Icon name="bookmark" size={20} color={Colors.iconColor} />
+);
 const bookmarkIconOutline = (
-  <Icon name="bookmark-outline" size={20} color={"tomato"} />
+  <Icon name="bookmark-outline" size={20} color={Colors.iconColor} />
 );
 
 const downloadIconFilled = <Icon name="download" size={20} color={"#1D9BF0"} />;

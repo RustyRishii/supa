@@ -8,14 +8,13 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Bookmark from "./lib/screens/bookmark";
 import SettingsPage from "./lib/screens/settings";
 import Icon from "react-native-vector-icons/Ionicons";
-import { supabase } from "./lib/supabase";
+import { supabase } from "./lib/utlities/supabase";
 import { Session } from "@supabase/supabase-js";
+import { Colors } from "./lib/utlities/colors";
 
 const AuthStackNavigator = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
-
-const iconColor = "tomato";
 
 const App = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -44,7 +43,7 @@ const App = () => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 name={focused ? "home" : "home-outline"}
-                color={iconColor}
+                color={Colors.iconColor}
                 size={20}
               />
             ),
@@ -57,7 +56,7 @@ const App = () => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 name={focused ? "bookmark" : "bookmark-outline"}
-                color={iconColor}
+                color={Colors.iconColor}
                 size={20}
               />
             ),
@@ -70,7 +69,7 @@ const App = () => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 name={focused ? "settings" : "settings-outline"}
-                color={iconColor}
+                color={Colors.iconColor}
                 size={20}
               />
             ),

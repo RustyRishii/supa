@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { supabase } from "../supabase";
+import { supabase } from "../utlities/supabase";
 import { GestureHandlerRootView, State } from "react-native-gesture-handler";
 import { useEffect, useRef, useState } from "react";
 import React from "react";

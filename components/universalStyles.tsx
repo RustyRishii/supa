@@ -1,5 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { Colors } from "../lib/utlities/colors";
 
 const universalStyles = StyleSheet.create({
   pageTitle: {
@@ -15,7 +16,7 @@ const universalStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
-    borderColor: "#FFA500",
+    borderColor: Colors.iconColor,
     borderRadius: 10,
     borderWidth: 0.2,
     //marginVertical: 10,
@@ -39,11 +40,13 @@ const universalStyles = StyleSheet.create({
     height: 50,
     padding: 10,
     borderRadius: 5,
-    borderColor: "black",
+    color: "white",
+    borderColor: "white",
   },
   ReferenceText: {
     marginTop: 20,
     marginBottom: 5,
+    color: "white",
   },
   bookmarkAndCopy: {
     marginVertical: 10,
