@@ -5,15 +5,17 @@ const universalStyles = StyleSheet.create({
   pageTitle: {
     fontSize: 30,
     color: "white",
+    paddingHorizontal: 5,
     borderBottomWidth: 0.2,
     borderColor: "aliceblue",
+    backgroundColor: "#1E1E1E",
   },
 
   quoteBlock: {
     justifyContent: "center",
     alignItems: "center",
     alignContent: "center",
-    borderColor: "white",
+    borderColor: "#FFA500",
     borderRadius: 10,
     borderWidth: 0.2,
     //marginVertical: 10,

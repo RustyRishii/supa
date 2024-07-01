@@ -44,8 +44,8 @@ const SettingsPage = ({ navigation }: { navigation: any }) => {
       <GestureHandlerRootView>
         <View
           style={{
-            backgroundColor: "#243447",
-            padding: 5,
+            backgroundColor: "#121212",
+            //paddingHorizontal: 5,
             height: viewportHeight - tabBarHeight,
           }}
         >
@@ -55,6 +55,7 @@ const SettingsPage = ({ navigation }: { navigation: any }) => {
               justifyContent: "center",
               alignContent: "center",
               alignItems: "center",
+              paddingHorizontal: 5,
             }}
           >
             <Pressable onPress={() => console.log("Image opened")}>
@@ -71,10 +72,10 @@ const SettingsPage = ({ navigation }: { navigation: any }) => {
             <Text style={{ fontSize: 20, paddingVertical: 10, color: "white" }}>
               Email : {email}
             </Text>
+            <Pressable onPress={signOut} style={styles.signOutButton}>
+              <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
+            </Pressable>
           </View>
-          <Pressable onPress={signOut} style={styles.signOutButton}>
-            <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
-          </Pressable>
         </View>
       </GestureHandlerRootView>
     </SafeAreaView>
@@ -89,6 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     height: 50,
+    width: 150,
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",

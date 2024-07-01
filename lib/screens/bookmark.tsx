@@ -5,13 +5,9 @@ import {
   FlatList,
   ToastAndroid,
   Dimensions,
-  Alert,
-  Platform,
   Pressable,
   RefreshControl,
-  TouchableNativeFeedback,
 } from "react-native";
-//import React, { useRef } from "react";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../supabase";
@@ -24,17 +20,13 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import NetInfo from "@react-native-community/netinfo";
+//FFA500
+const copyIconFilled = <Icon name="copy" size={20} color={"tomato"} />;
+const copyIconOutline = <Icon name="copy-outline" size={20} color={"tomato"} />;
 
-// import ViewShot from "react-native-view-shot";
-// import RNFS from "react-native-fs";
-// import { request, PERMISSIONS } from "react-native-permissions";
-
-const copyIconFilled = <Icon name="copy" size={20} color={"#1D9BF0"} />;
-const copyIconOutline = <Icon name="copy-outline" size={20} color={"white"} />;
-
-const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"#1D9BF0"} />;
+const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"tomato"} />;
 const bookmarkIconOutline = (
-  <Icon name="bookmark-outline" size={20} color={"black"} />
+  <Icon name="bookmark-outline" size={20} color={"tomato"} />
 );
 
 const Bookmark = () => {
@@ -59,7 +51,7 @@ const Bookmark = () => {
     NetInfo.fetch().then((state) => {
       if (!state.isConnected) {
         setConnected(false);
-        ToastAndroid.show("No network", ToastAndroid.SHORT);
+        ToastAndroid.show("No internet", ToastAndroid.SHORT);
       }
       if (state.isConnected) {
         setConnected(true);
@@ -150,12 +142,15 @@ const Bookmark = () => {
       <GestureHandlerRootView>
         <View
           style={{
-            paddingHorizontal: 5,
-            backgroundColor: "#243447",
+            //paddingHorizontal: 5,
+            //marginHorizontal: 5,
+            backgroundColor: "#121212",
             height: viewportHeight - tabBarHeight,
           }}
         >
-          <Text style={universalStyles.pageTitle}>Bookmarks</Text>
+          <View style={{ backgroundColor: "#1E1E1E" }}>
+            <Text style={universalStyles.pageTitle}>Bookmarks</Text>
+          </View>
           {isConnected ? (
             <FlatList
               removeClippedSubviews={false}

@@ -26,13 +26,13 @@ import ViewShot from "react-native-view-shot";
 import RNFS from "react-native-fs";
 import { request, PERMISSIONS } from "react-native-permissions";
 import NetInfo from "@react-native-community/netinfo";
+//FFA500
+const copyIconFilled = <Icon name="copy" size={20} color={"tomato"} />;
+const copyIconOutline = <Icon name="copy-outline" size={20} color={"tomato"} />;
 
-const copyIconFilled = <Icon name="copy" size={20} color={"#1D9BF0"} />;
-const copyIconOutline = <Icon name="copy-outline" size={20} color={"white"} />;
-
-const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"#1D9BF0"} />;
+const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"tomato"} />;
 const bookmarkIconOutline = (
-  <Icon name="bookmark-outline" size={20} color={"aliceblue"} />
+  <Icon name="bookmark-outline" size={20} color={"tomato"} />
 );
 
 const downloadIconFilled = <Icon name="download" size={20} color={"#1D9BF0"} />;
@@ -216,11 +216,11 @@ const Home = () => {
   const { height: viewportHeight } = Dimensions.get("window");
   return (
     <SafeAreaView style={{}}>
-      <StatusBar backgroundColor="black" style="light" />
+      <StatusBar backgroundColor="#1E1E1E" style="light" />
       <GestureHandlerRootView>
         <ScrollView
           style={{
-            backgroundColor: "#243447",
+            backgroundColor: "#121212",
             height: viewportHeight - tabBarHeight,
             padding: 10,
           }}
@@ -241,7 +241,7 @@ const Home = () => {
           <ViewShot
             ref={viewShotRef}
             options={{ format: "jpg", quality: 1.0, height: 215 }}
-            style={{ backgroundColor: "#243447" }}
+            style={{ backgroundColor: "#1E1E1E", borderRadius: 20 }}
           >
             <TouchableNativeFeedback onLongPress={handleLongPress}>
               <View style={universalStyles.quoteBlock}>

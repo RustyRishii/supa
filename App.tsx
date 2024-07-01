@@ -15,6 +15,8 @@ const AuthStackNavigator = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
 const Tabs = createBottomTabNavigator();
 
+const iconColor = "tomato";
+
 const App = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -27,9 +29,12 @@ const App = () => {
             position: "relative",
             fontSize: 13,
           },
+          tabBarIconStyle: {
+            //padding: 5,
+          },
           tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#243447",
-          tabBarInactiveBackgroundColor: "#243447",
+          tabBarActiveBackgroundColor: "#1E1E1E",
+          tabBarInactiveBackgroundColor: "#1E1E1E",
           headerShown: false,
         }}
         initialRouteName="Home"
@@ -39,7 +44,7 @@ const App = () => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 name={focused ? "home" : "home-outline"}
-                color={"white"}
+                color={iconColor}
                 size={20}
               />
             ),
@@ -52,7 +57,7 @@ const App = () => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 name={focused ? "bookmark" : "bookmark-outline"}
-                color={"white"}
+                color={iconColor}
                 size={20}
               />
             ),
@@ -65,7 +70,7 @@ const App = () => {
             tabBarIcon: ({ focused }) => (
               <Icon
                 name={focused ? "settings" : "settings-outline"}
-                color={"white"}
+                color={iconColor}
                 size={20}
               />
             ),
