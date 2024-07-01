@@ -25,6 +25,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import ViewShot from "react-native-view-shot";
 import RNFS from "react-native-fs";
 import { request, PERMISSIONS } from "react-native-permissions";
+import NetInfo from "@react-native-community/netinfo";
 
 const copyIconFilled = <Icon name="copy" size={20} color={"#1D9BF0"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"white"} />;
@@ -44,9 +45,37 @@ const Home = () => {
   const [bookmark, setBookmark] = useState(bookmarkIconOutline);
   const [postIcon, setPostIcon] = useState(downloadIconOutline);
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [isConnected, setConnected] = useState<boolean>(true);
   const [apiData, setAPIData] = useState<
     { text: string; author: string } | undefined
   >(undefined);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setConnected(state.isConnected);
+      if (!state.isConnected) {
+        showAlert();
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  function netCheck() {
+    NetInfo.fetch().then((state) => {
+      if (!state.isConnected) {
+        ToastAndroid.show("No internet", ToastAndroid.SHORT);
+      }
+    });
+  }
+  const showAlert = () => {
+    Alert.alert(
+      "Internet Connection",
+      "You are offline. Some features may not be available."
+    );
+  };
 
   const bookmarkQuote = async () => {
     const {
@@ -65,9 +94,11 @@ const Home = () => {
     });
     if (error) {
       console.error(error);
+      ToastAndroid.show("No internet", ToastAndroid.SHORT);
     } else {
-      console.log("Text Data added successfully");
+      console.log("Bookmarked");
       setBookmark(bookmarkIconFilled);
+      ToastAndroid.show("Bookmarked", ToastAndroid.SHORT);
     }
   };
 
@@ -90,7 +121,6 @@ const Home = () => {
   function bookmarkCondition() {
     if (bookmark === bookmarkIconOutline) {
       bookmarkQuote();
-      ToastAndroid.show("Bookmarked", ToastAndroid.SHORT);
     } else if (bookmark === bookmarkIconFilled) {
       setBookmark(bookmarkIconOutline);
       ToastAndroid.show("Bookmark Removed", ToastAndroid.SHORT);
@@ -199,7 +229,13 @@ const Home = () => {
             flex: 1,
           }}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={getQuotes} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                getQuotes();
+                netCheck();
+              }}
+            />
           }
         >
           <ViewShot
@@ -222,6 +258,7 @@ const Home = () => {
               </View>
             </TouchableNativeFeedback>
           </ViewShot>
+
           <View style={universalStyles.bookmarkAndCopy}>
             <Pressable
               style={universalStyles.icon}
@@ -246,6 +283,10 @@ const Home = () => {
               {postIcon}
             </Pressable> */}
           </View>
+          {/* 
+          <View>
+            {isConnected ? <Text>Online</Text> : <Text>Offline</Text>}
+          </View> */}
         </ScrollView>
       </GestureHandlerRootView>
     </SafeAreaView>

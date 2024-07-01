@@ -15,7 +15,7 @@ import {
 import Clipboard from "@react-native-clipboard/clipboard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../supabase";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { GestureHandlerRootView, State } from "react-native-gesture-handler";
 import { useEffect, useRef, useState } from "react";
 import React from "react";
 import universalStyles from "../../components/universalStyles";
@@ -23,6 +23,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import NetInfo from "@react-native-community/netinfo";
+
 // import ViewShot from "react-native-view-shot";
 // import RNFS from "react-native-fs";
 // import { request, PERMISSIONS } from "react-native-permissions";
@@ -36,15 +38,14 @@ const bookmarkIconOutline = (
 );
 
 const Bookmark = () => {
-  const insets = useSafeAreaInsets();
   const { height: viewportHeight } = Dimensions.get("window");
-
   const tabBarHeight = useBottomTabBarHeight();
 
   const [copy, setCopy] = useState(copyIconOutline);
   const [bookmarks, setBookmarks] = useState<any>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [bookmarkIcon, setBookmarkIcon] = useState(bookmarkIconFilled);
+  const [isConnected, setConnected] = useState<boolean>(true);
 
   async function RefreshFunction() {
     setRefreshing(true);
@@ -52,6 +53,18 @@ const Bookmark = () => {
     setTimeout(() => {
       setRefreshing(false);
     }, 200);
+  }
+
+  function netCheck() {
+    NetInfo.fetch().then((state) => {
+      if (!state.isConnected) {
+        setConnected(false);
+        ToastAndroid.show("No network", ToastAndroid.SHORT);
+      }
+      if (state.isConnected) {
+        setConnected(true);
+      }
+    });
   }
 
   async function fetchBookmarks() {
@@ -87,6 +100,7 @@ const Bookmark = () => {
   useFocusEffect(
     React.useCallback(() => {
       RefreshFunction();
+      netCheck();
     }, [])
   );
 
@@ -142,24 +156,48 @@ const Bookmark = () => {
           }}
         >
           <Text style={universalStyles.pageTitle}>Bookmarks</Text>
-
-          <FlatList
-            removeClippedSubviews={false}
-            scrollEnabled={true}
-            data={bookmarks}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            style={{ height: "100%" }}
-            indicatorStyle="white"
-            snapToEnd={true}
-            showsVerticalScrollIndicator={true}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={RefreshFunction}
-              />
-            }
-          />
+          {isConnected ? (
+            <FlatList
+              removeClippedSubviews={false}
+              scrollEnabled={true}
+              data={bookmarks}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              style={{ height: "100%" }}
+              indicatorStyle="white"
+              snapToEnd={true}
+              showsVerticalScrollIndicator={true}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={() => {
+                    RefreshFunction();
+                    netCheck();
+                  }}
+                />
+              }
+            />
+          ) : (
+            <View
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                flex: 1,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 45,
+                  color: "red",
+                  textAlign: "center",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                No internet
+              </Text>
+            </View>
+          )}
         </View>
       </GestureHandlerRootView>
     </SafeAreaView>
