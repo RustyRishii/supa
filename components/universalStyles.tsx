@@ -11,7 +11,6 @@ const universalStyles = StyleSheet.create({
     borderColor: "aliceblue",
     backgroundColor: "#1E1E1E",
   },
-
   quoteBlock: {
     justifyContent: "center",
     alignItems: "center",

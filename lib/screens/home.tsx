@@ -27,6 +27,7 @@ import RNFS from "react-native-fs";
 import { request, PERMISSIONS } from "react-native-permissions";
 import NetInfo from "@react-native-community/netinfo";
 import { Colors } from "../utlities/colors";
+
 //FFA500
 const copyIconFilled = <Icon name="copy" size={20} color={Colors.iconColor} />;
 const copyIconOutline = (
@@ -75,6 +76,7 @@ const Home = () => {
       }
     });
   }
+
   const showAlert = () => {
     Alert.alert(
       "Internet Connection",
@@ -135,8 +137,8 @@ const Home = () => {
   const fetchAPIData = async () => {
     const url = "https://stoic-quotes.com/api/quote";
     try {
-      let urlResult = await fetch(url); // Added 'await'
-      let myData = await urlResult.json(); // Added 'await'
+      let urlResult = await fetch(url);
+      let myData = await urlResult.json();
       setAPIData(myData);
       console.log(myData); // This should only log once
     } catch (error) {
@@ -146,18 +148,18 @@ const Home = () => {
     }
   };
 
-  const getQuotes = useCallback(() => {
+  async function getQuotes() {
     setBookmark(bookmarkIconOutline);
     setRefreshing(true);
     fetchAPIData();
     setTimeout(() => {
       setRefreshing(false);
-    }, 200);
-  }, []);
+    }, 1);
+  }
 
   useEffect(() => {
     getQuotes();
-  }, [getQuotes]); // Added 'getQuotes' to the dependency array
+  }, []); // Added 'getQuotes' to the dependency array
 
   async function quoteToPost() {
     const {
@@ -238,6 +240,7 @@ const Home = () => {
               refreshing={refreshing}
               onRefresh={() => {
                 getQuotes();
+
                 netCheck();
               }}
             />

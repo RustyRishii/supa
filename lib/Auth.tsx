@@ -1,11 +1,9 @@
 import {
   Alert,
   Pressable,
-  StyleSheet,
   Text,
   TextInput,
   ToastAndroid,
-  TouchableOpacity,
   View,
   AppState,
 } from "react-native";

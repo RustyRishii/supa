@@ -17,9 +17,10 @@ import React from "react";
 import universalStyles from "../../components/universalStyles";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import NetInfo from "@react-native-community/netinfo";
+import Swipeable from "react-native-gesture-handler/Swipeable";
+
 //FFA500
 const copyIconFilled = <Icon name="copy" size={20} color={"tomato"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"tomato"} />;
@@ -62,7 +63,8 @@ const Bookmark = () => {
   async function fetchBookmarks() {
     const { data, error } = await supabase
       .from("Bookmarks")
-      .select("id, Quote, Author");
+      .select("id, Quote, Author")
+      .order("id", { ascending: true });
     setBookmarks(data);
     //console.log(data);
 
@@ -97,44 +99,44 @@ const Bookmark = () => {
   );
 
   const renderItem = ({ item, index }: { item: any; index: number }) => (
-    <View style={styles.item}>
-      <Text
-        accessible={true}
-        accessibilityLabel="Quote and Author name"
-        selectable={true}
-        style={universalStyles.quote}
-      >
-        {item.Quote}
-      </Text>
-
-      <Text
-        accessible={true}
-        accessibilityLabel="Author name"
-        selectable={true}
-        style={universalStyles.author}
-      >
-        - {item.Author}
-      </Text>
-
-      <View style={{ flexDirection: "row" }}>
-        <Pressable
-          style={styles.icon}
-          onPress={() => {
-            setCopy(copyIconFilled);
-            Clipboard.setString(`${item.Quote} - ${item.Author} `);
-            ToastAndroid.show("Copied", ToastAndroid.SHORT);
-            setTimeout(() => {
-              setCopy(copyIconOutline);
-            }, 200);
-          }}
+    <Swipeable>
+      <View style={styles.item}>
+        <Text
+          accessible={true}
+          accessibilityLabel="Quote and Author name"
+          selectable={true}
+          style={universalStyles.quote}
         >
-          {copy}
-        </Pressable>
-        <Pressable onPress={() => deleteBookmark(item.id)}>
-          {bookmarkIcon}
-        </Pressable>
+          {item.Quote}
+        </Text>
+        <Text
+          accessible={true}
+          accessibilityLabel="Author name"
+          selectable={true}
+          style={universalStyles.author}
+        >
+          - {item.Author}
+        </Text>
+        <View style={{ flexDirection: "row" }}>
+          <Pressable
+            style={styles.icon}
+            onPress={() => {
+              setCopy(copyIconFilled);
+              Clipboard.setString(`${item.Quote} - ${item.Author} `);
+              ToastAndroid.show("Copied", ToastAndroid.SHORT);
+              setTimeout(() => {
+                setCopy(copyIconOutline);
+              }, 200);
+            }}
+          >
+            {copy}
+          </Pressable>
+          <Pressable onPress={() => deleteBookmark(item.id)}>
+            {bookmarkIcon}
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </Swipeable>
   );
 
   return (
