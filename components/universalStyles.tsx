@@ -16,15 +16,16 @@ const universalStyles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     borderColor: Colors.iconColor,
+    backgroundColor: "#1E1E1E",
     borderRadius: 10,
     borderWidth: 0.2,
-    //marginVertical: 10,
     height: 215,
     paddingHorizontal: 10,
   },
   quote: {
     fontSize: 20,
     color: "aliceblue",
+    //position: "relative",
   },
   author: {
     fontSize: 18,
@@ -33,6 +34,7 @@ const universalStyles = StyleSheet.create({
     textAlign: "right",
     alignItems: "flex-end",
     color: "aliceblue",
+    //position: "relative",
   },
   TextInput: {
     borderWidth: 1,

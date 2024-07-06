@@ -1,6 +1,6 @@
 import { StyleSheet, Pressable, Text, View } from "react-native";
 import React from "react";
-import { Icon } from "react-native-elements";
+import Icon from "react-native-vector-icons/Ionicons";
 import universalStyles from "./universalStyles";
 
 const Fab = ({ navigation }: { navigation: any }) => {

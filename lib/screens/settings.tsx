@@ -13,6 +13,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import universalStyles from "../../components/universalStyles";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { Colors } from "../utlities/colors";
 
 const SettingsPage = ({ navigation }: { navigation: any }) => {
   const tabBarHeight = useBottomTabBarHeight();
@@ -44,7 +45,7 @@ const SettingsPage = ({ navigation }: { navigation: any }) => {
       <GestureHandlerRootView>
         <View
           style={{
-            backgroundColor: "#121212",
+            backgroundColor: Colors.pageBackgroundColor,
             //paddingHorizontal: 5,
             height: viewportHeight - tabBarHeight,
           }}

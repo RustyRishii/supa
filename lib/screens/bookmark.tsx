@@ -20,6 +20,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import NetInfo from "@react-native-community/netinfo";
 import Swipeable from "react-native-gesture-handler/Swipeable";
+import { Colors } from "../utlities/colors";
 
 //FFA500
 const copyIconFilled = <Icon name="copy" size={20} color={"tomato"} />;
@@ -40,6 +41,7 @@ const Bookmark = () => {
   const [bookmarkIcon, setBookmarkIcon] = useState(bookmarkIconFilled);
   const [isConnected, setConnected] = useState<boolean>(true);
 
+ 
   async function RefreshFunction() {
     setRefreshing(true);
     fetchBookmarks();
@@ -146,7 +148,7 @@ const Bookmark = () => {
           style={{
             //paddingHorizontal: 5,
             //marginHorizontal: 5,
-            backgroundColor: "#121212",
+            backgroundColor: Colors.pageBackgroundColor,
             height: viewportHeight - tabBarHeight,
           }}
         >
@@ -182,17 +184,7 @@ const Bookmark = () => {
                 flex: 1,
               }}
             >
-              <Text
-                style={{
-                  fontSize: 45,
-                  color: "red",
-                  textAlign: "center",
-                  justifyContent: "center",
-                  alignContent: "center",
-                }}
-              >
-                No internet
-              </Text>
+              <Text style={styles.noInternetText}>No internet</Text>
             </View>
           )}
         </View>
@@ -226,6 +218,13 @@ const styles = StyleSheet.create({
   icon: {
     height: 25,
     width: 50,
+  },
+  noInternetText: {
+    fontSize: 45,
+    color: "red",
+    textAlign: "center",
+    justifyContent: "center",
+    alignContent: "center",
   },
 });
 

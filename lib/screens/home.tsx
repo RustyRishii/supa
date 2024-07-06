@@ -27,6 +27,8 @@ import RNFS from "react-native-fs";
 import { request, PERMISSIONS } from "react-native-permissions";
 import NetInfo from "@react-native-community/netinfo";
 import { Colors } from "../utlities/colors";
+import Animated from "react-native-reanimated";
+import { withTiming, useSharedValue } from "react-native-reanimated";
 
 //FFA500
 const copyIconFilled = <Icon name="copy" size={20} color={Colors.iconColor} />;
@@ -55,6 +57,8 @@ const Home = () => {
   const [apiData, setAPIData] = useState<
     { text: string; author: string } | undefined
   >(undefined);
+
+  var borderWidths = useSharedValue(1);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -219,15 +223,28 @@ const Home = () => {
     }
   };
 
+  function borderWidthAnimation() {
+    borderWidths.value = withTiming(borderWidths.value + 350, {
+      duration: 500,
+    });
+    //borderRadius.value = withTiming(10, { duration: 500 });
+    setTimeout(() => {
+      borderWidths.value = withTiming(0.2, {
+        duration: 500,
+      });
+      //borderRadius.value = withTiming(10, { duration: 500 });
+    }, 500);
+  }
+
   const tabBarHeight = useBottomTabBarHeight();
   const { height: viewportHeight } = Dimensions.get("window");
   return (
     <SafeAreaView style={{}}>
-      <StatusBar backgroundColor="#1E1E1E" style="light" />
+      <StatusBar backgroundColor={Colors.statusbar} style="light" />
       <GestureHandlerRootView>
         <ScrollView
           style={{
-            backgroundColor: "#121212",
+            backgroundColor: Colors.pageBackgroundColor,
             height: viewportHeight - tabBarHeight,
             padding: 10,
           }}
@@ -240,7 +257,7 @@ const Home = () => {
               refreshing={refreshing}
               onRefresh={() => {
                 getQuotes();
-
+                borderWidthAnimation();
                 netCheck();
               }}
             />
@@ -249,12 +266,34 @@ const Home = () => {
           <ViewShot
             ref={viewShotRef}
             options={{ format: "jpg", quality: 1.0, height: 215 }}
-            style={{ backgroundColor: "#1E1E1E", borderRadius: 20 }}
+            style={{
+              backgroundColor: "#1E1E1E",
+              borderRadius: 20,
+            }}
           >
             <TouchableNativeFeedback onLongPress={handleLongPress}>
-              <View style={universalStyles.quoteBlock}>
+              <Animated.View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  alignContent: "center",
+                  borderColor: Colors.iconColor,
+                  backgroundColor: "#1E1E1E",
+                  borderRadius: 10,
+                  borderWidth: 0.2,
+                  borderRightWidth: borderWidths,
+                  borderLeftWidth: borderWidths,
+                  height: 215,
+                  paddingHorizontal: 10,
+                }}
+              >
                 {apiData ? (
-                  <View>
+                  <View
+                    style={{
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                    }}
+                  >
                     <Text selectable={true} style={universalStyles.quote}>
                       {apiData.text}
                     </Text>
@@ -263,7 +302,7 @@ const Home = () => {
                     </Text>
                   </View>
                 ) : null}
-              </View>
+              </Animated.View>
             </TouchableNativeFeedback>
           </ViewShot>
 

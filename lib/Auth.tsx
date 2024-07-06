@@ -131,7 +131,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
           placeholder="Password"
           placeholderTextColor={Colors.placeHolder}
           keyboardType="visible-password"
-          cursorColor={"black"}
+          cursorColor={Colors.cursorColor}
           style={universalStyles.TextInput}
           value={password}
           onChangeText={(txt) => {
@@ -144,7 +144,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
           style={{
             backgroundColor: "black",
             borderRadius: 5,
-            marginVertical: 20,
+            marginVertical: 20, 
             borderWidth: 1,
             height: 50,
             justifyContent: "center",

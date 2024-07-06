@@ -26,7 +26,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import Fab from "../../components/fab";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { color } from "react-native-elements/dist/helpers";
+//import { color } from "react-native-elements/dist/helpers";
 
 const CommunityPage = ({ navigation }: { navigation: any }) => {
   //const insets = useSafeAreaInsets();
