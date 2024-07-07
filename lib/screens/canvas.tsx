@@ -26,7 +26,6 @@ const CanvasPage = () => {
   const [refresing, setRefreshing] = useState<boolean>(false);
   const width = useSharedValue<number>(100);
   var borderWidths = useSharedValue(1);
-  var borderRadius = useSharedValue(10);
 
   function onRefresh() {
     increaseWidth();
@@ -34,15 +33,13 @@ const CanvasPage = () => {
   }
 
   function borderWidthAnimation() {
-    borderWidths.value = withTiming(borderWidths.value + 300, {
+    borderWidths.value = withTiming(borderWidths.value + 200, {
       duration: 500,
     });
-    //borderRadius.value = withTiming(10, { duration: 500 });
     setTimeout(() => {
       borderWidths.value = withTiming(1, {
         duration: 500,
       });
-      //borderRadius.value = withTiming(10, { duration: 500 });
     }, 500);
   }
 

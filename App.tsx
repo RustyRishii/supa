@@ -78,7 +78,7 @@ const App = () => {
           name="SettingsPage"
           component={SettingsPage}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           options={{
             tabBarIcon: ({ focused }) => (
               <Icon
@@ -90,7 +90,7 @@ const App = () => {
           }}
           name="CanvasPage"
           component={CanvasPage}
-        />
+        /> */}
       </Tabs.Navigator>
     );
   }

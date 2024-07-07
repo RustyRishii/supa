@@ -1,5 +1,6 @@
 export const Colors =
 {
+	iconSize: 20,
 	iconColor: "tomato",
 	cursorColor: "tomato",
 	placeHolder: "grey",

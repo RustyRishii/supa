@@ -25,6 +25,7 @@ const universalStyles = StyleSheet.create({
   quote: {
     fontSize: 20,
     color: "aliceblue",
+    flexWrap: "nowrap",
     //position: "relative",
   },
   author: {
@@ -34,6 +35,7 @@ const universalStyles = StyleSheet.create({
     textAlign: "right",
     alignItems: "flex-end",
     color: "aliceblue",
+    flexWrap: "nowrap",
     //position: "relative",
   },
   TextInput: {

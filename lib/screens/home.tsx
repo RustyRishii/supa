@@ -27,25 +27,33 @@ import RNFS from "react-native-fs";
 import { request, PERMISSIONS } from "react-native-permissions";
 import NetInfo from "@react-native-community/netinfo";
 import { Colors } from "../utlities/colors";
-import Animated from "react-native-reanimated";
+import Animated, { withSpring } from "react-native-reanimated";
 import { withTiming, useSharedValue } from "react-native-reanimated";
 
 //FFA500
-const copyIconFilled = <Icon name="copy" size={20} color={Colors.iconColor} />;
+const copyIconFilled = (
+  <Icon name="copy" size={Colors.iconSize} color={Colors.iconColor} />
+);
 const copyIconOutline = (
-  <Icon name="copy-outline" size={20} color={Colors.iconColor} />
+  <Icon name="copy-outline" size={Colors.iconSize} color={Colors.iconColor} />
 );
 
 const bookmarkIconFilled = (
-  <Icon name="bookmark" size={20} color={Colors.iconColor} />
+  <Icon name="bookmark" size={Colors.iconSize} color={Colors.iconColor} />
 );
 const bookmarkIconOutline = (
-  <Icon name="bookmark-outline" size={20} color={Colors.iconColor} />
+  <Icon
+    name="bookmark-outline"
+    size={Colors.iconSize}
+    color={Colors.iconColor}
+  />
 );
 
-const downloadIconFilled = <Icon name="download" size={20} color={"#1D9BF0"} />;
+const downloadIconFilled = (
+  <Icon name="download" size={Colors.iconSize} color={"#1D9BF0"} />
+);
 const downloadIconOutline = (
-  <Icon name="download-outline" size={20} color={"white"} />
+  <Icon name="download-outline" size={Colors.iconSize} color={"white"} />
 );
 
 const Home = () => {
@@ -58,7 +66,8 @@ const Home = () => {
     { text: string; author: string } | undefined
   >(undefined);
 
-  var borderWidths = useSharedValue(1);
+  var borderWidths = useSharedValue(0.2);
+  var textOpacity = useSharedValue(1);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -224,17 +233,22 @@ const Home = () => {
   };
 
   function borderWidthAnimation() {
-    borderWidths.value = withTiming(borderWidths.value + 350, {
+    borderWidths.value = withTiming(borderWidths.value + 199, {
       duration: 500,
     });
-    //borderRadius.value = withTiming(10, { duration: 500 });
+    textOpacity.value = withTiming(0, { duration: 500 });
+    //borderRadius.value = withSpring(10);
     setTimeout(() => {
       borderWidths.value = withTiming(0.2, {
         duration: 500,
       });
-      //borderRadius.value = withTiming(10, { duration: 500 });
+      textOpacity.value = withTiming(1, { duration: 500 });
     }, 500);
   }
+
+  useEffect(() => {
+    borderWidthAnimation();
+  }, []);
 
   const tabBarHeight = useBottomTabBarHeight();
   const { height: viewportHeight } = Dimensions.get("window");
@@ -268,11 +282,11 @@ const Home = () => {
             options={{ format: "jpg", quality: 1.0, height: 215 }}
             style={{
               backgroundColor: "#1E1E1E",
-              borderRadius: 20,
+              borderRadius: 10,
             }}
           >
             <TouchableNativeFeedback onLongPress={handleLongPress}>
-              <Animated.View
+              <View
                 style={{
                   justifyContent: "center",
                   alignItems: "center",
@@ -280,18 +294,30 @@ const Home = () => {
                   borderColor: Colors.iconColor,
                   backgroundColor: "#1E1E1E",
                   borderRadius: 10,
-                  borderWidth: 0.2,
-                  borderRightWidth: borderWidths,
-                  borderLeftWidth: borderWidths,
                   height: 215,
                   paddingHorizontal: 10,
+                  //overflow: "hidden",
                 }}
               >
+                <Animated.View
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    borderColor: Colors.iconColor,
+                    borderRadius: 10,
+                    borderTopWidth: 0.2,
+                    borderBottomWidth: 0.2,
+                    borderRightWidth: borderWidths,
+                    borderLeftWidth: borderWidths,
+                  }}
+                />
                 {apiData ? (
-                  <View
+                  <Animated.View
                     style={{
-                      paddingLeft: 10,
-                      paddingRight: 10,
+                      opacity: textOpacity,
                     }}
                   >
                     <Text selectable={true} style={universalStyles.quote}>
@@ -300,12 +326,11 @@ const Home = () => {
                     <Text selectable={true} style={universalStyles.author}>
                       - {apiData.author}
                     </Text>
-                  </View>
+                  </Animated.View>
                 ) : null}
-              </Animated.View>
+              </View>
             </TouchableNativeFeedback>
           </ViewShot>
-
           <View style={universalStyles.bookmarkAndCopy}>
             <Pressable
               style={universalStyles.icon}
@@ -324,16 +349,16 @@ const Home = () => {
               {bookmark}
             </Pressable>
             {/* <Pressable
-              style={universalStyles.icon}
-              onPress={() => quoteToPost()}
-            >
-              {postIcon}
-            </Pressable> */}
+      style={universalStyles.icon}
+      onPress={() => quoteToPost()}
+    >
+      {postIcon}
+    </Pressable> */}
           </View>
           {/* 
-          <View>
-            {isConnected ? <Text>Online</Text> : <Text>Offline</Text>}
-          </View> */}
+  <View>
+    {isConnected ? <Text>Online</Text> : <Text>Offline</Text>}
+  </View> */}
         </ScrollView>
       </GestureHandlerRootView>
     </SafeAreaView>
