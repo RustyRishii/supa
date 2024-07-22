@@ -33,8 +33,8 @@ const App = () => {
             //padding: 5,
           },
           tabBarShowLabel: false,
-          tabBarActiveBackgroundColor: "#1E1E1E",
-          tabBarInactiveBackgroundColor: "#1E1E1E",
+          tabBarActiveBackgroundColor: Colors.statusbar,
+          tabBarInactiveBackgroundColor: Colors.statusbar,
           headerShown: false,
         }}
         initialRouteName="Home"
@@ -45,7 +45,7 @@ const App = () => {
               <Icon
                 name={focused ? "home" : "home-outline"}
                 color={Colors.iconColor}
-                size={20}
+                size={Colors.iconSize}
               />
             ),
           }}
@@ -58,7 +58,7 @@ const App = () => {
               <Icon
                 name={focused ? "bookmark" : "bookmark-outline"}
                 color={Colors.iconColor}
-                size={20}
+                size={Colors.iconSize}
               />
             ),
           }}
@@ -71,7 +71,7 @@ const App = () => {
               <Icon
                 name={focused ? "settings" : "settings-outline"}
                 color={Colors.iconColor}
-                size={20}
+                size={Colors.iconSize}
               />
             ),
           }}
@@ -84,7 +84,7 @@ const App = () => {
               <Icon
                 name={focused ? "person" : "person-outline"}
                 color={Colors.iconColor}
-                size={20}
+                size={Colors.iconSize}
               />
             ),
           }}

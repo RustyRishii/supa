@@ -1,26 +1,25 @@
+import Clipboard from "@react-native-clipboard/clipboard";
+import NetInfo from "@react-native-community/netinfo";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useFocusEffect } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  ToastAndroid,
   Dimensions,
+  FlatList,
   Pressable,
   RefreshControl,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  View,
 } from "react-native";
-import Clipboard from "@react-native-clipboard/clipboard";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { supabase } from "../utlities/supabase";
-import { GestureHandlerRootView, State } from "react-native-gesture-handler";
-import { useEffect, useRef, useState } from "react";
-import React from "react";
-import universalStyles from "../../components/universalStyles";
 import Icon from "react-native-vector-icons/Ionicons";
-import { useFocusEffect } from "@react-navigation/native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import NetInfo from "@react-native-community/netinfo";
-import Swipeable from "react-native-gesture-handler/Swipeable";
+import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
+import { supabase } from "../utlities/supabase";
 
 //FFA500
 const copyIconFilled = <Icon name="copy" size={20} color={"tomato"} />;
@@ -32,7 +31,8 @@ const bookmarkIconOutline = (
 );
 
 const Bookmark = () => {
-  const { height: viewportHeight } = Dimensions.get("window");
+  const { height: viewportHeight, width: screenWidth } =
+    Dimensions.get("window");
   const tabBarHeight = useBottomTabBarHeight();
 
   const [copy, setCopy] = useState(copyIconOutline);
@@ -41,10 +41,19 @@ const Bookmark = () => {
   const [bookmarkIcon, setBookmarkIcon] = useState(bookmarkIconFilled);
   const [isConnected, setConnected] = useState<boolean>(true);
 
- 
+  const borderWidths = useSharedValue(0.2);
+
+  function bookmarkAnimation() {
+    borderWidths.value = withTiming(screenWidth, { duration: 500 });
+    setTimeout(() => {
+      borderWidths.value = withTiming(0, { duration: 500 });
+    }, 500);
+  }
+
   async function RefreshFunction() {
     setRefreshing(true);
     fetchBookmarks();
+    bookmarkAnimation();
     setTimeout(() => {
       setRefreshing(false);
     }, 200);
@@ -101,44 +110,50 @@ const Bookmark = () => {
   );
 
   const renderItem = ({ item, index }: { item: any; index: number }) => (
-    <Swipeable>
-      <View style={styles.item}>
-        <Text
-          accessible={true}
-          accessibilityLabel="Quote and Author name"
-          selectable={true}
-          style={universalStyles.quote}
+    <Animated.View
+      style={{
+        // borderLeftWidth: borderWidths,
+        // borderRightWidth: borderWidths,
+        borderBottomWidth: 0.2,
+        borderBottomColor: "aliceblue",
+        padding: 5,
+      }}
+    >
+      <Text
+        accessible={true}
+        accessibilityLabel="Quote and Author name"
+        selectable={true}
+        style={universalStyles.quote}
+      >
+        {item.Quote}
+      </Text>
+      <Text
+        accessible={true}
+        accessibilityLabel="Author name"
+        selectable={true}
+        style={universalStyles.author}
+      >
+        - {item.Author}
+      </Text>
+      <View style={{ flexDirection: "row" }}>
+        <Pressable
+          style={styles.icon}
+          onPress={() => {
+            setCopy(copyIconFilled);
+            Clipboard.setString(`${item.Quote} - ${item.Author} `);
+            ToastAndroid.show("Copied", ToastAndroid.SHORT);
+            setTimeout(() => {
+              setCopy(copyIconOutline);
+            }, 200);
+          }}
         >
-          {item.Quote}
-        </Text>
-        <Text
-          accessible={true}
-          accessibilityLabel="Author name"
-          selectable={true}
-          style={universalStyles.author}
-        >
-          - {item.Author}
-        </Text>
-        <View style={{ flexDirection: "row" }}>
-          <Pressable
-            style={styles.icon}
-            onPress={() => {
-              setCopy(copyIconFilled);
-              Clipboard.setString(`${item.Quote} - ${item.Author} `);
-              ToastAndroid.show("Copied", ToastAndroid.SHORT);
-              setTimeout(() => {
-                setCopy(copyIconOutline);
-              }, 200);
-            }}
-          >
-            {copy}
-          </Pressable>
-          <Pressable onPress={() => deleteBookmark(item.id)}>
-            {bookmarkIcon}
-          </Pressable>
-        </View>
+          {copy}
+        </Pressable>
+        <Pressable onPress={() => deleteBookmark(item.id)}>
+          {bookmarkIcon}
+        </Pressable>
       </View>
-    </Swipeable>
+    </Animated.View>
   );
 
   return (

@@ -1,5 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { StyleSheet } from "react-native";
 import { Colors } from "../lib/utlities/colors";
 
 const universalStyles = StyleSheet.create({

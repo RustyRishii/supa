@@ -1,36 +1,33 @@
+import Clipboard from "@react-native-clipboard/clipboard";
+import NetInfo from "@react-native-community/netinfo";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useRef, useState } from "react";
 import {
+  Alert,
+  Dimensions,
+  Platform,
   Pressable,
   Text,
-  View,
   ToastAndroid,
-  Dimensions,
-  Alert,
-  Image,
   TouchableNativeFeedback,
-  Platform,
+  View,
 } from "react-native";
-import React, { useCallback, useEffect, useState, useRef } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
+import RNFS from "react-native-fs";
 import {
   GestureHandlerRootView,
   RefreshControl,
   ScrollView,
 } from "react-native-gesture-handler";
+import { PERMISSIONS, request } from "react-native-permissions";
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
-import Clipboard from "@react-native-clipboard/clipboard";
-import { supabase } from "../utlities/supabase";
-import universalStyles from "../../components/universalStyles";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import ViewShot from "react-native-view-shot";
-import RNFS from "react-native-fs";
-import { request, PERMISSIONS } from "react-native-permissions";
-import NetInfo from "@react-native-community/netinfo";
+import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
-import Animated, { withSpring } from "react-native-reanimated";
-import { withTiming, useSharedValue } from "react-native-reanimated";
+import { supabase } from "../utlities/supabase";
 
-//FFA500
 const copyIconFilled = (
   <Icon name="copy" size={Colors.iconSize} color={Colors.iconColor} />
 );
@@ -65,6 +62,8 @@ const Home = () => {
   const [apiData, setAPIData] = useState<
     { text: string; author: string } | undefined
   >(undefined);
+
+  const viewShotRef = useRef();
 
   var borderWidths = useSharedValue(0.2);
   var textOpacity = useSharedValue(1);
@@ -150,10 +149,15 @@ const Home = () => {
   const fetchAPIData = async () => {
     const url = "https://stoic-quotes.com/api/quote";
     try {
+      setBookmark(bookmarkIconOutline);
+      setRefreshing(true);
       let urlResult = await fetch(url);
       let myData = await urlResult.json();
       setAPIData(myData);
-      console.log(myData); // This should only log once
+      console.log(myData);
+      setTimeout(() => {
+        setRefreshing(false);
+      }, 1);
     } catch (error) {
       if (error) {
         console.error(error);
@@ -161,18 +165,10 @@ const Home = () => {
     }
   };
 
-  async function getQuotes() {
-    setBookmark(bookmarkIconOutline);
-    setRefreshing(true);
-    fetchAPIData();
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 1);
-  }
-
   useEffect(() => {
-    getQuotes();
-  }, []); // Added 'getQuotes' to the dependency array
+    fetchAPIData();
+    viewShotAnimations();
+  }, []);
 
   async function quoteToPost() {
     const {
@@ -196,8 +192,6 @@ const Home = () => {
       ToastAndroid.show("Posted", ToastAndroid.SHORT);
     }
   }
-
-  const viewShotRef = useRef();
 
   const handleLongPress = async () => {
     try {
@@ -232,23 +226,18 @@ const Home = () => {
     }
   };
 
-  function borderWidthAnimation() {
-    borderWidths.value = withTiming(borderWidths.value + 199, {
+  function viewShotAnimations() {
+    borderWidths.value = withTiming(borderWidths.value + 195, {
       duration: 500,
     });
-    textOpacity.value = withTiming(0, { duration: 500 });
-    //borderRadius.value = withSpring(10);
+    textOpacity.value = withTiming(0, { duration: 100 });
     setTimeout(() => {
       borderWidths.value = withTiming(0.2, {
         duration: 500,
       });
-      textOpacity.value = withTiming(1, { duration: 500 });
+      textOpacity.value = withTiming(1, { duration: 1500 });
     }, 500);
   }
-
-  useEffect(() => {
-    borderWidthAnimation();
-  }, []);
 
   const tabBarHeight = useBottomTabBarHeight();
   const { height: viewportHeight } = Dimensions.get("window");
@@ -270,8 +259,8 @@ const Home = () => {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={() => {
-                getQuotes();
-                borderWidthAnimation();
+                fetchAPIData();
+                viewShotAnimations();
                 netCheck();
               }}
             />

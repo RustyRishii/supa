@@ -19,14 +19,12 @@ import {
   ScrollView,
 } from "react-native-gesture-handler";
 import universalStyles from "../../components/universalStyles";
-// import { Image } from "expo-image";
 import { supabase } from "../utlities/supabase";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useFocusEffect } from "@react-navigation/native";
 import Fab from "../../components/fab";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-//import { color } from "react-native-elements/dist/helpers";
 
 const CommunityPage = ({ navigation }: { navigation: any }) => {
   //const insets = useSafeAreaInsets();
