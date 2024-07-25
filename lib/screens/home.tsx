@@ -20,13 +20,19 @@ import {
   ScrollView,
 } from "react-native-gesture-handler";
 import { PERMISSIONS, request } from "react-native-permissions";
-import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+  useSharedValue,
+  withTiming,
+  BounceIn,
+} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import ViewShot from "react-native-view-shot";
 import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
+import { Audio } from "expo-av";
+//var Sound = require('react-native-sound');
 
 const copyIconFilled = (
   <Icon name="copy" size={Colors.iconSize} color={Colors.iconColor} />
@@ -59,14 +65,46 @@ const Home = () => {
   const [postIcon, setPostIcon] = useState(downloadIconOutline);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [isConnected, setConnected] = useState<boolean>(true);
+  const [sound, setSound] = useState();
   const [apiData, setAPIData] = useState<
     { text: string; author: string } | undefined
   >(undefined);
+
+  const tabBarHeight = useBottomTabBarHeight();
+  const { height: viewportHeight } = Dimensions.get("window");
 
   const viewShotRef = useRef();
 
   var borderWidths = useSharedValue(0.2);
   var textOpacity = useSharedValue(1);
+
+  // async function playSound() {
+  //   console.log("Loading Sound");
+  //   const { sound } = await Audio.Sound.createAsync(
+  //     require("../../assets/audio/screenshot.mp3")
+  //   );
+  //   setSound(sound);
+
+  //   console.log("Playing Sound");
+  //   await sound.playAsync();
+  // }
+
+  // useEffect(() => {
+  //   return sound
+  //     ? () => {
+  //         console.log("Unloading Sound");
+  //         sound.unloadAsync();
+  //       }
+  //     : undefined;
+  // }, [sound]);
+
+  function netCheck() {
+    NetInfo.fetch().then((state) => {
+      if (!state.isConnected) {
+        ToastAndroid.show("No internet", ToastAndroid.SHORT);
+      }
+    });
+  }
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -80,14 +118,6 @@ const Home = () => {
       unsubscribe();
     };
   }, []);
-
-  function netCheck() {
-    NetInfo.fetch().then((state) => {
-      if (!state.isConnected) {
-        ToastAndroid.show("No internet", ToastAndroid.SHORT);
-      }
-    });
-  }
 
   const showAlert = () => {
     Alert.alert(
@@ -218,7 +248,7 @@ const Home = () => {
         RNFS.PicturesDirectoryPath
       }/screenshot_${Date.now()}.png`;
       await RNFS.moveFile(uri, destPath);
-
+      //playSound;
       ToastAndroid.show("Saved to gallery", ToastAndroid.SHORT);
     } catch (error) {
       Alert.alert("Error", "An error occurred while taking the screenshot");
@@ -239,8 +269,6 @@ const Home = () => {
     }, 500);
   }
 
-  const tabBarHeight = useBottomTabBarHeight();
-  const { height: viewportHeight } = Dimensions.get("window");
   return (
     <SafeAreaView style={{}}>
       <StatusBar backgroundColor={Colors.statusbar} style="light" />
@@ -309,10 +337,8 @@ const Home = () => {
                       opacity: textOpacity,
                     }}
                   >
-                    <Text selectable={true} style={universalStyles.quote}>
-                      {apiData.text}
-                    </Text>
-                    <Text selectable={true} style={universalStyles.author}>
+                    <Text style={universalStyles.quote}>{apiData.text}</Text>
+                    <Text style={universalStyles.author}>
                       - {apiData.author}
                     </Text>
                   </Animated.View>
