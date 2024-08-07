@@ -22,6 +22,7 @@ import { Session } from "@supabase/supabase-js";
 import Bookmark from "./screens/bookmark";
 import universalStyles from "../components/universalStyles";
 import { Colors } from "./utlities/colors";
+import LabelText from "../components/labelText";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -100,7 +101,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
     >
       <StatusBar backgroundColor="#1E1E1E" style="light" />
       <View style={{}}>
-        <Text style={universalStyles.ReferenceText}>Name</Text>
+        <LabelText LabelText="Name" />
         <TextInput
           placeholder="Username"
           placeholderTextColor={Colors.placeHolder}
@@ -113,7 +114,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
           }}
           style={universalStyles.TextInput}
         />
-        <Text style={universalStyles.ReferenceText}>Email</Text>
+        <LabelText LabelText="Email" />
         <TextInput
           placeholder="Email"
           placeholderTextColor={Colors.placeHolder}
@@ -126,7 +127,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
           }}
           style={universalStyles.TextInput}
         />
-        <Text style={universalStyles.ReferenceText}>Password</Text>
+        <LabelText LabelText="Password" />
         <TextInput
           placeholder="Password"
           placeholderTextColor={Colors.placeHolder}
@@ -139,35 +140,11 @@ const Auth = ({ navigation }: { navigation: any }) => {
             setPassword;
           }}
         />
-        <Pressable
-          onPress={() => signUp()}
-          style={{
-            backgroundColor: "black",
-            borderRadius: 5,
-            marginVertical: 20, 
-            borderWidth: 1,
-            height: 50,
-            justifyContent: "center",
-            alignContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ fontSize: 20, color: "white" }}>Sign Up</Text>
+        <Pressable onPress={() => signUp()} style={universalStyles.authButtons}>
+          <Text style={universalStyles.authButtonText}>Sign Up</Text>
         </Pressable>
-        <Pressable
-          onPress={() => signIn()}
-          style={{
-            backgroundColor: "black",
-            borderRadius: 5,
-            marginVertical: 20,
-            borderWidth: 1,
-            height: 50,
-            justifyContent: "center",
-            alignContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ fontSize: 20, color: "white" }}>Sign In</Text>
+        <Pressable onPress={() => signIn()} style={universalStyles.authButtons}>
+          <Text style={universalStyles.authButtonText}>Sign In</Text>
         </Pressable>
       </View>
       <GoogleSigninButton

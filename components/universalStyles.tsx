@@ -45,7 +45,7 @@ const universalStyles = StyleSheet.create({
     color: "white",
     borderColor: "white",
   },
-  ReferenceText: {
+  LabelText: {
     marginTop: 20,
     marginBottom: 5,
     color: "white",
@@ -76,6 +76,20 @@ const universalStyles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
+  },
+  authButtons: {
+    backgroundColor: Colors.buttonColor,
+    borderRadius: 5,
+    marginVertical: 5,
+    borderWidth: 1,
+    height: 50,
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+  },
+  authButtonText: {
+    fontSize: 20,
+    color: "white",
   },
 });
 
