@@ -22,8 +22,7 @@ import {
 import { PERMISSIONS, request } from "react-native-permissions";
 import Animated, {
   useSharedValue,
-  withTiming,
-  BounceIn,
+  withTiming
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -31,7 +30,6 @@ import ViewShot from "react-native-view-shot";
 import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
-import { Audio } from "expo-av";
 //var Sound = require('react-native-sound');
 
 const copyIconFilled = (
