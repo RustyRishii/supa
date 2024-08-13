@@ -20,17 +20,16 @@ import {
   ScrollView,
 } from "react-native-gesture-handler";
 import { PERMISSIONS, request } from "react-native-permissions";
-import Animated, {
-  useSharedValue,
-  withTiming
-} from "react-native-reanimated";
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import ViewShot from "react-native-view-shot";
 import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
+import { Easing } from "react-native-reanimated";
 //var Sound = require('react-native-sound');
+
 
 const copyIconFilled = (
   <Icon name="copy" size={Colors.iconSize} color={Colors.iconColor} />
@@ -258,7 +257,10 @@ const Home = () => {
     borderWidths.value = withTiming(borderWidths.value + 195, {
       duration: 500,
     });
-    textOpacity.value = withTiming(0, { duration: 100 });
+    textOpacity.value = withTiming(0, {
+      duration: 100,
+      easing: Easing.inOut(Easing.ease),
+    });
     setTimeout(() => {
       borderWidths.value = withTiming(0.2, {
         duration: 500,
