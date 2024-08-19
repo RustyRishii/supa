@@ -20,16 +20,14 @@ import {
   ScrollView,
 } from "react-native-gesture-handler";
 import { PERMISSIONS, request } from "react-native-permissions";
-import Animated, {
-  useSharedValue,
-  withTiming
-} from "react-native-reanimated";
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import ViewShot from "react-native-view-shot";
 import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
+//import Rive from "rive-react-native";
 //var Sound = require('react-native-sound');
 
 const copyIconFilled = (
@@ -72,29 +70,10 @@ const Home = () => {
   const { height: viewportHeight } = Dimensions.get("window");
 
   const viewShotRef = useRef();
+  const riveRef = useRef(null);
 
   var borderWidths = useSharedValue(0.2);
   var textOpacity = useSharedValue(1);
-
-  // async function playSound() {
-  //   console.log("Loading Sound");
-  //   const { sound } = await Audio.Sound.createAsync(
-  //     require("../../assets/audio/screenshot.mp3")
-  //   );
-  //   setSound(sound);
-
-  //   console.log("Playing Sound");
-  //   await sound.playAsync();
-  // }
-
-  // useEffect(() => {
-  //   return sound
-  //     ? () => {
-  //         console.log("Unloading Sound");
-  //         sound.unloadAsync();
-  //       }
-  //     : undefined;
-  // }, [sound]);
 
   function netCheck() {
     NetInfo.fetch().then((state) => {
@@ -255,7 +234,7 @@ const Home = () => {
   };
 
   function viewShotAnimations() {
-    borderWidths.value = withTiming(borderWidths.value + 195, {
+    borderWidths.value = withTiming(borderWidths.value + 200, {
       duration: 500,
     });
     textOpacity.value = withTiming(0, { duration: 100 });
@@ -267,8 +246,20 @@ const Home = () => {
     }, 500);
   }
 
+  // const handleRiveTap = () => {
+  //   if (riveRef.current) {
+  //     // Access the state machine and trigger the animation
+  //     const stateMachine = riveRef.current.stateMachineByName(
+  //       "Timeline 1"
+  //     ); // Replace with your state machine name
+  //     if (stateMachine) {
+  //       stateMachine.fire("Timeline 1"); // Replace with your trigger name
+  //     }
+  //   }
+  // };
+
   return (
-    <SafeAreaView style={{}}>
+    <SafeAreaView style={{ flex: 1 }}>
       <StatusBar backgroundColor={Colors.statusbar} style="light" />
       <GestureHandlerRootView>
         <ScrollView
@@ -361,6 +352,15 @@ const Home = () => {
             >
               {bookmark}
             </Pressable>
+            {/* <Pressable onPress={handleRiveTap}>
+              <Rive
+                ref={riveRef}
+                resourceName="../assets/animations/Copy.riv" // Replace with your .riv file name
+                autoplay={false} // Disable autoplay
+                style={{ width: 200, height: 200 }} // Set the width and height of the animation
+              />
+            </Pressable> */}
+
             {/* <Pressable
       style={universalStyles.icon}
       onPress={() => quoteToPost()}

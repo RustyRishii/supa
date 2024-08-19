@@ -12,17 +12,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { createClient } from "@supabase/supabase-js";
 import { supabase } from "./utlities/supabase";
 import { StatusBar } from "expo-status-bar";
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Session } from "@supabase/supabase-js";
 import Bookmark from "./screens/bookmark";
 import universalStyles from "../components/universalStyles";
 import { Colors } from "./utlities/colors";
 import LabelText from "../components/labelText";
+import GoogleAuth from "../components/GoogleAuth";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -38,12 +35,6 @@ const Auth = ({ navigation }: { navigation: any }) => {
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [userName, setUserName] = useState<string>("");
-
-  GoogleSignin.configure({
-    scopes: ["email", "profile"],
-    webClientId:
-      "633436539850-j820badpnksfhm4oo5pr2l7u3i4blhau.apps.googleusercontent.com",
-  });
 
   const signUp = async () => {
     try {
@@ -147,36 +138,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
           <Text style={universalStyles.authButtonText}>Sign In</Text>
         </Pressable>
       </View>
-      <GoogleSigninButton
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-        onPress={async () => {
-          try {
-            await GoogleSignin.hasPlayServices();
-            const userInfo = await GoogleSignin.signIn();
-            if (userInfo.idToken) {
-              const { data, error } = await supabase.auth.signInWithIdToken({
-                provider: "google",
-                token: userInfo.idToken,
-              });
-              console.log(error, data);
-            } else {
-              throw new Error("no ID token present!");
-            }
-            navigation.navigate("BottomTabs", { screen: "Home" });
-          } catch (error: any) {
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-              // user cancelled the login flow
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-              // operation (e.g. sign in) is in progress already
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-              // play services not available or outdated
-            } else {
-              // some other error happened
-            }
-          }
-        }}
-      />
+      <GoogleAuth />
     </SafeAreaView>
   );
 };
