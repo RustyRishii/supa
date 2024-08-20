@@ -14,22 +14,51 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import universalStyles from "../../components/universalStyles";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Colors } from "../utlities/colors";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { googleSignOut } from "../utlities/google";
 
 const SettingsPage = ({ navigation }: { navigation: any }) => {
   const tabBarHeight = useBottomTabBarHeight();
   const { height: viewportHeight } = Dimensions.get("window");
 
-  const [email, setEmail] = useState("");
-  const [image, setImage] = useState(null);
+  // const [email, setEmail] = useState("");
+  // const [image, setImage] = useState(null);
 
-  useEffect(() => {
-    const fetchEmail = async () => {
-      const userEmail = await AsyncStorage.getItem("userEmail");
-      setEmail(userEmail || "No email found");
-    };
+  const hasPlayServices = async () => {
+    try {
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      });
+      const userInfo = await GoogleSignin.signIn();
+      // google services are available
+    } catch (err) {
+      console.error("play services are not available");
+    }
+  };
 
-    fetchEmail();
-  }, []);
+  // const { name, email, photo } = userInfo || {};
+
+  // if (!userInfo) {
+  //   return <Text>Please sign in to view your profile.</Text>;
+  // }
+
+  // useEffect(() => {
+  //   const fetchEmail = async () => {
+  //     const userEmail = await AsyncStorage.getItem("userEmail");
+  //     setEmail(userEmail || "No email found");
+  //   };
+
+  //   fetchEmail();
+  // }, []);
+
+  // const googleSignOut = async () => {
+  //   try {
+  //     await GoogleSignin.signOut();
+  //     setState({ user: null }); // Remember to remove the user from your app's state as well
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const signOut = async () => {
     try {
@@ -46,7 +75,6 @@ const SettingsPage = ({ navigation }: { navigation: any }) => {
         <View
           style={{
             backgroundColor: Colors.pageBackgroundColor,
-            //paddingHorizontal: 5,
             height: viewportHeight - tabBarHeight,
           }}
         >
@@ -71,9 +99,9 @@ const SettingsPage = ({ navigation }: { navigation: any }) => {
               />
             </Pressable>
             <Text style={{ fontSize: 20, paddingVertical: 10, color: "white" }}>
-              Email : {email}
+              {/* Email : {email} */}
             </Text>
-            <Pressable onPress={signOut} style={styles.signOutButton}>
+            <Pressable onPress={googleSignOut} style={styles.signOutButton}>
               <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
             </Pressable>
           </View>
@@ -97,3 +125,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+function setUserInfo(arg0: null) {
+  throw new Error("Function not implemented.");
+}
