@@ -24,46 +24,48 @@ const SettingsPage = ({ navigation }: { navigation: any }) => {
   // const [email, setEmail] = useState("");
   // const [image, setImage] = useState(null);
 
-  const hasPlayServices = async () => {
+  const [userInfo, setUserInfo] = useState<{
+    name: string | null;
+    email: string | null;
+    photo: string | null;
+  } | null>(null);
+
+  const fetchUserInfo = async () => {
     try {
-      await GoogleSignin.hasPlayServices({
-        showPlayServicesUpdateDialog: true,
-      });
-      const userInfo = await GoogleSignin.signIn();
-      // google services are available
-    } catch (err) {
-      console.error("play services are not available");
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        setUserInfo({
+          name: user.user_metadata.full_name || null,
+          email: user.email,
+          photo: user.user_metadata.avatar_url || null,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
     }
   };
 
-  // const { name, email, photo } = userInfo || {};
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
 
-  // if (!userInfo) {
-  //   return <Text>Please sign in to view your profile.</Text>;
-  // }
-
-  // useEffect(() => {
-  //   const fetchEmail = async () => {
-  //     const userEmail = await AsyncStorage.getItem("userEmail");
-  //     setEmail(userEmail || "No email found");
-  //   };
-
-  //   fetchEmail();
-  // }, []);
-
-  // const googleSignOut = async () => {
+  // const signOut = async () => {
   //   try {
-  //     await GoogleSignin.signOut();
-  //     setState({ user: null }); // Remember to remove the user from your app's state as well
+  //     await supabase.auth.signOut();
+  //     navigation.navigate("Auth");
   //   } catch (error) {
   //     console.error(error);
   //   }
   // };
 
-  const signOut = async () => {
+  const googleSignOut = async () => {
     try {
+      await GoogleSignin.signOut();
       await supabase.auth.signOut();
-      navigation.navigate("Auth");
+      //setUserInfo(null);
+      //navigation.navigate("Auth");
     } catch (error) {
       console.error(error);
     }
@@ -94,13 +96,26 @@ const SettingsPage = ({ navigation }: { navigation: any }) => {
                 style={{ backgroundColor: "gray", marginVertical: 10 }}
                 borderRadius={150}
                 source={{
-                  uri: "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
+                  uri:
+                    userInfo?.photo ||
+                    "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
                 }}
               />
             </Pressable>
-            <Text style={{ fontSize: 20, paddingVertical: 10, color: "white" }}>
-              {/* Email : {email} */}
-            </Text>
+            {userInfo?.name && (
+              <Text
+                style={{ fontSize: 20, paddingVertical: 10, color: "white" }}
+              >
+                Name: {userInfo.name}
+              </Text>
+            )}
+            {userInfo?.email && (
+              <Text
+                style={{ fontSize: 20, paddingVertical: 10, color: "white" }}
+              >
+                Email: {userInfo.email}
+              </Text>
+            )}
             <Pressable onPress={googleSignOut} style={styles.signOutButton}>
               <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
             </Pressable>
