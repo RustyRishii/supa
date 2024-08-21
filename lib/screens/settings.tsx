@@ -1,5 +1,4 @@
 import {
-  StyleSheet,
   Text,
   Pressable,
   View,
@@ -10,14 +9,12 @@ import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../utlities/supabase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import universalStyles from "../../components/universalStyles";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Colors } from "../utlities/colors";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { googleSignOut } from "../utlities/google";
 
-const SettingsPage = ({ navigation }: { navigation: any }) => {
+const SettingsPage = () => {
   const tabBarHeight = useBottomTabBarHeight();
   const { height: viewportHeight } = Dimensions.get("window");
 
@@ -116,7 +113,10 @@ const SettingsPage = ({ navigation }: { navigation: any }) => {
                 Email: {userInfo.email}
               </Text>
             )}
-            <Pressable onPress={googleSignOut} style={styles.signOutButton}>
+            <Pressable
+              onPress={googleSignOut}
+              style={universalStyles.authButtons}
+            >
               <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
             </Pressable>
           </View>
@@ -128,18 +128,3 @@ const SettingsPage = ({ navigation }: { navigation: any }) => {
 
 export default SettingsPage;
 
-const styles = StyleSheet.create({
-  signOutButton: {
-    backgroundColor: "black",
-    borderRadius: 5,
-    borderWidth: 1,
-    height: 50,
-    width: 150,
-    justifyContent: "center",
-    alignContent: "center",
-    alignItems: "center",
-  },
-});
-function setUserInfo(arg0: null) {
-  throw new Error("Function not implemented.");
-}

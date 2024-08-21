@@ -7,15 +7,11 @@ import {
   View,
   AppState,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { createClient } from "@supabase/supabase-js";
 import { supabase } from "./utlities/supabase";
 import { StatusBar } from "expo-status-bar";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Session } from "@supabase/supabase-js";
-import Bookmark from "./screens/bookmark";
 import universalStyles from "../components/universalStyles";
 import { Colors } from "./utlities/colors";
 import LabelText from "../components/labelText";

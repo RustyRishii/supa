@@ -1,10 +1,13 @@
 import {
   GoogleSignin,
-  GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 import { supabase } from "../lib/utlities/supabase";
 import { useState } from "react";
+import universalStyles from "./universalStyles";
+import { Pressable, Text } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import { Colors } from "../lib/utlities/colors";
 
 GoogleSignin.configure({
   webClientId:
@@ -35,44 +38,109 @@ export default function () {
     return typeof error === "object" && error !== null && "code" in error;
   }
 
+  function signUp(): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
-    <GoogleSigninButton
-      size={GoogleSigninButton.Size.Wide}
-      color={GoogleSigninButton.Color.Dark}
-      onPress={async () => {
-        try {
-          await GoogleSignin.hasPlayServices();
-          const userInfo = await GoogleSignin.signIn();
-          setState({ userInfo, error: undefined });
-          if (userInfo.idToken) {
-            const { data, error } = await supabase.auth.signInWithIdToken({
-              provider: "google",
-              token: userInfo.idToken,
-            });
-            console.log(error, data);
-          } else {
-            throw new Error("No ID token present");
-          }
-        } catch (error: any) {
-          if (isErrorWithCode(error)) {
-            switch (error.code) {
-              case statusCodes.SIGN_IN_CANCELLED:
-                console.log("Sign in cancelled");
-                break;
-              case statusCodes.IN_PROGRESS:
-                console.log("Sign in in progress");
-                break;
-              case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
-                console.log("Play services not available");
-                break;
-              default:
-                console.log("Some other error occurred", error);
+    <>
+      <Pressable
+        onPress={async () => {
+          try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            setState({ userInfo, error: undefined });
+            if (userInfo.idToken) {
+              const { data, error } = await supabase.auth.signInWithIdToken({
+                provider: "google",
+                token: userInfo.idToken,
+              });
+              console.log(error, data);
+            } else {
+              throw new Error("No ID token present");
             }
-          } else {
-            console.log("An unknown error occurred", error);
+          } catch (error: any) {
+            if (isErrorWithCode(error)) {
+              switch (error.code) {
+                case statusCodes.SIGN_IN_CANCELLED:
+                  console.log("Sign in cancelled");
+                  break;
+                case statusCodes.IN_PROGRESS:
+                  console.log("Sign in in progress");
+                  break;
+                case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+                  console.log("Play services not available");
+                  break;
+                default:
+                  console.log("Some other error occurred", error);
+              }
+            } else {
+              console.log("An unknown error occurred", error);
+            }
           }
-        }
-      }}
-    />
+        }}
+        style={{
+          flexDirection: "row",
+          backgroundColor: Colors.buttonColor,
+          height: 50,
+          marginVertical: 5,
+          borderWidth: 1,
+          borderRadius: 5,
+          justifyContent: "center",
+          alignContent: "center",
+          alignItems: "center",
+          
+        }}
+      >
+        <Icon
+          style={{ marginHorizontal: 10 }}
+          name="logo-google"
+          size={25}
+          color={"skyblue"}
+        />
+        <Text style={universalStyles.authButtonText}>Sign in with Google </Text>
+      </Pressable>
+    </>
   );
+}
+//Google sign in button.
+{
+  /* <GoogleSigninButton
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Dark}
+        onPress={async () => {
+          try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            setState({ userInfo, error: undefined });
+            if (userInfo.idToken) {
+              const { data, error } = await supabase.auth.signInWithIdToken({
+                provider: "google",
+                token: userInfo.idToken,
+              });
+              console.log(error, data);
+            } else {
+              throw new Error("No ID token present");
+            }
+          } catch (error: any) {
+            if (isErrorWithCode(error)) {
+              switch (error.code) {
+                case statusCodes.SIGN_IN_CANCELLED:
+                  console.log("Sign in cancelled");
+                  break;
+                case statusCodes.IN_PROGRESS:
+                  console.log("Sign in in progress");
+                  break;
+                case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+                  console.log("Play services not available");
+                  break;
+                default:
+                  console.log("Some other error occurred", error);
+              }
+            } else {
+              console.log("An unknown error occurred", error);
+            }
+          }
+        }}
+      /> */
 }

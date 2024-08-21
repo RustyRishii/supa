@@ -11,7 +11,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { supabase } from "./lib/utlities/supabase";
 import { Session } from "@supabase/supabase-js";
 import { Colors } from "./lib/utlities/colors";
-import CanvasPage from "./lib/screens/canvas";
 
 const AuthStackNavigator = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
