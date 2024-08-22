@@ -16,7 +16,7 @@ GoogleSignin.configure({
   // offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
   // hostedDomain: "", // specifies a hosted domain restriction
   forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-  // accountName: "", // [Android] specifies an account name on the device that should be used
+  //accountName: "Stoic", // [Android] specifies an account name on the device that should be used
 });
 
 export default function () {
@@ -79,26 +79,15 @@ export default function () {
             }
           }
         }}
-        style={{
-          flexDirection: "row",
-          backgroundColor: Colors.buttonColor,
-          height: 50,
-          marginVertical: 5,
-          borderWidth: 1,
-          borderRadius: 5,
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-          
-        }}
+        style={universalStyles.authButtons}
       >
         <Icon
           style={{ marginHorizontal: 10 }}
           name="logo-google"
           size={25}
-          color={"skyblue"}
+          color={"black"}
         />
-        <Text style={universalStyles.authButtonText}>Sign in with Google </Text>
+        <Text style={universalStyles.authButtonText}>Sign in with Google</Text>
       </Pressable>
     </>
   );

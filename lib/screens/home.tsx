@@ -61,7 +61,6 @@ const Home = () => {
   const [postIcon, setPostIcon] = useState(downloadIconOutline);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [isConnected, setConnected] = useState<boolean>(true);
-  const [sound, setSound] = useState();
   const [apiData, setAPIData] = useState<
     { text: string; author: string } | undefined
   >(undefined);
@@ -111,16 +110,19 @@ const Home = () => {
     // from docs
 
     const userEmail = user?.email;
+    const userName = user?.user_metadata?.full_name;
     //for Adding users Email to the bookmarks table.
 
     const { data, error } = await supabase.from("Bookmarks").insert({
       Quote: apiData?.text,
       Author: apiData?.author,
       email_id: userEmail,
+      full_name: userName,
     });
     if (error) {
       console.error(error);
       ToastAndroid.show("No internet", ToastAndroid.SHORT);
+      console.log(userName);
     } else {
       console.log("Bookmarked");
       setBookmark(bookmarkIconFilled);
@@ -234,7 +236,7 @@ const Home = () => {
   };
 
   function viewShotAnimations() {
-    borderWidths.value = withTiming(borderWidths.value + 200, {
+    borderWidths.value = withTiming(borderWidths.value + 199, {
       duration: 500,
     });
     textOpacity.value = withTiming(0, { duration: 100 });

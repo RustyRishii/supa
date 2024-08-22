@@ -6,6 +6,7 @@ import {
   ToastAndroid,
   View,
   AppState,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -16,6 +17,7 @@ import universalStyles from "../components/universalStyles";
 import { Colors } from "./utlities/colors";
 import LabelText from "../components/labelText";
 import GoogleAuth from "../components/GoogleAuth";
+import Button from "../components/buttons";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -87,7 +89,25 @@ const Auth = ({ navigation }: { navigation: any }) => {
       style={{ padding: 10, backgroundColor: "#121212", height: "100%" }}
     >
       <StatusBar backgroundColor="#1E1E1E" style="light" />
-      <View style={{}}>
+      <View>
+        <Image
+          width={150}
+          height={150}
+          style={{
+            backgroundColor: "gray",
+            marginVertical: 10,
+            alignContent: "center",
+            alignItems: "center",
+            alignSelf: "center",
+          }}
+          borderRadius={150}
+          source={{
+            uri:
+              // userInfo?.photo ||
+              "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
+          }}
+        />
+
         <LabelText LabelText="Name" />
         <TextInput
           placeholder="Username"
@@ -127,14 +147,24 @@ const Auth = ({ navigation }: { navigation: any }) => {
             setPassword;
           }}
         />
-        <Pressable onPress={() => signUp()} style={universalStyles.authButtons}>
-          <Text style={universalStyles.authButtonText}>Sign Up</Text>
-        </Pressable>
-        <Pressable onPress={() => signIn()} style={universalStyles.authButtons}>
-          <Text style={universalStyles.authButtonText}>Sign In</Text>
-        </Pressable>
+        <Button text="Sign Up" onPress={signUp} />
+        <Button text="Sign In" onPress={signIn} />
+        <Text
+          style={{
+            color: "white",
+            fontSize: 25,
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+            alignSelf: "center",
+            textAlign: "center",
+            paddingVertical: 10,
+          }}
+        >
+          Or
+        </Text>
+        <GoogleAuth />
       </View>
-      <GoogleAuth />
     </SafeAreaView>
   );
 };
