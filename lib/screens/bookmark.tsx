@@ -1,4 +1,4 @@
-import Clipboard from "@react-native-clipboard/clipboard";
+//import Clipboard from "@react-native-clipboard/clipboard";
 import NetInfo from "@react-native-community/netinfo";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from "@react-navigation/native";
@@ -140,7 +140,7 @@ const Bookmark = () => {
           style={styles.icon}
           onPress={() => {
             setCopy(copyIconFilled);
-            Clipboard.setString(`${item.Quote} - ${item.Author} `);
+            //Clipboard.setString(`${item.Quote} - ${item.Author} `);
             ToastAndroid.show("Copied", ToastAndroid.SHORT);
             setTimeout(() => {
               setCopy(copyIconOutline);

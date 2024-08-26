@@ -1,4 +1,4 @@
-import Clipboard from "@react-native-clipboard/clipboard";
+//import Clipboard from "@react-native-clipboard/clipboard";
 import NetInfo from "@react-native-community/netinfo";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { StatusBar } from "expo-status-bar";
@@ -132,7 +132,7 @@ const Home = () => {
 
   function copyIconFunction() {
     setCopy(copyIconFilled);
-    Clipboard.setString(`${apiData?.text} - ${apiData?.author} `);
+    //Clipboard.setString(`${apiData?.text} - ${apiData?.author} `);
     ToastAndroid.show("Copied", ToastAndroid.SHORT);
     setTimeout(() => {
       setCopy(copyIconOutline);
