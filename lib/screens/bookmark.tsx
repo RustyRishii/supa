@@ -20,6 +20,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
+import * as Clipboard from "expo-clipboard";
 
 //FFA500
 const copyIconFilled = <Icon name="copy" size={20} color={"tomato"} />;
@@ -140,7 +141,7 @@ const Bookmark = () => {
           style={styles.icon}
           onPress={() => {
             setCopy(copyIconFilled);
-            //Clipboard.setString(`${item.Quote} - ${item.Author} `);
+            Clipboard.setStringAsync(`${item?.Quote} - ${item?.Author} `);
             ToastAndroid.show("Copied", ToastAndroid.SHORT);
             setTimeout(() => {
               setCopy(copyIconOutline);

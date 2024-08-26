@@ -1,4 +1,3 @@
-//import Clipboard from "@react-native-clipboard/clipboard";
 import NetInfo from "@react-native-community/netinfo";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { StatusBar } from "expo-status-bar";
@@ -11,6 +10,7 @@ import {
   Text,
   ToastAndroid,
   TouchableNativeFeedback,
+  TouchableOpacity,
   View,
 } from "react-native";
 import RNFS from "react-native-fs";
@@ -20,15 +20,21 @@ import {
   ScrollView,
 } from "react-native-gesture-handler";
 import { PERMISSIONS, request } from "react-native-permissions";
-import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import ViewShot from "react-native-view-shot";
 import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
-//import Rive from "rive-react-native";
-//var Sound = require('react-native-sound');
+import * as Clipboard from "expo-clipboard";
+import Copy from "../../components/copyComponent";
+import Rive from "rive-react-native";
 
 const copyIconFilled = (
   <Icon name="copy" size={Colors.iconSize} color={Colors.iconColor} />
@@ -61,6 +67,7 @@ const Home = () => {
   const [postIcon, setPostIcon] = useState(downloadIconOutline);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [isConnected, setConnected] = useState<boolean>(true);
+  //const [copiedText, setCopiedText] = React.useState("");
   const [apiData, setAPIData] = useState<
     { text: string; author: string } | undefined
   >(undefined);
@@ -73,6 +80,69 @@ const Home = () => {
 
   var borderWidths = useSharedValue(0.2);
   var textOpacity = useSharedValue(1);
+
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+  var bgColor = useSharedValue("#0000"); // Initialize with black
+
+  const [showCopy, setShowCopy] = useState(false);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: translateX.value },
+        { translateY: translateY.value },
+      ],
+    };
+  });
+
+  const reAnimCopy = async () => {
+    copyIconFunction();
+    if (!showCopy) {
+      setShowCopy(true);
+      translateX.value = withSpring(5);
+      translateY.value = withSpring(5);
+      bgColor.value = withTiming("#ff6347", { duration: 1000 }); // Change to desired color
+    } else {
+      translateX.value = withSpring(0);
+      translateY.value = withSpring(0);
+      bgColor.value = withTiming("#ff6347", { duration: 1000 });
+      //setShowCopy(false);
+    }
+
+    setTimeout(() => {
+      translateX.value = withSpring(0);
+      translateY.value = withSpring(0);
+      bgColor.value = withTiming("#000", { duration: 1000 }); // Revert back to black
+    }, 1000);
+
+    setTimeout(() => {
+      setShowCopy(false);
+    }, 1500);
+  };
+
+  const Copy = ({ backgroundColor }: { backgroundColor: string }) => {
+    return (
+      <Animated.View
+        style={[
+          {
+            height: 20,
+            width: 20,
+            borderWidth: 2,
+            borderRadius: 5,
+            borderColor: "tomato",
+            backgroundColor: bgColor, // Apply the animated background color here
+          },
+        ]}
+      />
+    );
+  };
+
+  const animatedBgStyle = useAnimatedStyle(() => {
+    return {
+      backgroundColor: bgColor.value,
+    };
+  });
 
   function netCheck() {
     NetInfo.fetch().then((state) => {
@@ -130,13 +200,9 @@ const Home = () => {
     }
   };
 
-  function copyIconFunction() {
-    setCopy(copyIconFilled);
-    //Clipboard.setString(`${apiData?.text} - ${apiData?.author} `);
+  async function copyIconFunction() {
+    Clipboard.setStringAsync(`${apiData?.text} - ${apiData?.author} `);
     ToastAndroid.show("Copied", ToastAndroid.SHORT);
-    setTimeout(() => {
-      setCopy(copyIconOutline);
-    }, 200);
   }
 
   function postIconFunction() {
@@ -228,7 +294,7 @@ const Home = () => {
       }/screenshot_${Date.now()}.png`;
       await RNFS.moveFile(uri, destPath);
       //playSound;
-      ToastAndroid.show("Saved to gallery", ToastAndroid.SHORT);
+      ToastAndroid.show("Saved to rargallery", ToastAndroid.SHORT);
     } catch (error) {
       Alert.alert("Error", "An error occurred while taking the screenshot");
       console.error(error);
@@ -247,18 +313,6 @@ const Home = () => {
       textOpacity.value = withTiming(1, { duration: 1500 });
     }, 500);
   }
-
-  // const handleRiveTap = () => {
-  //   if (riveRef.current) {
-  //     // Access the state machine and trigger the animation
-  //     const stateMachine = riveRef.current.stateMachineByName(
-  //       "Timeline 1"
-  //     ); // Replace with your state machine name
-  //     if (stateMachine) {
-  //       stateMachine.fire("Timeline 1"); // Replace with your trigger name
-  //     }
-  //   }
-  // };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -338,14 +392,18 @@ const Home = () => {
             </TouchableNativeFeedback>
           </ViewShot>
           <View style={universalStyles.bookmarkAndCopy}>
-            <Pressable
-              style={universalStyles.icon}
-              onPress={() => {
-                copyIconFunction();
-              }}
-            >
-              {copy}
-            </Pressable>
+            <View>
+              <TouchableOpacity onPress={reAnimCopy}>
+                <Copy backgroundColor={animatedBgStyle.backgroundColor} />
+              </TouchableOpacity>
+              {showCopy && (
+                <Animated.View
+                  style={[{ position: "absolute" }, animatedStyle]}
+                >
+                  <Copy backgroundColor={animatedBgStyle.backgroundColor} />
+                </Animated.View>
+              )}
+            </View>
             <Pressable
               style={universalStyles.icon}
               onPress={() => {
@@ -354,26 +412,7 @@ const Home = () => {
             >
               {bookmark}
             </Pressable>
-            {/* <Pressable onPress={handleRiveTap}>
-              <Rive
-                ref={riveRef}
-                resourceName="../assets/animations/Copy.riv" // Replace with your .riv file name
-                autoplay={false} // Disable autoplay
-                style={{ width: 200, height: 200 }} // Set the width and height of the animation
-              />
-            </Pressable> */}
-
-            {/* <Pressable
-      style={universalStyles.icon}
-      onPress={() => quoteToPost()}
-    >
-      {postIcon}
-    </Pressable> */}
           </View>
-          {/* 
-  <View>
-    {isConnected ? <Text>Online</Text> : <Text>Offline</Text>}
-  </View> */}
         </ScrollView>
       </GestureHandlerRootView>
     </SafeAreaView>
