@@ -6,19 +6,17 @@
     "preview": {
       "android": {
         "buildType": "apk"
-      }
+      },
+      "distribution": "internal"
     },
     "development": {
       "developmentClient": true,
       "distribution": "internal"
     },
     "production": {
-      "android" : {
+      "android": {
         "track": "internal"
       }
     }
-  },
-  "submit": {
-    "production": {}
   }
 }
