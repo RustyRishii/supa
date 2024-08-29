@@ -78,11 +78,6 @@ const Home = () => {
   var borderWidths = useSharedValue(0.2);
   var textOpacity = useSharedValue(1);
 
-  async function copyIconFunction() {
-    Clipboard.setStringAsync(`${apiData?.text} - ${apiData?.author} `);
-    ToastAndroid.show("Copied", ToastAndroid.SHORT);
-  }
-
   function netCheck() {
     NetInfo.fetch().then((state) => {
       if (!state.isConnected) {

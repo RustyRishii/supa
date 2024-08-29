@@ -32,7 +32,7 @@ const CopyButton = ({ text }: { text: string }) => {
   });
 
   const reAnimCopy = async () => {
-    Clipboard.setStringAsync(text);
+    Clipboard.setStringAsync(text); //text is a parameter for respective pages.
     ToastAndroid.show("Copied", ToastAndroid.SHORT);
 
     if (!showCopy) {
@@ -41,18 +41,18 @@ const CopyButton = ({ text }: { text: string }) => {
       translateX.value = withSpring(10);
       translateY.value = withSpring(10);
       scale.value = withSpring(1.2);
-      //opacity.value = withTiming(0, { duration: 500 });
-      bgColor.value = withTiming("tomato", { duration: 500 });
+      //opacity.value = withTiming(0, { duration: 100 });
+      bgColor.value = withTiming("tomato", { duration: 250 });
     }
 
     setTimeout(() => {
       translateX.value = withSpring(0);
       translateY.value = withSpring(0);
       scale.value = withSpring(1);
-      opacity.value = withTiming(1, { duration: 0 });
-      bgColor.value = withTiming(Colors.pageBackgroundColor, { duration: 500 });
+      //opacity.value = withTiming(1, { duration: 100 });
+      bgColor.value = withTiming(Colors.pageBackgroundColor, { duration: 250 });
       setShowCopy(false);
-    }, 500);
+    }, 350);
   };
 
   return (

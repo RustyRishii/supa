@@ -163,8 +163,6 @@ const Bookmark = () => {
       <GestureHandlerRootView>
         <View
           style={{
-            //paddingHorizontal: 5,
-            //marginHorizontal: 5,
             backgroundColor: Colors.pageBackgroundColor,
             height: viewportHeight - tabBarHeight,
           }}
@@ -194,13 +192,7 @@ const Bookmark = () => {
               }
             />
           ) : (
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                flex: 1,
-              }}
-            >
+            <View style={styles.noInternetView}>
               <Text style={styles.noInternetText}>No internet</Text>
             </View>
           )}
@@ -230,6 +222,11 @@ const styles = StyleSheet.create({
     borderBottomColor: "aliceblue",
     borderBottomWidth: 0.2,
     padding: 5,
+  },
+  noInternetView: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
   },
   noInternetText: {
     alignContent: "center",
