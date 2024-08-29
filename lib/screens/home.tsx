@@ -33,8 +33,7 @@ import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
 import * as Clipboard from "expo-clipboard";
-import Copy from "../../components/copyComponent";
-import Rive from "rive-react-native";
+import CopyButton from "../../components/copyComponent";
 
 const copyIconFilled = (
   <Icon name="copy" size={Colors.iconSize} color={Colors.iconColor} />
@@ -67,7 +66,6 @@ const Home = () => {
   const [postIcon, setPostIcon] = useState(downloadIconOutline);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [isConnected, setConnected] = useState<boolean>(true);
-  //const [copiedText, setCopiedText] = React.useState("");
   const [apiData, setAPIData] = useState<
     { text: string; author: string } | undefined
   >(undefined);
@@ -76,73 +74,14 @@ const Home = () => {
   const { height: viewportHeight } = Dimensions.get("window");
 
   const viewShotRef = useRef();
-  const riveRef = useRef(null);
 
   var borderWidths = useSharedValue(0.2);
   var textOpacity = useSharedValue(1);
 
-  const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
-  var bgColor = useSharedValue("#0000"); // Initialize with black
-
-  const [showCopy, setShowCopy] = useState(false);
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { translateX: translateX.value },
-        { translateY: translateY.value },
-      ],
-    };
-  });
-
-  const reAnimCopy = async () => {
-    copyIconFunction();
-    if (!showCopy) {
-      setShowCopy(true);
-      translateX.value = withSpring(5);
-      translateY.value = withSpring(5);
-      bgColor.value = withTiming("#ff6347", { duration: 1000 }); // Change to desired color
-    } else {
-      translateX.value = withSpring(0);
-      translateY.value = withSpring(0);
-      bgColor.value = withTiming("#ff6347", { duration: 1000 });
-      //setShowCopy(false);
-    }
-
-    setTimeout(() => {
-      translateX.value = withSpring(0);
-      translateY.value = withSpring(0);
-      bgColor.value = withTiming("#000", { duration: 1000 }); // Revert back to black
-    }, 1000);
-
-    setTimeout(() => {
-      setShowCopy(false);
-    }, 1500);
-  };
-
-  const Copy = ({ backgroundColor }: { backgroundColor: string }) => {
-    return (
-      <Animated.View
-        style={[
-          {
-            height: 20,
-            width: 20,
-            borderWidth: 2,
-            borderRadius: 5,
-            borderColor: "tomato",
-            backgroundColor: bgColor, // Apply the animated background color here
-          },
-        ]}
-      />
-    );
-  };
-
-  const animatedBgStyle = useAnimatedStyle(() => {
-    return {
-      backgroundColor: bgColor.value,
-    };
-  });
+  async function copyIconFunction() {
+    Clipboard.setStringAsync(`${apiData?.text} - ${apiData?.author} `);
+    ToastAndroid.show("Copied", ToastAndroid.SHORT);
+  }
 
   function netCheck() {
     NetInfo.fetch().then((state) => {
@@ -156,16 +95,18 @@ const Home = () => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setConnected(state.isConnected);
       if (!state.isConnected) {
-        showAlert();
+        internetAlert();
       }
     });
+    fetchAPIData();
+    viewShotAnimations();
 
     return () => {
       unsubscribe();
     };
   }, []);
 
-  const showAlert = () => {
+  const internetAlert = () => {
     Alert.alert(
       "Internet Connection",
       "You are offline. Some features may not be available."
@@ -199,11 +140,6 @@ const Home = () => {
       ToastAndroid.show("Bookmarked", ToastAndroid.SHORT);
     }
   };
-
-  async function copyIconFunction() {
-    Clipboard.setStringAsync(`${apiData?.text} - ${apiData?.author} `);
-    ToastAndroid.show("Copied", ToastAndroid.SHORT);
-  }
 
   function postIconFunction() {
     setPostIcon(downloadIconFilled);
@@ -239,11 +175,6 @@ const Home = () => {
       }
     }
   };
-
-  useEffect(() => {
-    fetchAPIData();
-    viewShotAnimations();
-  }, []);
 
   async function quoteToPost() {
     const {
@@ -358,6 +289,10 @@ const Home = () => {
                   borderRadius: 10,
                   height: 215,
                   paddingHorizontal: 10,
+                  elevation: 20,
+                  shadowColor: "#121212",
+                  shadowRadius: 10,
+                  shadowOpacity: 1,
                   //overflow: "hidden",
                 }}
               >
@@ -392,18 +327,7 @@ const Home = () => {
             </TouchableNativeFeedback>
           </ViewShot>
           <View style={universalStyles.bookmarkAndCopy}>
-            <View>
-              <TouchableOpacity onPress={reAnimCopy}>
-                <Copy backgroundColor={animatedBgStyle.backgroundColor} />
-              </TouchableOpacity>
-              {showCopy && (
-                <Animated.View
-                  style={[{ position: "absolute" }, animatedStyle]}
-                >
-                  <Copy backgroundColor={animatedBgStyle.backgroundColor} />
-                </Animated.View>
-              )}
-            </View>
+            <CopyButton text={`${apiData?.text} - ${apiData?.author} `} />
             <Pressable
               style={universalStyles.icon}
               onPress={() => {
