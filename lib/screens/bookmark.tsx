@@ -5,26 +5,21 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   Dimensions,
   FlatList,
-  Pressable,
   StyleSheet,
   RefreshControl,
   Text,
-  TouchableNativeFeedback,
   ToastAndroid,
   View,
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/Ionicons";
 import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
 import CopyButton from "../../components/interactionButons/copyComponent";
 import LottieView from "lottie-react-native";
 import BookmarkButton from "../../components/interactionButons/bookmarkIcon";
-
-const copyIconOutline = <Icon name="copy-outline" size={20} color={"tomato"} />;
 
 const Bookmark = () => {
   const { height: viewportHeight, width: screenWidth } =

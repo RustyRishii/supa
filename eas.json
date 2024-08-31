@@ -10,13 +10,8 @@
       "distribution": "internal"
     },
     "development": {
-      "developmentClient": true,
-      "distribution": "internal"
+      "developmentClient": true
     },
-    "production": {
-      "android": {
-        "track": "internal"
-      }
-    }
+    "production": {}
   }
 }

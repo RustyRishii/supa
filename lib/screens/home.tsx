@@ -6,7 +6,6 @@ import {
   Alert,
   Dimensions,
   Platform,
-  Pressable,
   Text,
   ToastAndroid,
   TouchableNativeFeedback,
@@ -28,20 +27,7 @@ import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
 //import CopyButton from../../components/interactionButons/copyComponentnt";
 import CopyButton from "../../components/interactionButons/copyComponent";
-import BookmarkButton from "../../components/interactionButons/bookmarkIcon";
 import LottieView from "lottie-react-native";
-import * as Clipboard from "expo-clipboard";
-
-const bookmarkIconFilled = (
-  <Icon name="bookmark" size={Colors.iconSize} color={Colors.iconColor} />
-);
-const bookmarkIconOutline = (
-  <Icon
-    name="bookmark-outline"
-    size={Colors.iconSize}
-    color={Colors.iconColor}
-  />
-);
 
 const downloadIconFilled = (
   <Icon name="download" size={Colors.iconSize} color={"#1D9BF0"} />
@@ -202,7 +188,7 @@ const Home = () => {
       }/screenshot_${Date.now()}.png`;
       await RNFS.moveFile(uri, destPath);
       //playSound;
-      ToastAndroid.show("Saved to rargallery", ToastAndroid.SHORT);
+      ToastAndroid.show("Saved to gallery", ToastAndroid.SHORT);
     } catch (error) {
       Alert.alert("Error", "An error occurred while taking the screenshot");
       console.error(error);
