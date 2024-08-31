@@ -10,7 +10,6 @@ import {
   Text,
   ToastAndroid,
   TouchableNativeFeedback,
-  TouchableOpacity,
   View,
 } from "react-native";
 import RNFS from "react-native-fs";
@@ -20,27 +19,18 @@ import {
   ScrollView,
 } from "react-native-gesture-handler";
 import { PERMISSIONS, request } from "react-native-permissions";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
+import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import ViewShot from "react-native-view-shot";
 import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
+//import CopyButton from../../components/interactionButons/copyComponentnt";
+import CopyButton from "../../components/interactionButons/copyComponent";
+import BookmarkButton from "../../components/interactionButons/bookmarkIcon";
+import LottieView from "lottie-react-native";
 import * as Clipboard from "expo-clipboard";
-import CopyButton from "../../components/copyComponent";
-
-const copyIconFilled = (
-  <Icon name="copy" size={Colors.iconSize} color={Colors.iconColor} />
-);
-const copyIconOutline = (
-  <Icon name="copy-outline" size={Colors.iconSize} color={Colors.iconColor} />
-);
 
 const bookmarkIconFilled = (
   <Icon name="bookmark" size={Colors.iconSize} color={Colors.iconColor} />
@@ -61,8 +51,6 @@ const downloadIconOutline = (
 );
 
 const Home = () => {
-  const [copy, setCopy] = useState(copyIconOutline);
-  const [bookmark, setBookmark] = useState(bookmarkIconOutline);
   const [postIcon, setPostIcon] = useState(downloadIconOutline);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [isConnected, setConnected] = useState<boolean>(true);
@@ -77,6 +65,9 @@ const Home = () => {
 
   var borderWidths = useSharedValue(0.2);
   var textOpacity = useSharedValue(1);
+  //const copyLottieRef = useRef<LottieView>(null);
+
+  const bookMarkLottieRef = useRef<LottieView>(null);
 
   function netCheck() {
     NetInfo.fetch().then((state) => {
@@ -115,9 +106,8 @@ const Home = () => {
     } = await supabase.auth.getUser();
     // from docs
 
-    const userEmail = user?.email;
-    const userName = user?.user_metadata?.full_name;
-    //for Adding users Email to the bookmarks table.
+    const userEmail = user?.email; //for Adding users Email to the bookmarks table.
+    const userName = user?.user_metadata?.full_name; //Adds the display name that comes with Google Auth
 
     const { data, error } = await supabase.from("Bookmarks").insert({
       Quote: apiData?.text,
@@ -131,7 +121,6 @@ const Home = () => {
       console.log(userName);
     } else {
       console.log("Bookmarked");
-      setBookmark(bookmarkIconFilled);
       ToastAndroid.show("Bookmarked", ToastAndroid.SHORT);
     }
   };
@@ -143,27 +132,20 @@ const Home = () => {
     }, 200);
   }
 
-  function bookmarkCondition() {
-    if (bookmark === bookmarkIconOutline) {
-      bookmarkQuote();
-    } else if (bookmark === bookmarkIconFilled) {
-      setBookmark(bookmarkIconOutline);
-      ToastAndroid.show("Bookmark Removed", ToastAndroid.SHORT);
-    }
-  }
-
   const fetchAPIData = async () => {
     const url = "https://stoic-quotes.com/api/quote";
     try {
-      setBookmark(bookmarkIconOutline);
       setRefreshing(true);
       let urlResult = await fetch(url);
       let myData = await urlResult.json();
       setAPIData(myData);
-      console.log(myData);
+      //console.log(myData);
+      if (bookMarkLottieRef.current) {
+        bookMarkLottieRef.current.reset(); // This will reset the bookmark animation to the start
+      }
       setTimeout(() => {
         setRefreshing(false);
-      }, 1);
+      }, 100);
     } catch (error) {
       if (error) {
         console.error(error);
@@ -322,15 +304,24 @@ const Home = () => {
             </TouchableNativeFeedback>
           </ViewShot>
           <View style={universalStyles.bookmarkAndCopy}>
-            <CopyButton text={`${apiData?.text} - ${apiData?.author} `} />
-            <Pressable
-              style={universalStyles.icon}
+            <CopyButton
+              height={40}
+              width={30}
+              text={`${apiData?.text} - ${apiData?.author} `} //Copies the text
+            />
+            <TouchableNativeFeedback
               onPress={() => {
-                bookmarkCondition();
+                bookmarkQuote();
+                bookMarkLottieRef.current!.play();
               }}
             >
-              {bookmark}
-            </Pressable>
+              <LottieView
+                ref={bookMarkLottieRef}
+                style={{ width: 40, height: 40 }} // Same size as CopyButton
+                source={require("../../assets/animations/bookmark.json")}
+                loop={false}
+              />
+            </TouchableNativeFeedback>
           </View>
         </ScrollView>
       </GestureHandlerRootView>
@@ -339,3 +330,22 @@ const Home = () => {
 };
 
 export default Home;
+
+/*
+<View style={universalStyles.bookmarkAndCopy}>
+            <CopyButton text={`${apiData?.text} - ${apiData?.author}`} />
+            <TouchableNativeFeedback
+              onPress={() => {
+                bookmarkCondition();
+                LottieRef.current!.play();
+              }}
+            >
+              <LottieView
+                ref={LottieRef}
+                style={{ width: 50, height: 50, backgroundColor: "" }} // Same size as CopyButton
+                source={require("../../assets/bookmark.json")}
+                loop={false}
+              />
+            </TouchableNativeFeedback> 
+            </View>
+            */

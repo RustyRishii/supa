@@ -8,10 +8,40 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Colors } from "../utlities/colors";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Button from "../../components/buttons";
+import Icon from "react-native-vector-icons/Ionicons";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+} from "react-native-reanimated";
+import BookmarkButton from "../../components/interactionButons/bookmarkIcon";
 
 const SettingsPage = () => {
   const tabBarHeight = useBottomTabBarHeight();
   const { height: viewportHeight } = Dimensions.get("window");
+
+  const [iconShow, setIconShow] = useState(false);
+  const iconSize = useSharedValue(20);
+
+  const BookmarkIcon = () => (
+    <Icon
+      name="bookmark"
+      size={20}
+      color={Colors.iconColor}
+      onPress={() => animFunc()}
+    />
+  );
+
+  const animFunc = async () => {
+    if (!iconShow) {
+      setIconShow(true);
+      iconSize.value = withTiming(30, { duration: 500 });
+    }
+    setTimeout(() => {
+      iconSize.value = withTiming(20, { duration: 500 });
+    });
+  };
 
   const [userInfo, setUserInfo] = useState<{
     name: string | null;
@@ -27,7 +57,7 @@ const SettingsPage = () => {
       if (user) {
         setUserInfo({
           name: user.user_metadata.full_name || null,
-          email: user.email,
+          email: user.email ?? null,
           photo: user.user_metadata.avatar_url || null,
         });
       }

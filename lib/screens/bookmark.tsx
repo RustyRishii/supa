@@ -1,41 +1,30 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Dimensions,
   FlatList,
-  Platform,
   Pressable,
-  RefreshControl,
   StyleSheet,
+  RefreshControl,
   Text,
+  TouchableNativeFeedback,
   ToastAndroid,
   View,
 } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
-import * as Clipboard from "expo-clipboard";
-import deleteBookmark from "../utlities/bookmarkFunctions";
-import CopyButton from "../../components/copyComponent";
+import CopyButton from "../../components/interactionButons/copyComponent";
+import LottieView from "lottie-react-native";
+import BookmarkButton from "../../components/interactionButons/bookmarkIcon";
 
-//FFA500
-const copyIconFilled = <Icon name="copy" size={20} color={"tomato"} />;
 const copyIconOutline = <Icon name="copy-outline" size={20} color={"tomato"} />;
-const bookmarkIconFilled = <Icon name="bookmark" size={20} color={"tomato"} />;
-const bookmarkIconOutline = (
-  <Icon name="bookmark-outline" size={20} color={"tomato"} />
-);
 
 const Bookmark = () => {
   const { height: viewportHeight, width: screenWidth } =
@@ -44,22 +33,24 @@ const Bookmark = () => {
 
   const [bookmarks, setBookmarks] = useState<any>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [bookmarkIcon, setBookmarkIcon] = useState(bookmarkIconFilled);
   const [isConnected, setConnected] = useState<boolean>(true);
 
-  const borderWidths = useSharedValue(0.2);
+  const bookMarkLottieRef = useRef<LottieView>(null);
 
-  function bookmarkAnimation() {
-    borderWidths.value = withTiming(screenWidth, { duration: 500 });
-    setTimeout(() => {
-      borderWidths.value = withTiming(0, { duration: 500 });
-    }, 500);
-  }
+  useFocusEffect(
+    React.useCallback(() => {
+      RefreshFunction();
+      netCheck();
+      // Set the animation to the last frame when the component is focused
+      if (bookMarkLottieRef.current) {
+        bookMarkLottieRef.current.play(0, 60); // Adjust this number according to the number of frames in the animation
+      }
+    }, [])
+  );
 
   async function RefreshFunction() {
     setRefreshing(true);
     fetchBookmarks();
-    bookmarkAnimation();
     setTimeout(() => {
       setRefreshing(false);
     }, 200);
@@ -70,8 +61,7 @@ const Bookmark = () => {
       if (!state.isConnected) {
         setConnected(false);
         ToastAndroid.show("No internet", ToastAndroid.SHORT);
-      }
-      if (state.isConnected) {
+      } else {
         setConnected(true);
       }
     });
@@ -82,15 +72,12 @@ const Bookmark = () => {
       .from("Bookmarks")
       .select("id, Quote, Author")
       .order("id", { ascending: true });
-    setBookmarks(data);
-    //console.log(data);
 
     if (error) {
       console.error("Error fetching bookmarks:", error);
       return;
     }
-
-    return data;
+    setBookmarks(data);
   }
 
   async function deleteBookmark(id: number) {
@@ -108,18 +95,9 @@ const Bookmark = () => {
     }
   }
 
-  useFocusEffect(
-    React.useCallback(() => {
-      RefreshFunction();
-      netCheck();
-    }, [])
-  );
-
-  const renderItem = ({ item, index }: { item: any; index: number }) => (
+  const renderItem = ({ item }: { item: any }) => (
     <Animated.View
       style={{
-        // borderLeftWidth: borderWidths,
-        // borderRightWidth: borderWidths,
         borderBottomWidth: 0.2,
         borderBottomColor: "aliceblue",
         padding: 5,
@@ -150,10 +128,36 @@ const Bookmark = () => {
           width: 90,
         }}
       >
-        <CopyButton text={`${item.Quote} - ${item.Author}`} />
-        <Pressable onPress={() => deleteBookmark(item.id)}>
-          {bookmarkIcon}
-        </Pressable>
+        <CopyButton
+          height={40}
+          width={30}
+          text={`${item.Quote} - ${item.Author}`}
+        />
+        {/* <TouchableNativeFeedback
+          onPress={() => {
+            deleteBookmark(item.id);
+            if (bookMarkLottieRef.current) {
+              bookMarkLottieRef.current.play(0, 60); // Plays the animation from start to end
+            }
+          }}
+        >
+          <LottieView
+            ref={bookMarkLottieRef}
+            style={{ width: 40, height: 40 }} // Same size as CopyButton
+            source={require("../../assets/bookmark.json")}
+            loop={false}
+            speed={-1}
+          />
+        </TouchableNativeFeedback> */}
+        {/* <Pressable
+          style={{
+            marginTop: 10,
+          }}
+          onPress={() => deleteBookmark(item.id)}
+        >
+          {bookmarkIconFilled}
+        </Pressable> */}
+        <BookmarkButton bookmarkCondition={() => deleteBookmark(item.id)} />
       </View>
     </Animated.View>
   );
@@ -173,13 +177,10 @@ const Bookmark = () => {
           {isConnected ? (
             <FlatList
               removeClippedSubviews={false}
-              scrollEnabled={true}
               data={bookmarks}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               style={{ height: "100%" }}
-              indicatorStyle="white"
-              snapToEnd={true}
               showsVerticalScrollIndicator={true}
               refreshControl={
                 <RefreshControl
@@ -202,42 +203,17 @@ const Bookmark = () => {
   );
 };
 
-export default Bookmark;
-
 const styles = StyleSheet.create({
-  author: {
-    alignContent: "flex-end",
-    alignItems: "flex-end",
-    color: "black",
-    fontSize: 16,
-    fontStyle: "italic",
-    justifyContent: "flex-end",
-    textAlign: "right",
-  },
-  icon: {
-    height: 25,
-    width: 50,
-  },
-  item: {
-    borderBottomColor: "aliceblue",
-    borderBottomWidth: 0.2,
-    padding: 5,
-  },
   noInternetView: {
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
   },
   noInternetText: {
-    alignContent: "center",
     color: "red",
     fontSize: 45,
-    justifyContent: "center",
     textAlign: "center",
   },
-  quote: {
-    color: "black",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
 });
+
+export default Bookmark;
