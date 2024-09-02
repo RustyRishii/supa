@@ -37,7 +37,7 @@ const downloadIconOutline = (
 );
 
 const Home = () => {
-  const [postIcon, setPostIcon] = useState(downloadIconOutline);
+  //const [postIcon, setPostIcon] = useState(downloadIconOutline);
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [isConnected, setConnected] = useState<boolean>(true);
   const [apiData, setAPIData] = useState<
@@ -111,13 +111,6 @@ const Home = () => {
     }
   };
 
-  function postIconFunction() {
-    setPostIcon(downloadIconFilled);
-    setTimeout(() => {
-      setPostIcon(downloadIconOutline);
-    }, 200);
-  }
-
   const fetchAPIData = async () => {
     const url = "https://stoic-quotes.com/api/quote";
     try {
@@ -139,28 +132,35 @@ const Home = () => {
     }
   };
 
-  async function quoteToPost() {
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
+  // async function quoteToPost() {
+  //   const {
+  //     data: { user },
+  //     error: userError,
+  //   } = await supabase.auth.getUser();
 
-    var post_id = Math.random();
+  //   var post_id = Math.random();
 
-    const userEmail = user?.email;
-    const { data, error } = await supabase.from("Posts").insert({
-      post: `${apiData?.text} - ${apiData?.author}`,
-      post_id: post_id,
-      email_id: userEmail,
-    });
-    if (error) {
-      console.error(error);
-    } else {
-      postIconFunction();
-      console.log("Quote To Post successful");
-      ToastAndroid.show("Posted", ToastAndroid.SHORT);
-    }
-  }
+  //   const userEmail = user?.email;
+  //   const { data, error } = await supabase.from("Posts").insert({
+  //     post: `${apiData?.text} - ${apiData?.author}`,
+  //     post_id: post_id,
+  //     email_id: userEmail,
+  //   });
+  //   if (error) {
+  //     console.error(error);
+  //   } else {
+  //     postIconFunction();
+  //     console.log("Quote To Post successful");
+  //     ToastAndroid.show("Posted", ToastAndroid.SHORT);
+  //   }
+  // }
+
+  // function postIconFunction() {
+  //   setPostIcon(downloadIconFilled);
+  //   setTimeout(() => {
+  //     setPostIcon(downloadIconOutline);
+  //   }, 200);
+  // }
 
   const handleLongPress = async () => {
     try {
@@ -187,7 +187,6 @@ const Home = () => {
         RNFS.PicturesDirectoryPath
       }/screenshot_${Date.now()}.png`;
       await RNFS.moveFile(uri, destPath);
-      //playSound;
       ToastAndroid.show("Saved to gallery", ToastAndroid.SHORT);
     } catch (error) {
       Alert.alert("Error", "An error occurred while taking the screenshot");
