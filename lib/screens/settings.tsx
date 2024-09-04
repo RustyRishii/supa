@@ -8,41 +8,13 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Colors } from "../utlities/colors";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Button from "../../components/buttons";
-import Icon from "react-native-vector-icons/Ionicons";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
-import BookmarkButton from "../../components/interactionButons/bookmarkIcon";
+import { useFocusEffect } from "@react-navigation/native";
 
 const SettingsPage = () => {
   const tabBarHeight = useBottomTabBarHeight();
   const { height: viewportHeight } = Dimensions.get("window");
 
-  const [iconShow, setIconShow] = useState(false);
-  const iconSize = useSharedValue(20);
-
-  const BookmarkIcon = () => (
-    <Icon
-      name="bookmark"
-      size={20}
-      color={Colors.iconColor}
-      onPress={() => animFunc()}
-    />
-  );
-
-  const animFunc = async () => {
-    if (!iconShow) {
-      setIconShow(true);
-      iconSize.value = withTiming(30, { duration: 500 });
-    }
-    setTimeout(() => {
-      iconSize.value = withTiming(20, { duration: 500 });
-    });
-  };
-
+  const [bookmarkCount, setBookmarkCount] = useState<number | null>(null);
   const [userInfo, setUserInfo] = useState<{
     name: string | null;
     email: string | null;
@@ -68,6 +40,12 @@ const SettingsPage = () => {
 
   useEffect(() => {
     fetchUserInfo();
+    // const fetchBookmarkCount = async () => {
+    //   const count = await getBookmarkCount();
+    //   setBookmarkCount(count);
+    // };
+
+    // fetchBookmarkCount();
   }, []);
 
   // const signOut = async () => {

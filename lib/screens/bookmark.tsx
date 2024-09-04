@@ -2,7 +2,7 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -19,7 +19,6 @@ import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
 import CopyButton from "../../components/interactionButons/copyComponent";
-import LottieView from "lottie-react-native";
 import BookmarkButton from "../../components/interactionButons/bookmarkIcon";
 
 const Bookmark = () => {
@@ -30,19 +29,44 @@ const Bookmark = () => {
   const [bookmarks, setBookmarks] = useState<any>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [isConnected, setConnected] = useState<boolean>(true);
+  const [bookmarkCount, setBookmarkCount] = useState<number | null>(null);
 
-  const bookMarkLottieRef = useRef<LottieView>(null);
+  async function getBookmarkCount(): Promise<number | null> {
+    try {
+      // Get the current user
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
 
-  useFocusEffect(
-    React.useCallback(() => {
-      RefreshFunction();
-      netCheck();
-      // Set the animation to the last frame when the component is focused
-      if (bookMarkLottieRef.current) {
-        bookMarkLottieRef.current.play(0, 60); // Adjust this number according to the number of frames in the animation
+      if (userError) {
+        console.error("Error fetching user:", userError);
+        return null;
       }
-    }, [])
-  );
+
+      const email = user?.email; // This is your dynamic email
+
+      if (!email) {
+        console.error("No user email found.");
+        return null;
+      }
+
+      const { data, error } = await supabase
+        .from("Bookmarks")
+        .select("id", { count: "exact" })
+        .eq("email_id", email);
+
+      if (error) {
+        console.error("Error fetching bookmark count:", error);
+        return null;
+      }
+
+      return data.length;
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      return null;
+    }
+  }
 
   async function RefreshFunction() {
     setRefreshing(true);
@@ -52,7 +76,7 @@ const Bookmark = () => {
     }, 200);
   }
 
-  function netCheck() {
+  async function netCheck() {
     NetInfo.fetch().then((state) => {
       if (!state.isConnected) {
         setConnected(false);
@@ -158,6 +182,19 @@ const Bookmark = () => {
     </Animated.View>
   );
 
+  useFocusEffect(
+    React.useCallback(() => {
+      RefreshFunction();
+      netCheck();
+      const fetchBookmarkCount = async () => {
+        const count = await getBookmarkCount();
+        setBookmarkCount(count);
+      };
+
+      fetchBookmarkCount();
+    }, [])
+  );
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <GestureHandlerRootView>
@@ -167,8 +204,17 @@ const Bookmark = () => {
             height: viewportHeight - tabBarHeight,
           }}
         >
-          <View style={{ backgroundColor: "#1E1E1E" }}>
-            <Text style={universalStyles.pageTitle}>Bookmarks</Text>
+          <View
+            style={{
+              backgroundColor: "#1E1E1E",
+              //backgroundColor: "green",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <Text style={universalStyles.pageTitle}>
+              Bookmarks: {bookmarkCount !== null ? bookmarkCount : "None"}{" "}
+            </Text>
           </View>
           {isConnected ? (
             <FlatList

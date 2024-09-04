@@ -51,7 +51,6 @@ const Home = () => {
 
   var borderWidths = useSharedValue(0.2);
   var textOpacity = useSharedValue(1);
-  //const copyLottieRef = useRef<LottieView>(null);
 
   const bookMarkLottieRef = useRef<LottieView>(null);
 
@@ -302,7 +301,7 @@ const Home = () => {
             >
               <LottieView
                 ref={bookMarkLottieRef}
-                style={{ width: 40, height: 40 }} // Same size as CopyButton
+                style={{ width: 40, height: 45 }} // Same size as CopyButton
                 source={require("../../assets/animations/bookmark.json")}
                 loop={false}
               />
