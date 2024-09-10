@@ -314,22 +314,3 @@ const Home = () => {
 };
 
 export default Home;
-
-/*
-<View style={universalStyles.bookmarkAndCopy}>
-            <CopyButton text={`${apiData?.text} - ${apiData?.author}`} />
-            <TouchableNativeFeedback
-              onPress={() => {
-                bookmarkCondition();
-                LottieRef.current!.play();
-              }}
-            >
-              <LottieView
-                ref={LottieRef}
-                style={{ width: 50, height: 50, backgroundColor: "" }} // Same size as CopyButton
-                source={require("../../assets/bookmark.json")}
-                loop={false}
-              />
-            </TouchableNativeFeedback> 
-            </View>
-            */
