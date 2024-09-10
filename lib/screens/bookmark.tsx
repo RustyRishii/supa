@@ -2,7 +2,7 @@
 import NetInfo from "@react-native-community/netinfo";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dimensions,
   FlatList,
@@ -30,6 +30,32 @@ const Bookmark = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [isConnected, setConnected] = useState<boolean>(true);
   const [bookmarkCount, setBookmarkCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "Bookmarks",
+        },
+        (payload) => {
+          console.log(payload);
+          // Update bookmark count based on the change
+          getBookmarkCount().then((count) => setBookmarkCount(count));
+          // Also refresh the bookmarks list
+          fetchBookmarks();
+        }
+      )
+      .subscribe();
+
+    // Cleanup function
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   async function getBookmarkCount(): Promise<number | null> {
     try {
@@ -101,17 +127,13 @@ const Bookmark = () => {
   }
 
   async function deleteBookmark(id: number) {
-    const { data, error } = await supabase
-      .from("Bookmarks")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabase.from("Bookmarks").delete().eq("id", id);
 
     if (error) {
       console.error("Error deleting bookmark:", error);
     } else {
-      console.log("Bookmark deleted successfully:", data);
       ToastAndroid.show("Deleted", ToastAndroid.SHORT);
-      fetchBookmarks();
+      // The real-time subscription will handle updating the list and count
     }
   }
 
@@ -182,16 +204,19 @@ const Bookmark = () => {
     </Animated.View>
   );
 
+  useEffect(() => {
+    const fetchBookmarkCount = async () => {
+      const count = await getBookmarkCount();
+      setBookmarkCount(count);
+    };
+
+    fetchBookmarkCount();
+  }, []);
+
   useFocusEffect(
     React.useCallback(() => {
       RefreshFunction();
       netCheck();
-      const fetchBookmarkCount = async () => {
-        const count = await getBookmarkCount();
-        setBookmarkCount(count);
-      };
-
-      fetchBookmarkCount();
     }, [])
   );
 

@@ -31,7 +31,6 @@ const Auth = ({ navigation }: { navigation: any }) => {
   //const [userName, setUserName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState(false);
   const [userName, setUserName] = useState<string>("");
 
   const signUp = async () => {
@@ -101,10 +100,11 @@ const Auth = ({ navigation }: { navigation: any }) => {
             alignSelf: "center",
           }}
           borderRadius={150}
+          //source={require("../assets/Stoic.png")}
           source={{
             uri:
               // userInfo?.photo ||
-              "https://hlgnifpdoxwdaezhvlru.supabase.co/storage/v1/object/public/User%20Profile/pfp/pfp.png",
+              "https://media.licdn.com/dms/image/D4E12AQHJqgEA8P7wWQ/article-cover_image-shrink_720_1280/0/1681989384537?e=2147483647&v=beta&t=GMEFTie-rMM6ya5jLQmOe83avf5jvyEOX7GXV_ndWbQ",
           }}
         />
 

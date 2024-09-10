@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Pressable,
-  Text,
-  View,
-  TouchableNativeFeedback,
-} from "react-native";
+import { StyleSheet, Pressable } from "react-native";
 import React, { useRef, useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
 

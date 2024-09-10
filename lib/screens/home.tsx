@@ -29,12 +29,12 @@ import { supabase } from "../utlities/supabase";
 import CopyButton from "../../components/interactionButons/copyComponent";
 import LottieView from "lottie-react-native";
 
-const downloadIconFilled = (
-  <Icon name="download" size={Colors.iconSize} color={"#1D9BF0"} />
-);
-const downloadIconOutline = (
-  <Icon name="download-outline" size={Colors.iconSize} color={"white"} />
-);
+// const downloadIconFilled = (
+//   <Icon name="download" size={Colors.iconSize} color={"#1D9BF0"} />
+// );
+// const downloadIconOutline = (
+//   <Icon name="download-outline" size={Colors.iconSize} color={"white"} />
+// );
 
 const Home = () => {
   //const [postIcon, setPostIcon] = useState(downloadIconOutline);
