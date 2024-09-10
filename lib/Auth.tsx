@@ -108,7 +108,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
           }}
         />
 
-        <LabelText LabelText="Name" />
+        {/* <LabelText LabelText="Name" />
         <TextInput
           placeholder="Username"
           placeholderTextColor={Colors.placeHolder}
@@ -120,7 +120,7 @@ const Auth = ({ navigation }: { navigation: any }) => {
             setUserName;
           }}
           style={universalStyles.TextInput}
-        />
+        /> */}
         <LabelText LabelText="Email" />
         <TextInput
           placeholder="Email"
