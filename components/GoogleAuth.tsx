@@ -7,13 +7,13 @@ import { useState } from "react";
 import universalStyles from "./universalStyles";
 import { Pressable, Text } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Colors } from "../lib/utlities/colors";
+import React from "react";
 
 GoogleSignin.configure({
   webClientId:
     "633436539850-4e3jmq0flpesfcnulan9gpri5lvptp46.apps.googleusercontent.com", // client ID of type WEB for your server. Required to get the `idToken` on the user object, and for offline access.
   scopes: ["https://www.googleapis.com/auth/drive.readonly"], // what API you want to access on behalf of the user, default is email and profile
-  // offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+  //offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
   // hostedDomain: "", // specifies a hosted domain restriction
   forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
   //accountName: "Stoic", // [Android] specifies an account name on the device that should be used
