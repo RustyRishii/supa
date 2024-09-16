@@ -28,13 +28,7 @@ import { supabase } from "../utlities/supabase";
 //import CopyButton from../../components/interactionButons/copyComponentnt";
 import CopyButton from "../../components/interactionButons/copyComponent";
 import LottieView from "lottie-react-native";
-
-// const downloadIconFilled = (
-//   <Icon name="download" size={Colors.iconSize} color={"#1D9BF0"} />
-// );
-// const downloadIconOutline = (
-//   <Icon name="download-outline" size={Colors.iconSize} color={"white"} />
-// );
+import * as Haptics from "expo-haptics";
 
 const Home = () => {
   //const [postIcon, setPostIcon] = useState(downloadIconOutline);
@@ -187,6 +181,7 @@ const Home = () => {
       }/screenshot_${Date.now()}.png`;
       await RNFS.moveFile(uri, destPath);
       ToastAndroid.show("Saved to gallery", ToastAndroid.SHORT);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
     } catch (error) {
       Alert.alert("Error", "An error occurred while taking the screenshot");
       console.error(error);
