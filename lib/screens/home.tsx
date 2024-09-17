@@ -20,12 +20,10 @@ import {
 import { PERMISSIONS, request } from "react-native-permissions";
 import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/Ionicons";
 import ViewShot from "react-native-view-shot";
 import universalStyles from "../../components/universalStyles";
 import { Colors } from "../utlities/colors";
 import { supabase } from "../utlities/supabase";
-//import CopyButton from../../components/interactionButons/copyComponentnt";
 import CopyButton from "../../components/interactionButons/copyComponent";
 import LottieView from "lottie-react-native";
 import * as Haptics from "expo-haptics";
